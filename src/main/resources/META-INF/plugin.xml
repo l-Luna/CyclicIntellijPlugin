@@ -14,6 +14,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
 
+        <fileType name="Cyclic file"
+                  implementationClass="cyclic.intellij.CyclicFileType"
+                  fieldName="FILE_TYPE"
+                  language="Cyclic"
+                  extensions="cyc"
+        />
     </extensions>
 
     <actions>
