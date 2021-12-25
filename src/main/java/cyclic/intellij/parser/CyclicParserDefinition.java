@@ -12,9 +12,8 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
-import cyclic.intellij.psi.CycElement;
-import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.Tokens;
+import cyclic.intellij.antlr_generated.CyclicLangParser;
+import cyclic.intellij.psi.*;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +50,10 @@ public class CyclicParserDefinition implements ParserDefinition{
 	}
 	
 	public @NotNull PsiElement createElement(ASTNode node){
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl))
+			return new CycTypeDefinition(node);
+		if(node.getElementType() == Tokens.getFor(CyclicLangParser.ID))
+			return new CycId(node);
 		return new CycElement(node);
 	}
 	

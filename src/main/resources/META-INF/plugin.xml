@@ -26,6 +26,9 @@
 
         <lang.parserDefinition language="Cyclic"
                                implementationClass="cyclic.intellij.parser.CyclicParserDefinition"/>
+
+        <lang.refactoringSupport language="Cyclic"
+                                 implementationClass="cyclic.intellij.refactoring.CycRefactoringSupport"/>
     </extensions>
 
     <actions>
