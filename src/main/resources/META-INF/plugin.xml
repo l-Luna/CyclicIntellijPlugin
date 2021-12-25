@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>org.example.CyclicIntellijPlugin</id>
+    <name>Cyclic Support</name>
+    <vendor>Cyclic</vendor>
+
+    <description><![CDATA[
+    Adds support for the Cyclic programming language to IntelliJ.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
