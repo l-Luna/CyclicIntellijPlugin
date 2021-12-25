@@ -12,7 +12,7 @@ public class CyclicFileType extends LanguageFileType{
 	public static final CyclicFileType FILE_TYPE = new CyclicFileType();
 	
 	protected CyclicFileType(){
-		super(CyclicLanguage.CYCLIC);
+		super(CyclicLanguage.LANGUAGE);
 	}
 	
 	public @NonNls @NotNull String getName(){

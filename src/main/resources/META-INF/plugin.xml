@@ -14,12 +14,18 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
 
-        <fileType name="Cyclic file"
+        <fileType name="Cyclic File"
                   implementationClass="cyclic.intellij.CyclicFileType"
                   fieldName="FILE_TYPE"
                   language="Cyclic"
                   extensions="cyc"
         />
+
+        <lang.syntaxHighlighterFactory language="Cyclic"
+                                       implementationClass="cyclic.intellij.parser.CyclicSyntaxHighlighter"/>
+
+        <lang.parserDefinition language="Cyclic"
+                               implementationClass="cyclic.intellij.parser.CyclicParserDefinition"/>
     </extensions>
 
     <actions>
