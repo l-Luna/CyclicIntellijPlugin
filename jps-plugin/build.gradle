@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+jar.archiveFileName = "jps-plugin.jar"
+
+repositories {
+    mavenCentral()
+}
+
+intellij {
+    version = '2021.3'
+    type = 'IC' // Should be JPS according to the README, but Gradle says it doesn't exist.
+    plugins.add("com.intellij.java")
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+
+    implementation files("libs/CyclicCompiler-1.0-SNAPSHOT.jar")
+    implementation 'org.jetbrains:annotations:22.0.0'
+}
+
+test {
+    useJUnitPlatform()
+}
