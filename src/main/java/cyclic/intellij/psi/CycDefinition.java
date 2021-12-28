@@ -29,6 +29,7 @@ public class CycDefinition extends CycElement implements PsiNameIdentifierOwner,
 		return this;
 	}
 	
+	@NotNull
 	public String getName(){
 		var name = getNameIdentifier();
 		return name == null ? "" : name.getText();

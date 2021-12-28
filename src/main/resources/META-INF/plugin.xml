@@ -31,6 +31,8 @@
                                  implementationClass="cyclic.intellij.refactoring.CycRefactoringSupport"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
+        <lang.findUsagesProvider language="Cyclic" implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
+        <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
     </extensions>
 
     <actions>
