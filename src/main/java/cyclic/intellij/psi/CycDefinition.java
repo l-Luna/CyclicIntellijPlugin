@@ -1,12 +1,12 @@
 package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.NlsSafe;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +25,7 @@ public class CycDefinition extends CycElement implements PsiNameIdentifierOwner,
 	
 	public PsiElement setName(@NotNull String name) throws IncorrectOperationException{
 		if(getNameIdentifier() != null)
-			getNameIdentifier().replace(PsiUtils.createIdFromText(this, name));
+			getNameIdentifier().replace(PsiUtils.createIdPartFromText(this, name));
 		return this;
 	}
 	

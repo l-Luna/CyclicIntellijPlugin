@@ -50,10 +50,20 @@ public class CyclicParserDefinition implements ParserDefinition{
 	}
 	
 	public @NotNull PsiElement createElement(ASTNode node){
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_file))
+			return new CycFileWrapper(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl))
-			return new CycTypeDefinition(node);
-		if(node.getElementType() == Tokens.getFor(CyclicLangParser.ID))
+			return new CycTypeDef(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_id))
 			return new CycId(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_packageDecl))
+			return new CycPackageStatement(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_importDecl))
+			return new CycImportStatement(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_rawType))
+			return new CycRawTypeRef(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_member))
+			return new CycMember(node);
 		return new CycElement(node);
 	}
 	

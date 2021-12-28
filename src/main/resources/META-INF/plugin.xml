@@ -29,6 +29,8 @@
 
         <lang.refactoringSupport language="Cyclic"
                                  implementationClass="cyclic.intellij.refactoring.CycRefactoringSupport"/>
+
+        <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
     </extensions>
 
     <actions>

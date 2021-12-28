@@ -73,14 +73,15 @@ type
     ;
 
 rawType
-    : INT                      #intType
-    | DEC                      #decType
-    | BYTE                     #byteType
-    | BOOL                     #boolType
-    | VOID                     #voidType
-    | VAR                      #inferType
-    | VAL                      #inferFinalType
-    | id                       #idType
+    : INT
+    | DEC
+    | DOUBLE
+    | BYTE
+    | BOOL
+    | VOID
+    | VAR
+    | VAL
+    | id
     ;
 
 id: ID (DOT ID)*;
@@ -278,6 +279,7 @@ EQARROW: '=>'; // Unused
 
 INT: 'int';
 DEC: 'float';
+DOUBLE: 'double';
 BYTE: 'byte';
 BOOL: 'boolean';
 VOID: 'void';
