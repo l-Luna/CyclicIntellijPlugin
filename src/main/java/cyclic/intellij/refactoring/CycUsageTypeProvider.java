@@ -13,8 +13,6 @@ public class CycUsageTypeProvider implements UsageTypeProvider{
 	public @Nullable UsageType getUsageType(@NotNull PsiElement element){
 		if(element instanceof CycImportStatement)
 			return UsageType.CLASS_IMPORT;
-		if(element instanceof CycTypeDef)
-			return UsageType.DEC;
 		return null;
 	}
 }

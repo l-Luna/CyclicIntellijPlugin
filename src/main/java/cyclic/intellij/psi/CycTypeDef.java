@@ -15,6 +15,10 @@ public class CycTypeDef extends CycDefinition{
 		super(node);
 	}
 	
+	public boolean isTopLevelType(){
+		return getParent() instanceof CycFileWrapper;
+	}
+	
 	public String getPackageName(){
 		if(getContainingFile() instanceof CycFile){
 			CycFile file = (CycFile)getContainingFile();
@@ -32,8 +36,8 @@ public class CycTypeDef extends CycDefinition{
 	
 	public PsiElement setName(@NotNull String name) throws IncorrectOperationException{
 		// also change the file name if top level
-		if(getParent() instanceof CycFileWrapper)
-			((CycFile)getParent().getParent()).setName(name + ".cyc");
+		if(isTopLevelType())
+			getContainingFile().setName(name + ".cyc");
 		return super.setName(name);
 	}
 	

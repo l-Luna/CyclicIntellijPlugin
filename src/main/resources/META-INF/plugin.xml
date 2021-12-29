@@ -33,6 +33,12 @@
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <lang.findUsagesProvider language="Cyclic" implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
+
+        <localInspection language="Cyclic"
+                         groupPath="Cyclic"
+                         enabledByDefault="true" level="ERROR"
+                         groupName="Errors" displayName="Wrong type name for file name"
+                         implementationClass="cyclic.intellij.inspections.WrongFileNameForTypeNameInspection"/>
     </extensions>
 
     <actions>

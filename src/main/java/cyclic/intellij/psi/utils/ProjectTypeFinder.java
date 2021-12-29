@@ -7,6 +7,7 @@ import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.CycMember;
 import cyclic.intellij.psi.CycTypeDef;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -15,7 +16,17 @@ import java.util.function.Predicate;
 
 public class ProjectTypeFinder{
 	
-	public static Optional<CycTypeDef> find(Project in, Predicate<CycTypeDef> checker){
+	/**
+	 * Checks every Cyclic type in a project and returns the first type found that matches the criteria, or an empty
+	 * Optional if none exist.
+	 *
+	 * @param in
+	 * 		The project to search in.
+	 * @param checker
+	 * 		The criteria to search against.
+	 * @return The first type found that matches the criteria.
+	 */
+	public static Optional<CycTypeDef> find(@NotNull Project in, @NotNull Predicate<CycTypeDef> checker){
 		AtomicReference<Optional<CycTypeDef>> ret = new AtomicReference<>(Optional.empty());
 		ProjectRootManager.getInstance(in).getFileIndex().iterateContent(vf -> {
 			if(!vf.isDirectory() && Objects.equals(vf.getExtension(), "cyc") && vf.getFileType() == CyclicFileType.FILE_TYPE){
@@ -36,7 +47,7 @@ public class ProjectTypeFinder{
 		return ret.get();
 	}
 	
-	public static Optional<CycTypeDef> checkTypeAndMembers(CycTypeDef type, Predicate<CycTypeDef> checker){
+	public static Optional<CycTypeDef> checkTypeAndMembers(@NotNull CycTypeDef type, @NotNull Predicate<CycTypeDef> checker){
 		if(checker.test(type))
 			return Optional.of(type);
 		for(CycMember member : type.getMembers()){
