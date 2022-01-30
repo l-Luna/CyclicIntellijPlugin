@@ -24,8 +24,11 @@ public class Tokens{
 			
 			CyclicLangLexer.BOOL,
 			CyclicLangLexer.BYTE,
-			CyclicLangLexer.DEC,
+			CyclicLangLexer.SHORT,
 			CyclicLangLexer.INT,
+			CyclicLangLexer.LONG,
+			CyclicLangLexer.FLOAT,
+			CyclicLangLexer.DOUBLE,
 			CyclicLangLexer.VOID,
 			
 			CyclicLangLexer.VAR,
@@ -51,6 +54,7 @@ public class Tokens{
 			CyclicLangLexer.PACKAGE,
 			CyclicLangLexer.EXTENDS,
 			CyclicLangLexer.IMPLEMENTS,
+			CyclicLangLexer.PERMITS,
 			
 			CyclicLangLexer.RETURN,
 			CyclicLangLexer.NEW,
@@ -122,6 +126,8 @@ public class Tokens{
 			
 			CyclicLangLexer.DOT,
 			CyclicLangLexer.COMMA,
+			CyclicLangLexer.COLON,
+			CyclicLangLexer.SEMICOLON,
 			
 			CyclicLangLexer.EXCLAMATION,
 			CyclicLangLexer.QUESTION

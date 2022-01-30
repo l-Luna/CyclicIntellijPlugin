@@ -6,7 +6,7 @@ import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
-import cyclic.intellij.psi.CycTypeDef;
+import cyclic.intellij.psi.CycType;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,12 +14,12 @@ import org.jetbrains.annotations.Nullable;
 public class RenameCycTypeProcessor extends RenamePsiElementProcessor{
 	
 	public boolean canProcessElement(@NotNull PsiElement element){
-		return element instanceof CycTypeDef;
+		return element instanceof CycType;
 	}
 	
 	public void renameElement(@NotNull PsiElement element, @NotNull String newName, UsageInfo @NotNull [] usages, @Nullable RefactoringElementListener listener) throws IncorrectOperationException{
 		// pass along the new fully qualified name instead
-		CycTypeDef type = (CycTypeDef)element;
+		CycType type = (CycType)element;
 		type.handleElementRename(newName);
 		String fqNewName = type.getFullyQualifiedName();
 		for(UsageInfo usage : usages){

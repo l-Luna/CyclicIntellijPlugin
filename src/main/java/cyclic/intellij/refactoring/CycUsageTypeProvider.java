@@ -4,7 +4,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.usages.impl.rules.UsageType;
 import com.intellij.usages.impl.rules.UsageTypeProvider;
 import cyclic.intellij.psi.CycImportStatement;
-import cyclic.intellij.psi.CycTypeDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

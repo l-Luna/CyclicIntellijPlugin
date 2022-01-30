@@ -5,16 +5,15 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiFile;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.CycTypeDef;
+import cyclic.intellij.psi.CycType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CyclicInspection extends LocalInspectionTool{
 	
-	public ProblemDescriptor @NotNull [] checkType(@NotNull CycTypeDef type, @NotNull InspectionManager manager, boolean isOnTheFly){
+	public ProblemDescriptor @NotNull [] checkType(@NotNull CycType type, @NotNull InspectionManager manager, boolean isOnTheFly){
 		return new ProblemDescriptor[0];
 	}
 	

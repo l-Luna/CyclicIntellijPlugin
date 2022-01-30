@@ -23,7 +23,7 @@ public class CycFileWrapper extends CycElement{
 		return new ArrayList<>(PsiTreeUtil.findChildrenOfType(this, CycImportStatement.class));
 	}
 	
-	public Optional<CycTypeDef> getTypeDef(){
-		return PsiUtils.childOfType(this, CycTypeDef.class);
+	public Optional<CycType> getTypeDef(){
+		return PsiUtils.childOfType(this, CycType.class);
 	}
 }

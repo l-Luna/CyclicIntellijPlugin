@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import cyclic.intellij.psi.CycTypeDef;
+import cyclic.intellij.psi.CycType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ public class RenameFileToTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
 	}
 	
 	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement){
-		if(startElement instanceof CycTypeDef)
+		if(startElement instanceof CycType)
 			file.setName(newName + ".cyc");
 	}
 	

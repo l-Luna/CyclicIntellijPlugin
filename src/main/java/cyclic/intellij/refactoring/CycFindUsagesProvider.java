@@ -6,7 +6,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.parser.LexerAdapter;
 import cyclic.intellij.psi.CycDefinition;
-import cyclic.intellij.psi.CycTypeDef;
+import cyclic.intellij.psi.CycType;
 import cyclic.intellij.psi.Tokens;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -24,20 +24,20 @@ public class CycFindUsagesProvider implements FindUsagesProvider{
 	}
 	
 	public @Nls @NotNull String getType(@NotNull PsiElement element){
-		if(element instanceof CycTypeDef)
+		if(element instanceof CycType)
 			return "class"; // TODO: type kinds
 		return "";
 	}
 	
 	public @Nls @NotNull String getDescriptiveName(@NotNull PsiElement element){
-		if(element instanceof CycTypeDef)
-			return ((CycTypeDef)element).getFullyQualifiedName();
+		if(element instanceof CycType)
+			return ((CycType)element).getFullyQualifiedName();
 		return "";
 	}
 	
 	public @Nls @NotNull String getNodeText(@NotNull PsiElement element, boolean useFullName){
-		if(element instanceof CycTypeDef){
-			CycTypeDef def = (CycTypeDef)element;
+		if(element instanceof CycType){
+			CycType def = (CycType)element;
 			return useFullName ? def.getFullyQualifiedName() : def.getName();
 		}
 		return "";

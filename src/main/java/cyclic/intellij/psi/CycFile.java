@@ -3,7 +3,6 @@ package cyclic.intellij.psi;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -35,7 +34,7 @@ public class CycFile extends PsiFileBase{
 		return wrapper().map(CycFileWrapper::getImports).orElse(new ArrayList<>(0));
 	}
 	
-	public Optional<CycTypeDef> getTypeDef(){
+	public Optional<CycType> getTypeDef(){
 		return wrapper().flatMap(CycFileWrapper::getTypeDef);
 	}
 }

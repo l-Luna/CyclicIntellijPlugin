@@ -2,7 +2,6 @@ package cyclic.intellij.psi;
 
 import com.intellij.extapi.psi.ASTDelegatePsiElement;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.Nullable;
 

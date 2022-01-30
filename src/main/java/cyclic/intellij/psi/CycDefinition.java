@@ -19,7 +19,7 @@ public class CycDefinition extends CycElement implements PsiNameIdentifierOwner,
 	}
 	
 	public @Nullable PsiElement getNameIdentifier(){
-		List<PsiElement> ids = PsiUtils.matchingChildren(this, x -> Tokens.IDENTIFIERS.contains(x.getNode().getElementType()));
+		List<PsiElement> ids = PsiUtils.matchingChildren(this, CycIdPart.class::isInstance);
 		return ids.size() > 0 ? ids.get(0) : null;
 	}
 	
@@ -37,7 +37,7 @@ public class CycDefinition extends CycElement implements PsiNameIdentifierOwner,
 	
 	/**
 	 * The name, independent of import statements or context.
-	 * e.g. cyclic.intellij.psi.CycDefinition, or cyclic.intellij.CyclicIcons.CYCLIC_FILE.
+	 * e.g. cyclic.intellij.psi.CycDefinition, or cyclic.intellij.CyclicIcons.CYCLIC_FILE, or ...CycDefinition::setName
 	 */
 	public String getFullyQualifiedName(){
 		return getName();

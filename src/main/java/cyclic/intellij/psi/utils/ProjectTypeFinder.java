@@ -6,7 +6,7 @@ import com.intellij.psi.PsiManager;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.CycMember;
-import cyclic.intellij.psi.CycTypeDef;
+import cyclic.intellij.psi.CycType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -26,8 +26,8 @@ public class ProjectTypeFinder{
 	 * 		The criteria to search against.
 	 * @return The first type found that matches the criteria.
 	 */
-	public static Optional<CycTypeDef> find(@NotNull Project in, @NotNull Predicate<CycTypeDef> checker){
-		AtomicReference<Optional<CycTypeDef>> ret = new AtomicReference<>(Optional.empty());
+	public static Optional<CycType> find(@NotNull Project in, @NotNull Predicate<CycType> checker){
+		AtomicReference<Optional<CycType>> ret = new AtomicReference<>(Optional.empty());
 		ProjectRootManager.getInstance(in).getFileIndex().iterateContent(vf -> {
 			if(!vf.isDirectory() && Objects.equals(vf.getExtension(), "cyc") && vf.getFileType() == CyclicFileType.FILE_TYPE){
 				CycFile file = (CycFile)PsiManager.getInstance(in).findFile(vf);
@@ -47,11 +47,11 @@ public class ProjectTypeFinder{
 		return ret.get();
 	}
 	
-	public static Optional<CycTypeDef> checkTypeAndMembers(@NotNull CycTypeDef type, @NotNull Predicate<CycTypeDef> checker){
+	public static Optional<CycType> checkTypeAndMembers(@NotNull CycType type, @NotNull Predicate<CycType> checker){
 		if(checker.test(type))
 			return Optional.of(type);
 		for(CycMember member : type.getMembers()){
-			Optional<CycTypeDef> def = PsiUtils.childOfType(member, CycTypeDef.class);
+			Optional<CycType> def = PsiUtils.childOfType(member, CycType.class);
 			if(def.isPresent()){
 				var r = checkTypeAndMembers(def.get(), checker);
 				if(r.isPresent())

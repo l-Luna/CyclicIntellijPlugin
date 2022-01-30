@@ -7,12 +7,12 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import cyclic.intellij.inspections.fixes.RenameFileToTypeFix;
 import cyclic.intellij.inspections.fixes.RenameTypeToFileFix;
-import cyclic.intellij.psi.CycTypeDef;
+import cyclic.intellij.psi.CycType;
 import org.jetbrains.annotations.NotNull;
 
 public class WrongFileNameForTypeNameInspection extends CyclicInspection{
 	
-	public ProblemDescriptor @NotNull [] checkType(@NotNull CycTypeDef type, @NotNull InspectionManager manager, boolean isOnTheFly){
+	public ProblemDescriptor @NotNull [] checkType(@NotNull CycType type, @NotNull InspectionManager manager, boolean isOnTheFly){
 		String typeName = type.getName();
 		if(type.isTopLevelType() && type.getNameIdentifier() != null){
 			String filename = type.getContainingFile().getName();

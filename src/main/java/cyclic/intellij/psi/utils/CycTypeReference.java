@@ -24,7 +24,7 @@ public class CycTypeReference implements PsiReference{
 		return from;
 	}
 	
-	public @Nullable CycTypeDef resolve(){
+	public @Nullable CycType resolve(){
 		// TODO: check Java types
 		if(id == null)
 			return null;
@@ -36,7 +36,7 @@ public class CycTypeReference implements PsiReference{
 	}
 	
 	public @NotNull String getCanonicalText(){
-		CycTypeDef resolve = resolve();
+		CycType resolve = resolve();
 		return resolve != null ? resolve.getCanonicalText() : "";
 	}
 	
@@ -46,22 +46,22 @@ public class CycTypeReference implements PsiReference{
 	}
 	
 	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException{
-		if(element instanceof CycTypeDef){
-			from.setName(((CycTypeDef)element).getFullyQualifiedName());
+		if(element instanceof CycType){
+			from.setName(((CycType)element).getFullyQualifiedName());
 			return from;
 		}
 		throw new IncorrectOperationException("Can't bind a CycBaseTypeRef to an element that is not a CycTypeDef");
 	}
 	
 	public boolean isReferenceTo(@NotNull PsiElement element){
-		return element instanceof CycTypeDef && matchesType((CycTypeDef)element);
+		return element instanceof CycType && matchesType((CycType)element);
 	}
 	
 	public boolean isSoft(){
 		return false;
 	}
 	
-	public boolean matchesType(CycTypeDef typeDef){
+	public boolean matchesType(CycType typeDef){
 		String ourId = id.getText();
 		if(ourId == null || ourId.isBlank())
 			return false;
@@ -81,7 +81,6 @@ public class CycTypeReference implements PsiReference{
 			// it's FQ-name == a wildcard import + our text
 			//     TODO: static imports for inner types
 			//     TODO: also consider target's modifiers
-			//      not implemented on compiler side yet?
 			for(CycImportStatement i : file.getImports())
 				if(!i.isStatic()){
 					String name = i.getImportName();

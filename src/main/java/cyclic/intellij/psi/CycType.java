@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CycTypeDef extends CycDefinition{
+public class CycType extends CycDefinition{
 	
-	public CycTypeDef(@NotNull ASTNode node){
+	public CycType(@NotNull ASTNode node){
 		super(node);
 	}
 	

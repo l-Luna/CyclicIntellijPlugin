@@ -53,9 +53,11 @@ public class CyclicParserDefinition implements ParserDefinition{
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_file))
 			return new CycFileWrapper(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl))
-			return new CycTypeDef(node);
+			return new CycType(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_id))
 			return new CycId(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_idPart))
+			return new CycIdPart(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_packageDecl))
 			return new CycPackageStatement(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_importDecl))
@@ -64,6 +66,12 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycRawTypeRef(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_member))
 			return new CycMember(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_function))
+			return new CycMethod(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_statement))
+			return new CycStatement(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_value))
+			return new CycExpression(node);
 		return new CycElement(node);
 	}
 	
