@@ -30,6 +30,9 @@
         <lang.refactoringSupport language="Cyclic"
                                  implementationClass="cyclic.intellij.refactoring.CycRefactoringSupport"/>
 
+        <lang.foldingBuilder language="Cyclic"
+                             implementationClass="cyclic.intellij.presentation.CycFoldingBuilder"/>
+
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <lang.findUsagesProvider language="Cyclic" implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
