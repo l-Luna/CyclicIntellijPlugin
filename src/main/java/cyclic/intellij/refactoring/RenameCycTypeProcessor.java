@@ -21,7 +21,7 @@ public class RenameCycTypeProcessor extends RenamePsiElementProcessor{
 		// pass along the new fully qualified name instead
 		CycType type = (CycType)element;
 		type.handleElementRename(newName);
-		String fqNewName = type.getFullyQualifiedName();
+		String fqNewName = type.fullyQualifiedName();
 		for(UsageInfo usage : usages){
 			PsiReference ref = usage.getReference();
 			if(ref != null)

@@ -4,12 +4,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.psi.utils.CPsiClass;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CycType extends CycDefinition{
+public class CycType extends CycDefinition implements CPsiClass{
 	
 	public CycType(@NotNull ASTNode node){
 		super(node);
@@ -27,11 +28,11 @@ public class CycType extends CycDefinition{
 		return "";
 	}
 	
-	public String getFullyQualifiedName(){
+	public String fullyQualifiedName(){
 		PsiFile file = getContainingFile();
 		if(file instanceof CycFile)
-			return ((CycFile)file).getPackage().map(k -> k.getPackageName() + ".").orElse("") + super.getFullyQualifiedName();
-		return super.getFullyQualifiedName();
+			return ((CycFile)file).getPackage().map(k -> k.getPackageName() + ".").orElse("") + super.fullyQualifiedName();
+		return super.fullyQualifiedName();
 	}
 	
 	public PsiElement setName(@NotNull String name) throws IncorrectOperationException{
@@ -43,5 +44,9 @@ public class CycType extends CycDefinition{
 	
 	public List<CycMember> getMembers(){
 		return PsiUtils.childrenOfType(this, CycMember.class);
+	}
+	
+	public PsiElement declaration(){
+		return this;
 	}
 }

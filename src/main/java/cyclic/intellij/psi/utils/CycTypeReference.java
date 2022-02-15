@@ -8,7 +8,10 @@ import cyclic.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CycTypeReference implements PsiReference{
 	
@@ -24,20 +27,45 @@ public class CycTypeReference implements PsiReference{
 		return from;
 	}
 	
-	public @Nullable CycType resolve(){
-		// TODO: check Java types
-		if(id == null)
-			return null;
-		return ProjectTypeFinder.find(id.getProject(), this::matchesType).orElse(null);
-	}
-	
 	public @NotNull TextRange getRangeInElement(){
 		return id.getTextRangeInParent();
 	}
 	
+	public @Nullable CPsiClass resolveClass(){
+		if(id == null)
+			return null;
+		var p = id.getProject();
+		// possible names come from imports
+		if(from.getContainingFile() instanceof CycFile){
+			CycFile file = (CycFile)from.getContainingFile();
+			Optional<String> pkg = file.getPackage().map(CycPackageStatement::getPackageName);
+			List<String> candidates = file.getImports().stream()
+					.filter(x -> !x.isStatic())
+					.map(x -> x.isWildcard() ? (x.getImportName() + "." + id.getText()) : (x.getImportName().endsWith(id.getText()) ? x.getImportName() : null))
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList());
+			candidates.add(0, id.getText());
+			// TODO: all implicit imports
+			candidates.add(1, "java.lang." + id.getText());
+			pkg.ifPresent(s -> candidates.add(2, s + "." + id.getText()));
+			for(String candidate : candidates){
+				var type = ProjectTypeFinder.findByName(p, candidate);
+				if(type.isPresent())
+					return type.get();
+			}
+			return null;
+		}
+		return ProjectTypeFinder.findByName(p, id.getText()).orElse(null);
+	}
+	
+	public @Nullable PsiElement resolve(){
+		var cClass = resolveClass();
+		return cClass != null ? cClass.declaration() : null;
+	}
+	
 	public @NotNull String getCanonicalText(){
-		CycType resolve = resolve();
-		return resolve != null ? resolve.getCanonicalText() : "";
+		var cClass = resolveClass();
+		return cClass != null ? cClass.fullyQualifiedName() : "";
 	}
 	
 	public PsiElement handleElementRename(@NotNull String name) throws IncorrectOperationException{
@@ -47,7 +75,7 @@ public class CycTypeReference implements PsiReference{
 	
 	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException{
 		if(element instanceof CycType){
-			from.setName(((CycType)element).getFullyQualifiedName());
+			from.setName(((CycType)element).fullyQualifiedName());
 			return from;
 		}
 		throw new IncorrectOperationException("Can't bind a CycBaseTypeRef to an element that is not a CycTypeDef");
@@ -72,7 +100,7 @@ public class CycTypeReference implements PsiReference{
 				// we're not in the default package -> we can't reference it
 				return false;
 			}
-			String fqName = typeDef.getFullyQualifiedName();
+			String fqName = typeDef.fullyQualifiedName();
 			// check if
 			// its FQ-name == our text (plus package name)
 			if(fqName.equals(ourId) || (pkg.isPresent() && (pkg.get() + "." + ourId).equals(fqName)))
@@ -91,6 +119,6 @@ public class CycTypeReference implements PsiReference{
 				}
 			return false;
 		}else
-			return typeDef.getFullyQualifiedName().equals(ourId);
+			return typeDef.fullyQualifiedName().equals(ourId);
 	}
 }

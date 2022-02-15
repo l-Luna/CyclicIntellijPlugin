@@ -39,7 +39,7 @@ public class CycDefinition extends CycElement implements PsiNameIdentifierOwner,
 	 * The name, independent of import statements or context.
 	 * e.g. cyclic.intellij.psi.CycDefinition, or cyclic.intellij.CyclicIcons.CYCLIC_FILE, or ...CycDefinition::setName
 	 */
-	public String getFullyQualifiedName(){
+	public String fullyQualifiedName(){
 		return getName();
 	}
 	
@@ -64,7 +64,7 @@ public class CycDefinition extends CycElement implements PsiNameIdentifierOwner,
 	}
 	
 	public @NotNull String getCanonicalText(){
-		return getFullyQualifiedName();
+		return fullyQualifiedName();
 	}
 	
 	public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException{

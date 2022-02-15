@@ -57,6 +57,7 @@ public class Tokens{
 			CyclicLangLexer.PERMITS,
 			
 			CyclicLangLexer.RETURN,
+			CyclicLangLexer.THROW,
 			CyclicLangLexer.NEW,
 			CyclicLangLexer.ASSERT,
 			
@@ -93,6 +94,9 @@ public class Tokens{
 			
 			CyclicLangLexer.UP,
 			CyclicLangLexer.PASS,
+			
+			CyclicLangLexer.PLUSPLUS,
+			CyclicLangLexer.MINUSMINUS,
 			
 			CyclicLangLexer.STAR,
 			CyclicLangLexer.SLASH,

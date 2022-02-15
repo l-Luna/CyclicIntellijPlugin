@@ -31,14 +31,14 @@ public class CycFindUsagesProvider implements FindUsagesProvider{
 	
 	public @Nls @NotNull String getDescriptiveName(@NotNull PsiElement element){
 		if(element instanceof CycType)
-			return ((CycType)element).getFullyQualifiedName();
+			return ((CycType)element).fullyQualifiedName();
 		return "";
 	}
 	
 	public @Nls @NotNull String getNodeText(@NotNull PsiElement element, boolean useFullName){
 		if(element instanceof CycType){
 			CycType def = (CycType)element;
-			return useFullName ? def.getFullyQualifiedName() : def.getName();
+			return useFullName ? def.fullyQualifiedName() : def.getName();
 		}
 		return "";
 	}

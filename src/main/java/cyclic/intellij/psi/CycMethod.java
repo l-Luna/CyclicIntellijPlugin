@@ -14,7 +14,7 @@ public class CycMethod extends CycDefinition{
 		return (CycType)getParent().getParent();
 	}
 	
-	public String getFullyQualifiedName(){
-		return getType().getFullyQualifiedName() + "::" + getName();
+	public String fullyQualifiedName(){
+		return getType().fullyQualifiedName() + "::" + getName();
 	}
 }
