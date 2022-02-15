@@ -8,8 +8,6 @@ import com.intellij.openapi.util.TextRange;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.Tokens;
-import org.antlr.intellij.adaptor.lexer.RuleIElementType;
-import org.eclipse.sisu.space.Streams;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
