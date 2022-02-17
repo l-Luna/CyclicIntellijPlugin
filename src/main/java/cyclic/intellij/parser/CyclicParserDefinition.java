@@ -14,6 +14,7 @@ import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.*;
+import cyclic.intellij.psi.expressions.*;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,11 +72,52 @@ public class CyclicParserDefinition implements ParserDefinition{
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_statement))
 			return new CycStatement(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_value))
-			return new CycExpression(node);
+			return createExpr(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_call))
+			return new CycCall(node);
 		return new CycElement(node);
 	}
 	
 	public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider){
 		return new CycFile(viewProvider);
+	}
+	
+	private PsiElement createExpr(ASTNode node){
+		// expression tag info is lost during conversion to a PSI AST rn
+		// so, we "guess" what it is
+		// TODO: rewrite to not be a big if/else chain
+		if(node.findChildByType(Tokens.TOK_ASSIGN) != null)
+			return new CycAssignExpr(node);
+		if(node.findChildByType(Tokens.RULE_BIN_OP) != null)
+			return new CycBinaryExpr(node);
+		if(node.findChildByType(Tokens.RULE_CALL) != null)
+			return new CycCallExpr(node);
+		if(node.findChildByType(Tokens.TOK_INSTANCEOF) != null)
+			return new CycInstanceOfExpr(node);
+		if(node.findChildByType(Tokens.SQ_BRACES) != null)
+			return new CycArrayIndexExpr(node);
+		if(node.findChildByType(Tokens.RULE_ID_PART) != null)
+			return new CycIdExpr(node);
+		if(node.findChildByType(Tokens.RULE_INITIALISATION) != null)
+			return new CycInitialisationExpr(node);
+		if(node.findChildByType(Tokens.PARENTHESIS) != null)
+			return new CycParenthesisedExpr(node);
+		if(node.findChildByType(Tokens.TOK_CLASS) != null)
+			return new CycClassLiteralExpr(node);
+		if(node.findChildByType(Tokens.RULE_CAST) != null)
+			return new CycCastExpr(node);
+		if(node.findChildByType(Tokens.PRE_POST_OPS) != null)
+			return new CycAffixOpExpr(node);
+		if(node.findChildByType(Tokens.RULE_NEW_ARRAY) != null)
+			return new CycNewArrayExpr(node);
+		if(node.findChildByType(Tokens.RULE_NEW_LIST_ARRAY) != null)
+			return new CycNewListArrayExpr(node);
+		if(node.findChildByType(Tokens.TOK_THIS) != null)
+			return new CycThisExpr(node);
+		if(node.findChildByType(Tokens.SEM_LITERALS) != null)
+			return new CycLiteralExpr(node);
+		if(node.findChildByType(Tokens.TOK_STRING) != null)
+			return new CycStringLiteralExpr(node);
+		return new CycExpression(node);
 	}
 }

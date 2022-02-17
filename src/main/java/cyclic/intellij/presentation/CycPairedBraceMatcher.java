@@ -14,7 +14,8 @@ public class CycPairedBraceMatcher implements PairedBraceMatcher{
 	public BracePair @NotNull [] getPairs(){
 		return new BracePair[] {
 				new BracePair(Tokens.getFor(CyclicLangLexer.LBRACE), Tokens.getFor(CyclicLangLexer.RBRACE), true),
-				new BracePair(Tokens.getFor(CyclicLangLexer.LPAREN), Tokens.getFor(CyclicLangLexer.RPAREN), false)
+				new BracePair(Tokens.getFor(CyclicLangLexer.LPAREN), Tokens.getFor(CyclicLangLexer.RPAREN), false),
+				new BracePair(Tokens.getFor(CyclicLangLexer.LSQUAR), Tokens.getFor(CyclicLangLexer.RSQUAR), false)
 				// TODO: pair <> correctly - need to seperate between comparisons and generics
 		};
 	}

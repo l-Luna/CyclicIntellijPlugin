@@ -27,7 +27,7 @@ public class CycFoldingBuilder implements FoldingBuilder{
 			}
 		}
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_imports)){
-			var imports = node.getChildren(Tokens.IMPORT);
+			var imports = node.getChildren(Tokens.RULE_IMPORT);
 			if(imports.length > 1){
 				// fold from first ID to last semicolon
 				var begin = imports[0].findChildByType(Tokens.getRuleFor(CyclicLangParser.RULE_id));

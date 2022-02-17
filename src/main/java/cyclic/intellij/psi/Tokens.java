@@ -108,6 +108,7 @@ public class Tokens{
 			CyclicLangLexer.PERCENT
 	);
 	
+	// used for syntax highlighting
 	public static final TokenSet LITERALS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
@@ -139,23 +140,39 @@ public class Tokens{
 			CyclicLangLexer.QUESTION
 	);
 	
-	public static final TokenSet BRACES = createTokenSet(
-			CyclicLanguage.LANGUAGE,
-			
-			CyclicLangLexer.LPAREN,
-			CyclicLangLexer.RPAREN,
-			CyclicLangLexer.LBRACE,
-			CyclicLangLexer.RBRACE,
-			CyclicLangLexer.LSQUAR,
-			CyclicLangLexer.RSQUAR
-	);
-	
 	public static final TokenSet WHITESPACES = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.WS);
 	public static final TokenSet COMMENTS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.SING_COMMENT);
 	public static final TokenSet STRING_LITERALS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.STRLIT);
 	public static final TokenSet IDENTIFIERS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.ID);
 	
-	public static final TokenSet IMPORT = TokenSet.create(getRuleFor(CyclicLangParser.RULE_importDecl));
+	// single-element sets
+	public static final TokenSet RULE_IMPORT = TokenSet.create(getRuleFor(CyclicLangParser.RULE_importDecl));
+	public static final TokenSet RULE_BIN_OP = TokenSet.create(getRuleFor(CyclicLangParser.RULE_binaryop));
+	public static final TokenSet RULE_CALL = TokenSet.create(getRuleFor(CyclicLangParser.RULE_call));
+	public static final TokenSet RULE_ID_PART = TokenSet.create(getRuleFor(CyclicLangParser.RULE_idPart));
+	public static final TokenSet RULE_INITIALISATION = TokenSet.create(getRuleFor(CyclicLangParser.RULE_initialisation));
+	public static final TokenSet RULE_CAST = TokenSet.create(getRuleFor(CyclicLangParser.RULE_cast));
+	public static final TokenSet RULE_NEW_ARRAY = TokenSet.create(getRuleFor(CyclicLangParser.RULE_newArray));
+	public static final TokenSet RULE_NEW_LIST_ARRAY = TokenSet.create(getRuleFor(CyclicLangParser.RULE_newListedArray));
+	
+	public static final TokenSet TOK_ASSIGN = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.ASSIGN);
+	public static final TokenSet TOK_INSTANCEOF = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.INSTANCEOF);
+	public static final TokenSet TOK_CLASS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.CLASS);
+	public static final TokenSet TOK_THIS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.THIS);
+	public static final TokenSet TOK_STRING = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.STRLIT);
+	
+	public static final TokenSet PARENTHESIS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.LPAREN, CyclicLangLexer.RPAREN);
+	public static final TokenSet SQ_BRACES = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.LSQUAR, CyclicLangLexer.RSQUAR);
+	public static final TokenSet PRE_POST_OPS = TokenSet.create(
+			getRuleFor(CyclicLangParser.RULE_prefixop), getRuleFor(CyclicLangParser.RULE_postfixop));
+	
+	// used for literal expression checking
+	public static final TokenSet SEM_LITERALS = createTokenSet(CyclicLanguage.LANGUAGE,
+			CyclicLangLexer.NULL,
+			CyclicLangLexer.INTLIT,
+			CyclicLangLexer.DECLIT,
+			CyclicLangLexer.BOOLLIT
+	);
 	
 	@Contract(pure = true) public static IElementType getFor(int type){
 		return TOKEN_ELEMENT_TYPES.get(type);
