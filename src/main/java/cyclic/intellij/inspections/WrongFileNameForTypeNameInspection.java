@@ -15,11 +15,8 @@ public class WrongFileNameForTypeNameInspection extends CyclicInspection{
 	public ProblemDescriptor @NotNull [] checkTypeDef(@NotNull CycType type, @NotNull InspectionManager manager, boolean isOnTheFly){
 		String typeName = type.getName();
 		if(type.isTopLevelType() && type.getNameIdentifier() != null){
-			String filename = type.getContainingFile().getName();
-			// TODO: check for non-standard file extensions
-			String expected = filename.substring(0, filename.length() - 4);
-			if(!typeName.equals(expected))
-				return new ProblemDescriptor[]{ manager.createProblemDescriptor(type.getNameIdentifier(), "Cyclic type '" + typeName + "' should be declared in file '" + typeName + ".cyc'", new LocalQuickFix[]{ new RenameFileToTypeFix(type, typeName), new RenameTypeToFileFix(type, expected) }, ProblemHighlightType.ERROR, isOnTheFly, false) };
+			if(!typeName.equals(type.getContainingFile().getName()))
+				return new ProblemDescriptor[]{ manager.createProblemDescriptor(type.getNameIdentifier(), "Cyclic type '" + typeName + "' should be declared in file '" + typeName + ".cyc'", new LocalQuickFix[]{ new RenameFileToTypeFix(type, typeName), new RenameTypeToFileFix(type, type.getContainingFile().getName()) }, ProblemHighlightType.ERROR, isOnTheFly, false) };
 		}
 		return super.checkTypeDef(type, manager, isOnTheFly);
 	}

@@ -39,9 +39,12 @@
         <lang.commenter language="Cyclic"
                         implementationClass="cyclic.intellij.refactoring.CycCommenter"/>
 
+        <lang.findUsagesProvider language="Cyclic"
+                                 implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
+
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
-        <lang.findUsagesProvider language="Cyclic" implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
+        <fileIconPatcher implementation="cyclic.intellij.presentation.CycFileIconPatcher"/>
 
         <localInspection language="Cyclic"
                          groupPath="Cyclic"
@@ -53,7 +56,7 @@
                          groupPath="Cyclic"
                          enabledByDefault="true" level="ERROR"
                          groupName="Errors" displayName="Invalid type name"
-                         implementationClass="cyclic.intellij.inspections.InvalidTypeNameInspection"/>
+                         implementationClass="cyclic.intellij.inspections.InvalidTypeRefInspection"/>
 
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
@@ -61,7 +64,6 @@
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.AddParensAction</className>
         </intentionAction>
-
     </extensions>
 
     <actions>

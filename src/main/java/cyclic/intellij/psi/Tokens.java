@@ -157,9 +157,16 @@ public class Tokens{
 	
 	public static final TokenSet TOK_ASSIGN = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.ASSIGN);
 	public static final TokenSet TOK_INSTANCEOF = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.INSTANCEOF);
-	public static final TokenSet TOK_CLASS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.CLASS);
 	public static final TokenSet TOK_THIS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.THIS);
 	public static final TokenSet TOK_STRING = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.STRLIT);
+	
+	public static final TokenSet TOK_CLASS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.CLASS);
+	public static final TokenSet TOK_INTERFACE = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.INTERFACE);
+	public static final TokenSet TOK_ANNOTATION = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.ANNOTATION);
+	public static final TokenSet TOK_AT = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.AT);
+	public static final TokenSet TOK_ENUM = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.ENUM);
+	public static final TokenSet TOK_RECORD = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.RECORD);
+	public static final TokenSet TOK_SINGLE = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.SINGLE);
 	
 	public static final TokenSet PARENTHESIS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.LPAREN, CyclicLangLexer.RPAREN);
 	public static final TokenSet SQ_BRACES = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.LSQUAR, CyclicLangLexer.RSQUAR);

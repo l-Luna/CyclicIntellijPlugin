@@ -37,4 +37,15 @@ public class CycFile extends PsiFileBase{
 	public Optional<CycType> getTypeDef(){
 		return wrapper().flatMap(CycFileWrapper::getTypeDef);
 	}
+	
+	public @NotNull String getFileName(){
+		return getViewProvider().getVirtualFile().getName();
+	}
+	
+	public @NotNull String getName(){
+		var o = super.getName();
+		if(getTypeDef().isPresent())
+			return o.substring(0, o.length() - ".cyc".length());
+		return o;
+	}
 }

@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElementVisitor;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import org.jetbrains.annotations.NotNull;
 
-public class InvalidTypeNameInspection extends LocalInspectionTool{
+public class InvalidTypeRefInspection extends LocalInspectionTool{
 	
 	public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly){
 		return new PsiElementVisitor(){

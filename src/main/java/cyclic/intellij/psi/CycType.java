@@ -1,13 +1,19 @@
 package cyclic.intellij.psi;
 
+import com.intellij.ide.JavaFileIconPatcher;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.PlatformIcons;
+import cyclic.intellij.CyclicIcons;
+import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.utils.CPsiClass;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.List;
 
 public class CycType extends CycDefinition implements CPsiClass{
@@ -48,5 +54,24 @@ public class CycType extends CycDefinition implements CPsiClass{
 	
 	public PsiElement declaration(){
 		return this;
+	}
+	
+	public @Nullable Icon getIcon(int flags){
+		var objType = getNode().findChildByType(Tokens.getRuleFor(CyclicLangParser.RULE_objectType));
+		if(objType != null){
+			if(objType.findChildByType(Tokens.TOK_CLASS) != null)
+				return PlatformIcons.CLASS_ICON;
+			if(objType.findChildByType(Tokens.TOK_INTERFACE) != null)
+				return PlatformIcons.INTERFACE_ICON;
+			if(objType.findChildByType(Tokens.TOK_ANNOTATION) != null || objType.findChildByType(Tokens.TOK_AT) != null)
+				return PlatformIcons.ANNOTATION_TYPE_ICON;
+			if(objType.findChildByType(Tokens.TOK_ENUM) != null)
+				return PlatformIcons.ENUM_ICON;
+			if(objType.findChildByType(Tokens.TOK_RECORD) != null)
+				return PlatformIcons.RECORD_ICON;
+			if(objType.findChildByType(Tokens.TOK_SINGLE) != null)
+				return CyclicIcons.SINGLE;
+		}
+		return CyclicIcons.CYCLIC_FILE;
 	}
 }
