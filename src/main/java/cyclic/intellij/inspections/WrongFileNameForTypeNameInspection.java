@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class WrongFileNameForTypeNameInspection extends CyclicInspection{
 	
-	public ProblemDescriptor @NotNull [] checkType(@NotNull CycType type, @NotNull InspectionManager manager, boolean isOnTheFly){
+	public ProblemDescriptor @NotNull [] checkTypeDef(@NotNull CycType type, @NotNull InspectionManager manager, boolean isOnTheFly){
 		String typeName = type.getName();
 		if(type.isTopLevelType() && type.getNameIdentifier() != null){
 			String filename = type.getContainingFile().getName();
@@ -21,7 +21,7 @@ public class WrongFileNameForTypeNameInspection extends CyclicInspection{
 			if(!typeName.equals(expected))
 				return new ProblemDescriptor[]{ manager.createProblemDescriptor(type.getNameIdentifier(), "Cyclic type '" + typeName + "' should be declared in file '" + typeName + ".cyc'", new LocalQuickFix[]{ new RenameFileToTypeFix(type, typeName), new RenameTypeToFileFix(type, expected) }, ProblemHighlightType.ERROR, isOnTheFly, false) };
 		}
-		return super.checkType(type, manager, isOnTheFly);
+		return super.checkTypeDef(type, manager, isOnTheFly);
 	}
 	
 	public boolean isEnabledByDefault(){

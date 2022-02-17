@@ -65,7 +65,7 @@ public class CycTypeReference implements PsiReference{
 	
 	public @NotNull String getCanonicalText(){
 		var cClass = resolveClass();
-		return cClass != null ? cClass.fullyQualifiedName() : "";
+		return cClass != null ? cClass.fullyQualifiedName() : id.getText();
 	}
 	
 	public PsiElement handleElementRename(@NotNull String name) throws IncorrectOperationException{
