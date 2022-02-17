@@ -26,6 +26,18 @@ public class CycFoldingBuilder implements FoldingBuilder{
 						new FoldingDescriptor(node, TextRange.create(opBrace.getStartOffset(), endBrace.getStartOffset() + 1))};
 			}
 		}
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_imports)){
+			var imports = node.getChildren(Tokens.IMPORT);
+			if(imports.length > 1){
+				// fold from first ID to last semicolon
+				var begin = imports[0].findChildByType(Tokens.getRuleFor(CyclicLangParser.RULE_id));
+				var end = imports[imports.length - 1].findChildByType(Tokens.getFor(CyclicLangLexer.SEMICOLON));
+				if(begin != null && end != null){
+					descriptors = new FoldingDescriptor[]{
+							new FoldingDescriptor(node, TextRange.create(begin.getStartOffset(), end.getStartOffset() + 1))};
+				}
+			}
+		}
 		// simple recursive approach
 		// just add the arrays
 		descriptors = Stream.concat(
@@ -38,6 +50,8 @@ public class CycFoldingBuilder implements FoldingBuilder{
 	}
 	
 	public @Nullable String getPlaceholderText(@NotNull ASTNode node){
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_imports))
+			return "...";
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl)
 				&& node.findChildByType(Tokens.getRuleFor(CyclicLangParser.RULE_member)) == null){
 			return "{}";
@@ -50,6 +64,6 @@ public class CycFoldingBuilder implements FoldingBuilder{
 	}
 	
 	public boolean isCollapsedByDefault(@NotNull ASTNode node){
-		return false;
+		return node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_imports);
 	}
 }

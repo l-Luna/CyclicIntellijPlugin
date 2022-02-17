@@ -5,12 +5,15 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
+import cyclic.intellij.antlr_generated.CyclicLangParser;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.lexer.TokenIElementType;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
+
+import static org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory.createTokenSet;
 
 public class Tokens{
 	
@@ -19,7 +22,7 @@ public class Tokens{
 	public static final List<TokenIElementType> TOKEN_ELEMENT_TYPES = PSIElementTypeFactory.getTokenIElementTypes(CyclicLanguage.LANGUAGE);
 	public static final List<RuleIElementType> RULE_ELEMENT_TYPES = PSIElementTypeFactory.getRuleIElementTypes(CyclicLanguage.LANGUAGE);
 	
-	public static final TokenSet KEYWORDS = PSIElementTypeFactory.createTokenSet(
+	public static final TokenSet KEYWORDS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
 			CyclicLangLexer.BOOL,
@@ -77,7 +80,7 @@ public class Tokens{
 			CyclicLangLexer.FALSE
 	);
 	
-	public static final TokenSet OPERATORS = PSIElementTypeFactory.createTokenSet(
+	public static final TokenSet OPERATORS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
 			CyclicLangLexer.EQUAL,
@@ -105,7 +108,7 @@ public class Tokens{
 			CyclicLangLexer.PERCENT
 	);
 	
-	public static final TokenSet LITERALS = PSIElementTypeFactory.createTokenSet(
+	public static final TokenSet LITERALS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
 			CyclicLangLexer.INTLIT,
@@ -114,7 +117,7 @@ public class Tokens{
 			CyclicLangLexer.DECLIT
 	);
 	
-	public static final TokenSet SYMBOLS = PSIElementTypeFactory.createTokenSet(
+	public static final TokenSet SYMBOLS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
 			CyclicLangLexer.QUOTE,
@@ -125,7 +128,7 @@ public class Tokens{
 			CyclicLangLexer.EQARROW
 	);
 	
-	public static final TokenSet PUNCTUATION = PSIElementTypeFactory.createTokenSet(
+	public static final TokenSet PUNCTUATION = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
 			CyclicLangLexer.DOT,
@@ -137,7 +140,7 @@ public class Tokens{
 			CyclicLangLexer.QUESTION
 	);
 	
-	public static final TokenSet BRACES = PSIElementTypeFactory.createTokenSet(
+	public static final TokenSet BRACES = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
 			CyclicLangLexer.LPAREN,
@@ -148,10 +151,12 @@ public class Tokens{
 			CyclicLangLexer.RSQUAR
 	);
 	
-	public static final TokenSet WHITESPACES = PSIElementTypeFactory.createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.WS);
-	public static final TokenSet COMMENTS = PSIElementTypeFactory.createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.SING_COMMENT);
-	public static final TokenSet STRING_LITERALS = PSIElementTypeFactory.createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.STRLIT);
-	public static final TokenSet IDENTIFIERS = PSIElementTypeFactory.createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.ID);
+	public static final TokenSet WHITESPACES = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.WS);
+	public static final TokenSet COMMENTS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.SING_COMMENT);
+	public static final TokenSet STRING_LITERALS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.STRLIT);
+	public static final TokenSet IDENTIFIERS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.ID);
+	
+	public static final TokenSet IMPORT = TokenSet.create(getRuleFor(CyclicLangParser.RULE_importDecl));
 	
 	@Contract(pure = true) public static IElementType getFor(int type){
 		return TOKEN_ELEMENT_TYPES.get(type);
