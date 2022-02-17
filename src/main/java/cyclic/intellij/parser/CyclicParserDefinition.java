@@ -63,6 +63,8 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycPackageStatement(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_importDecl))
 			return new CycImportStatement(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_imports))
+			return new CycImportList(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_rawType))
 			return new CycRawTypeRef(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_member))

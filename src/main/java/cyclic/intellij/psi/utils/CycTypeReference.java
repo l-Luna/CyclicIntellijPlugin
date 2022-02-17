@@ -1,9 +1,15 @@
 package cyclic.intellij.psi.utils;
 
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.LocalQuickFixProvider;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.inspections.fixes.AddImportFix;
 import cyclic.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CycTypeReference implements PsiReference{
+public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	
 	CycId id;
 	CycIdHolder from;
@@ -120,5 +126,21 @@ public class CycTypeReference implements PsiReference{
 			return false;
 		}else
 			return typeDef.fullyQualifiedName().equals(ourId);
+	}
+	
+	public LocalQuickFix @Nullable [] getQuickFixes(){
+		// we resolve to nothing, see if there exists a type with the right short name
+		var shortName = id.getText();
+		if(shortName.contains("."))
+			return new LocalQuickFix[0];
+		
+		var project = id.getProject();
+		List<CPsiClass> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName));
+		for(PsiClass psiClass : PsiShortNamesCache.getInstance(project).getClassesByName(shortName, GlobalSearchScope.everythingScope(project)))
+			candidates.add(JPsiClass.of(psiClass));
+		
+		return candidates.stream()
+				.map(x -> new AddImportFix(x.fullyQualifiedName(), id))
+				.toArray(LocalQuickFix[]::new);
 	}
 }

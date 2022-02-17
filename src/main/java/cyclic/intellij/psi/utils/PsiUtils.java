@@ -41,6 +41,15 @@ public class PsiUtils{
 		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_value)).getFirstChild();
 	}
 	
+	public static PsiElement createImportFromText(@NotNull PsiElement context, String text){
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_importDecl)).getFirstChild();
+	}
+	
+	public static PsiElement createWhitespace(@NotNull PsiElement context, String text){
+		assert text.isBlank();
+		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID)).getFirstChild();
+	}
+	
 	@NotNull public static <X> List<X> childrenOfType(@NotNull PsiElement parent, Class<X> filter){
 		return Arrays.stream(parent.getChildren())
 				.filter(filter::isInstance)

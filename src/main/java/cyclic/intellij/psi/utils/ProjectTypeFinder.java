@@ -11,6 +11,8 @@ import cyclic.intellij.psi.CycMember;
 import cyclic.intellij.psi.CycType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -54,6 +56,27 @@ public class ProjectTypeFinder{
 			return true;
 		});
 		return ret.get();
+	}
+	
+	public static List<CPsiClass> findAll(@NotNull Project in, @NotNull Predicate<CycType> checker){
+		List<CPsiClass> ret = new ArrayList<>();
+		ProjectRootManager.getInstance(in).getFileIndex().iterateContent(vf -> {
+			if(!vf.isDirectory() && Objects.equals(vf.getExtension(), "cyc") && vf.getFileType() == CyclicFileType.FILE_TYPE){
+				CycFile file = (CycFile)PsiManager.getInstance(in).findFile(vf);
+				if(file != null){
+					var type = file.getTypeDef();
+					if(type.isPresent()){
+						var checked = checkTypeAndMembers(type.get(), checker);
+						if(checked.isPresent()){
+							ret.add(checked.get());
+							return true; // don't stop
+						}
+					}
+				}
+			}
+			return true;
+		});
+		return ret;
 	}
 	
 	public static Optional<CPsiClass> checkTypeAndMembers(@NotNull CycType type, @NotNull Predicate<CycType> checker){
