@@ -36,6 +36,9 @@
         <lang.braceMatcher language="Cyclic"
                            implementationClass="cyclic.intellij.presentation.CycPairedBraceMatcher"/>
 
+        <lang.commenter language="Cyclic"
+                        implementationClass="cyclic.intellij.refactoring.CycCommenter"/>
+
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <lang.findUsagesProvider language="Cyclic" implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
