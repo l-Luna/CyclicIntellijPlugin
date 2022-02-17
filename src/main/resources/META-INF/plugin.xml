@@ -33,6 +33,9 @@
         <lang.foldingBuilder language="Cyclic"
                              implementationClass="cyclic.intellij.presentation.CycFoldingBuilder"/>
 
+        <lang.braceMatcher language="Cyclic"
+                           implementationClass="cyclic.intellij.presentation.CycPairedBraceMatcher"/>
+
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <lang.findUsagesProvider language="Cyclic" implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>

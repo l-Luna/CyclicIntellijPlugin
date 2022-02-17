@@ -122,7 +122,6 @@ public class Tokens{
 			
 			CyclicLangLexer.QUOTE,
 			CyclicLangLexer.SEMICOLON,
-			CyclicLangLexer.ASSIGN,
 			
 			CyclicLangLexer.DASHARROW,
 			CyclicLangLexer.EQARROW
@@ -134,7 +133,7 @@ public class Tokens{
 			CyclicLangLexer.DOT,
 			CyclicLangLexer.COMMA,
 			CyclicLangLexer.COLON,
-			CyclicLangLexer.SEMICOLON,
+			CyclicLangLexer.ASSIGN,
 			
 			CyclicLangLexer.EXCLAMATION,
 			CyclicLangLexer.QUESTION
