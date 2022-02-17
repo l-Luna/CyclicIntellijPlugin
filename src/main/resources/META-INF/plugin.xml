@@ -48,6 +48,13 @@
                          enabledByDefault="true" level="ERROR"
                          groupName="Errors" displayName="Wrong type name for file name"
                          implementationClass="cyclic.intellij.inspections.WrongFileNameForTypeNameInspection"/>
+
+        <intentionAction>
+            <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
+        </intentionAction>
+        <intentionAction>
+            <className>cyclic.intellij.refactoring.intentions.AddParensAction</className>
+        </intentionAction>
     </extensions>
 
     <actions>

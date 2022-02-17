@@ -7,9 +7,9 @@ import com.intellij.psi.impl.PsiFileFactoryImpl;
 import com.intellij.psi.tree.IElementType;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
+import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.Tokens;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,13 +28,17 @@ public class PsiUtils{
 		return createFromText(context.getProject(), context, text, elementType);
 	}
 	
-	// yes, unwrapping both times is intentional
+	// the ID token is understood in ParserAdaptor to mean a full ID
 	public static PsiElement createIdFromText(@NotNull PsiElement context, String text){
 		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID)).getFirstChild();
 	}
 	
 	public static PsiElement createIdPartFromText(@NotNull PsiElement context, String text){
 		return createIdFromText(context, text).getFirstChild();
+	}
+	
+	public static PsiElement createExpressionFromText(@NotNull PsiElement context, String text){
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_value)).getFirstChild();
 	}
 	
 	@NotNull public static <X> List<X> childrenOfType(@NotNull PsiElement parent, Class<X> filter){
