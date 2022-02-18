@@ -64,8 +64,14 @@
         <localInspection language="Cyclic"
                          groupPath="Cyclic"
                          enabledByDefault="true" level="ERROR"
-                         groupName="Errors" displayName="Invalid type name"
+                         groupName="Errors" displayName="Invalid type reference"
                          implementationClass="cyclic.intellij.inspections.InvalidTypeRefInspection"/>
+
+        <localInspection language="Cyclic"
+                         groupPath="Cyclic"
+                         enabledByDefault="true" level="ERROR"
+                         groupName="Errors" displayName="'this' in static context"
+                         implementationClass="cyclic.intellij.inspections.ThisInStaticMethodInspection"/>
 
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>

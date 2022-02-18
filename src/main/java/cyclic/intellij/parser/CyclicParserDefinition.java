@@ -67,8 +67,14 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycImportList(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_rawType))
 			return new CycRawTypeRef(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_type))
+			return new CycTypeRef(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_member))
 			return new CycMember(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_modifiers))
+			return new CycModifierList(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_modifier))
+			return new CycModifier(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_function))
 			return new CycMethod(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_statement))
@@ -77,6 +83,8 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return createExpr(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_call))
 			return new CycCall(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_varAssignment))
+			return new CycVariableAssignment(node);
 		return new CycElement(node);
 	}
 	

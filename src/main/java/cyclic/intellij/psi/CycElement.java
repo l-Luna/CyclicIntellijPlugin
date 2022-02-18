@@ -34,4 +34,8 @@ public class CycElement extends ASTWrapperPsiElement{
 				cont = processor.execute(child, state);
 		return cont;
 	}
+	
+	public boolean textMatches(String text){
+		return getText().equals(text);
+	}
 }

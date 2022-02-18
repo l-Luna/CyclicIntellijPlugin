@@ -168,6 +168,11 @@ public class Tokens{
 	public static final TokenSet TOK_RECORD = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.RECORD);
 	public static final TokenSet TOK_SINGLE = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.SINGLE);
 	
+	public static final TokenSet TOK_NULL = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.NULL);
+	public static final TokenSet TOK_INTLIT = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.INTLIT);
+	public static final TokenSet TOK_DECLIT = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.DECLIT);
+	public static final TokenSet TOK_BOOLLIT = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.BOOLLIT);
+	
 	public static final TokenSet PARENTHESIS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.LPAREN, CyclicLangLexer.RPAREN);
 	public static final TokenSet SQ_BRACES = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.LSQUAR, CyclicLangLexer.RSQUAR);
 	public static final TokenSet PRE_POST_OPS = TokenSet.create(
