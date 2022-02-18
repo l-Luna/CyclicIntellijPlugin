@@ -4,8 +4,8 @@ plugins {
     java
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "com.github.l-Luna.CyclicCompiler"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
@@ -28,8 +28,7 @@ intellij {
 tasks {
     patchPluginXml {
         changeNotes.set("""
-            Add change notes here.<br>
-            <em>most HTML tags may be used</em>        """.trimIndent())
+            First version.       """.trimIndent())
     }
 }
 tasks.getByName<Test>("test") {

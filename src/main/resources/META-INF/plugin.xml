@@ -47,7 +47,6 @@
         <fileIconPatcher implementation="cyclic.intellij.presentation.CycFileIconPatcher"/>
         <createFromTemplateHandler implementation="cyclic.intellij.CyclicTemplates"/>
 
-        <internalFileTemplate name="Cyclic File"/>
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>
         <internalFileTemplate name="Cyclic Enum"/>
