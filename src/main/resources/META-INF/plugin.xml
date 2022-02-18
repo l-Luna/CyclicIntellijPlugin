@@ -45,6 +45,15 @@
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
         <fileIconPatcher implementation="cyclic.intellij.presentation.CycFileIconPatcher"/>
+        <createFromTemplateHandler implementation="cyclic.intellij.CyclicTemplates"/>
+
+        <internalFileTemplate name="Cyclic File"/>
+        <internalFileTemplate name="Cyclic Class"/>
+        <internalFileTemplate name="Cyclic Interface"/>
+        <internalFileTemplate name="Cyclic Enum"/>
+        <internalFileTemplate name="Cyclic Annotation"/>
+        <internalFileTemplate name="Cyclic Record"/>
+        <internalFileTemplate name="Cyclic Single"/>
 
         <localInspection language="Cyclic"
                          groupPath="Cyclic"
@@ -67,6 +76,8 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <action id="cyclic.intellij.actions.CreateCyclicClassAction" class="cyclic.intellij.actions.CreateCyclicClassAction" text="Cyclic Class" description="Create new Cyclic class">
+            <add-to-group group-id="NewGroup1" anchor="after" relative-to-action="NewClass"/>
+        </action>
     </actions>
 </idea-plugin>
