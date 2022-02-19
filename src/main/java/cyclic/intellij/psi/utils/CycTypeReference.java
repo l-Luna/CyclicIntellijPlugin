@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
@@ -150,17 +151,26 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	}
 	
 	public Object @NotNull [] getVariants(){
-		List<LookupElementBuilder> list = new ArrayList<>();
-		for(CPsiClass aClass : ProjectTypeFinder.allVisibleAt(id.getProject(), id)){
+		Predicate<CPsiClass> isWrongClause = (aClass) -> {
 			CycType in;
-			boolean wrongClause = false;
 			if(PsiTreeUtil.getParentOfType(id, CycImplementsClause.class) != null)
 				if(aClass.kind() != CPsiClass.Kind.INTERFACE)
-					wrongClause = true;
+					return true;
 			if(PsiTreeUtil.getParentOfType(id, CycExtendsClause.class) != null && (in = PsiTreeUtil.getParentOfType(id, CycType.class)) != null)
-				if(aClass.isFinal() || (in.kind() != CPsiClass.Kind.INTERFACE && aClass.kind() == CPsiClass.Kind.INTERFACE))
-					continue;
-			
+				return aClass.isFinal()
+						|| (in.kind() != CPsiClass.Kind.INTERFACE && aClass.kind() == CPsiClass.Kind.INTERFACE)
+						|| (in.kind() == CPsiClass.Kind.INTERFACE && aClass.kind() != CPsiClass.Kind.INTERFACE)
+						|| aClass.kind() == CPsiClass.Kind.ANNOTATION;
+			return false;
+		};
+		
+		return fillCompletion(id, isWrongClause);
+	}
+	
+	public static Object @NotNull [] fillCompletion(CycElement at, Predicate<CPsiClass> isWrongClause){
+		List<LookupElementBuilder> list = new ArrayList<>();
+		for(CPsiClass aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), at)){
+			boolean wrongClause = isWrongClause.test(aClass);
 			PsiElement decl = aClass.declaration();
 			if(decl != null){
 				var fqName = aClass.fullyQualifiedName();

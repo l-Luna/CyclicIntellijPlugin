@@ -11,6 +11,8 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.java</depends>
 
+    <!-- <depends>org.jetbrains.plugins.yaml</depends> -->
+
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
 
@@ -41,6 +43,9 @@
 
         <lang.findUsagesProvider language="Cyclic"
                                  implementationClass="cyclic.intellij.refactoring.CycFindUsagesProvider"/>
+
+        <completion.contributor language="Cyclic"
+                                implementationClass="cyclic.intellij.completion.CycKeywordContributor"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>

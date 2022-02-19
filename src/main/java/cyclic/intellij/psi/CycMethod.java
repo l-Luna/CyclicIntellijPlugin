@@ -2,12 +2,13 @@ package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
+import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class CycMethod extends CycDefinition{
+public class CycMethod extends CycDefinition implements CycModifiersHolder{
 	
 	public CycMethod(@NotNull ASTNode node){
 		super(node);

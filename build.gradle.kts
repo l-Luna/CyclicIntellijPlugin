@@ -24,6 +24,7 @@ dependencies {
 intellij {
     version.set("2021.3")
     plugins.add("com.intellij.java")
+    //plugins.add("yaml")
 }
 tasks {
     patchPluginXml {
