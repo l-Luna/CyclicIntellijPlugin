@@ -33,7 +33,23 @@ public class PrimPsiClass implements CPsiClass{
 		return null;
 	}
 	
+	public @NotNull String name(){
+		return fullyQualifiedName();
+	}
+	
+	public @NotNull String packageName(){
+		return "";
+	}
+	
 	public @NotNull String fullyQualifiedName(){
 		return type.name().toLowerCase(Locale.ROOT);
+	}
+	
+	public @NotNull Kind kind(){
+		return Kind.CONSTRUCTED;
+	}
+	
+	public boolean isFinal(){
+		return true;
 	}
 }

@@ -3,7 +3,7 @@ package cyclic.intellij.psi.expressions;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiReference;
 import cyclic.intellij.psi.CycExpression;
-import cyclic.intellij.psi.CycIdHolder;
+import cyclic.intellij.psi.utils.CycIdHolder;
 import cyclic.intellij.psi.utils.CPsiClass;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import cyclic.intellij.psi.utils.JPsiClass;

@@ -10,6 +10,8 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.inspections.fixes.AddImportFix;
 import cyclic.intellij.psi.*;
@@ -150,13 +152,21 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	public Object @NotNull [] getVariants(){
 		List<LookupElementBuilder> list = new ArrayList<>();
 		for(CPsiClass aClass : ProjectTypeFinder.allVisibleAt(id.getProject(), id)){
+			CycType in;
+			boolean wrongClause = false;
+			if(PsiTreeUtil.getParentOfType(id, CycImplementsClause.class) != null)
+				if(aClass.kind() != CPsiClass.Kind.INTERFACE)
+					wrongClause = true;
+			if(PsiTreeUtil.getParentOfType(id, CycExtendsClause.class) != null && (in = PsiTreeUtil.getParentOfType(id, CycType.class)) != null)
+				if(aClass.isFinal() || (in.kind() != CPsiClass.Kind.INTERFACE && aClass.kind() == CPsiClass.Kind.INTERFACE))
+					continue;
+			
 			PsiElement decl = aClass.declaration();
 			if(decl != null){
-				var namedElem = (PsiNamedElement)decl;
 				var fqName = aClass.fullyQualifiedName();
 				LookupElementBuilder builder = LookupElementBuilder
-						.createWithIcon(namedElem)
-						.withTailText(" " + fqName.substring(0, fqName.length() - namedElem.getName().length() - 1))
+						.createWithIcon((PsiNamedElement)decl)
+						.withTailText(" " + aClass.packageName())
 						.withInsertHandler((ctx, elem) -> {
 							if(ctx.getFile() instanceof CycFile){
 								CycFile cFile = (CycFile)ctx.getFile();
@@ -166,6 +176,8 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 									AddImportFix.addImport(cFile, fqName);
 							}
 						});
+				if(wrongClause)
+					builder = builder.withItemTextForeground(JBColor.RED);
 				list.add(builder);
 			}
 		}
