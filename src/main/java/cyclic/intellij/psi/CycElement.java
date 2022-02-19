@@ -10,6 +10,8 @@ import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.psi.Trees;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class CycElement extends ASTWrapperPsiElement{
 	
 	public CycElement(@NotNull ASTNode node){
@@ -37,5 +39,12 @@ public class CycElement extends ASTWrapperPsiElement{
 	
 	public boolean textMatches(String text){
 		return getText().equals(text);
+	}
+	
+	public Optional<CycFileWrapper> getContainer(){
+		var file = getContainingFile();
+		if(file instanceof CycFile)
+			return ((CycFile)file).wrapper();
+		return Optional.empty();
 	}
 }

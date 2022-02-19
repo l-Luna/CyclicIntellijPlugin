@@ -26,7 +26,7 @@ import java.util.Properties;
 public class CreateCyclicClassAction extends CreateTemplateInPackageAction<CycType>{
 	
 	protected CreateCyclicClassAction(){
-		super("", "Create new Cyclic CLass", new LayeredIcon(PlatformIcons.CLASS_ICON, CyclicIcons.CYCLIC_DECORATION), JavaModuleSourceRootTypes.SOURCES);
+		super("", "Create new Cyclic class", new LayeredIcon(PlatformIcons.CLASS_ICON, CyclicIcons.CYCLIC_DECORATION), JavaModuleSourceRootTypes.SOURCES);
 	}
 	
 	protected @Nullable PsiElement getNavigationElement(@NotNull CycType createdElement){
@@ -43,8 +43,7 @@ public class CreateCyclicClassAction extends CreateTemplateInPackageAction<CycTy
 		/*for(Map.Entry<String, String> entry : additionalProperties.entrySet())
 			properties.setProperty(entry.getKey(), entry.getValue());*/
 		
-		String ext = "cyc";
-		String fileName = className + "." + ext;
+		String fileName = className + ".cyc";
 		
 		PsiElement element;
 		try{

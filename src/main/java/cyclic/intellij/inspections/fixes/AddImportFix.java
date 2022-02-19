@@ -7,8 +7,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.CycImportList;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -33,6 +31,10 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement{
 	}
 	
 	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement){
+		addImport(file, fqName);
+	}
+	
+	public static void addImport(@NotNull PsiFile file, String fqName){
 		if(file instanceof CycFile){
 			CycFile cycFile = (CycFile)file;
 			cycFile.wrapper().flatMap(w -> PsiUtils.childOfType(w, CycImportList.class)).ifPresent(list -> {

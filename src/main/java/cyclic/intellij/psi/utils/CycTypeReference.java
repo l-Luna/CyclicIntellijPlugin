@@ -1,10 +1,12 @@
 package cyclic.intellij.psi.utils;
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.LocalQuickFixProvider;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
@@ -14,6 +16,7 @@ import cyclic.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -114,7 +117,7 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 			// it's FQ-name == some import that ends in our text,
 			// it's FQ-name == a wildcard import + our text
 			//     TODO: static imports for inner types
-			//     TODO: also consider target's modifiers
+			//     TODO: also consider target's visibility
 			for(CycImportStatement i : file.getImports())
 				if(!i.isStatic()){
 					String name = i.getImportName();
@@ -142,5 +145,28 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		return candidates.stream()
 				.map(x -> new AddImportFix(x.fullyQualifiedName(), id))
 				.toArray(LocalQuickFix[]::new);
+	}
+	
+	public Object @NotNull [] getVariants(){
+		List<LookupElementBuilder> list = new ArrayList<>();
+		for(CPsiClass aClass : ProjectTypeFinder.allVisibleAt(id.getProject(), id)){
+			PsiElement decl = aClass.declaration();
+			if(decl != null){
+				LookupElementBuilder builder = LookupElementBuilder
+						.createWithIcon((PsiNamedElement)decl)
+						.withInsertHandler((ctx, elem) -> {
+							if(ctx.getFile() instanceof CycFile){
+								CycFile cFile = (CycFile)ctx.getFile();
+								var name = aClass.fullyQualifiedName();
+								if(cFile.getImports().stream().noneMatch(imp -> imp.importsType(aClass))
+										&& !CycImportStatement.importsType("java.lang.*", name)
+										&& !CycImportStatement.importsType(cFile.getPackageName() + ".*", name))
+									AddImportFix.addImport(cFile, name);
+							}
+						});
+				list.add(builder);
+			}
+		}
+		return list.toArray();
 	}
 }

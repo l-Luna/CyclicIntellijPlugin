@@ -30,6 +30,10 @@ public class CycFile extends PsiFileBase{
 		return wrapper().flatMap(CycFileWrapper::getPackage);
 	}
 	
+	public String getPackageName(){
+		return getPackage().map(CycPackageStatement::getPackageName).orElse("");
+	}
+	
 	public List<CycImportStatement> getImports(){
 		return wrapper().map(CycFileWrapper::getImports).orElse(new ArrayList<>(0));
 	}

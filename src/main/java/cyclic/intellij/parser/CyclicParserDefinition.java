@@ -51,6 +51,7 @@ public class CyclicParserDefinition implements ParserDefinition{
 	}
 	
 	public @NotNull PsiElement createElement(ASTNode node){
+		// TODO: replace with switch (by rule index)
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_file))
 			return new CycFileWrapper(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl))
@@ -85,6 +86,12 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycCall(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_varAssignment))
 			return new CycVariableAssignment(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_objectExtends))
+			return new CycExtendsClause(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_objectImplements))
+			return new CycImplementsClause(node);
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_objectPermits))
+			return new CycPermitsClause(node);
 		return new CycElement(node);
 	}
 	
