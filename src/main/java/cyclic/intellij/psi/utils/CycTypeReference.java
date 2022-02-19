@@ -152,16 +152,18 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		for(CPsiClass aClass : ProjectTypeFinder.allVisibleAt(id.getProject(), id)){
 			PsiElement decl = aClass.declaration();
 			if(decl != null){
+				var namedElem = (PsiNamedElement)decl;
+				var fqName = aClass.fullyQualifiedName();
 				LookupElementBuilder builder = LookupElementBuilder
-						.createWithIcon((PsiNamedElement)decl)
+						.createWithIcon(namedElem)
+						.withTailText(" " + fqName.substring(0, fqName.length() - namedElem.getName().length() - 1))
 						.withInsertHandler((ctx, elem) -> {
 							if(ctx.getFile() instanceof CycFile){
 								CycFile cFile = (CycFile)ctx.getFile();
-								var name = aClass.fullyQualifiedName();
 								if(cFile.getImports().stream().noneMatch(imp -> imp.importsType(aClass))
-										&& !CycImportStatement.importsType("java.lang.*", name)
-										&& !CycImportStatement.importsType(cFile.getPackageName() + ".*", name))
-									AddImportFix.addImport(cFile, name);
+										&& !CycImportStatement.importsType("java.lang.*", fqName)
+										&& !CycImportStatement.importsType(cFile.getPackageName() + ".*", fqName))
+									AddImportFix.addImport(cFile, fqName);
 							}
 						});
 				list.add(builder);
