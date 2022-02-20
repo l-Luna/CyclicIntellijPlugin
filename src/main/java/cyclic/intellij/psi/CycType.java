@@ -3,20 +3,24 @@ package cyclic.intellij.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.psi.utils.CPsiClass;
+import cyclic.intellij.psi.types.CPsiMethod;
+import cyclic.intellij.psi.types.CPsiType;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
+import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CycType extends CycDefinition implements CPsiClass, CycModifiersHolder{
+public class CycType extends CycDefinition implements CPsiType, CycModifiersHolder{
 	
 	public CycType(@NotNull ASTNode node){
 		super(node);
@@ -62,6 +66,16 @@ public class CycType extends CycDefinition implements CPsiClass, CycModifiersHol
 	
 	public boolean isFinal(){
 		return hasModifier("final");
+	}
+	
+	public @NotNull List<? extends CPsiMethod> methods(){
+		return PsiUtils.childrenOfType(this, CycMethod.class);
+	}
+	
+	public @NotNull List<? extends CycVariable> fields(){
+		List<CycVariable> defs = new ArrayList<>(PsiUtils.wrappedChildrenOfType(this, CycVariableDef.class));
+		PsiUtils.childOfType(this, CycRecordComponents.class).ifPresent(rc -> defs.addAll(rc.components()));
+		return defs;
 	}
 	
 	public PsiElement setName(@NotNull String name) throws IncorrectOperationException{

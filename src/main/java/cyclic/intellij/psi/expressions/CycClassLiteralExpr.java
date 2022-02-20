@@ -4,9 +4,9 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiReference;
 import cyclic.intellij.psi.CycExpression;
 import cyclic.intellij.psi.utils.CycIdHolder;
-import cyclic.intellij.psi.utils.CPsiClass;
+import cyclic.intellij.psi.types.CPsiType;
 import cyclic.intellij.psi.utils.CycTypeReference;
-import cyclic.intellij.psi.utils.JPsiClass;
+import cyclic.intellij.psi.types.JPsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,8 +16,8 @@ public class CycClassLiteralExpr extends CycExpression implements CycIdHolder{
 		super(node);
 	}
 	
-	public @Nullable CPsiClass type(){
-		return JPsiClass.of("java.lang.Class", getProject());
+	public @Nullable CPsiType type(){
+		return JPsiType.of("java.lang.Class", getProject());
 	}
 	
 	public PsiReference getReference(){

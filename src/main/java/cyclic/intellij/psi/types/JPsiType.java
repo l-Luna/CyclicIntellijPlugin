@@ -1,4 +1,4 @@
-package cyclic.intellij.psi.utils;
+package cyclic.intellij.psi.types;
 
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.project.Project;
@@ -6,31 +6,33 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
+import cyclic.intellij.psi.utils.CycVariable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.WeakHashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
-public class JPsiClass implements CPsiClass{
+public class JPsiType implements CPsiType{
 	
-	private static final Map<PsiClass, JPsiClass> CACHE = new WeakHashMap<>();
+	private static final Map<PsiClass, JPsiType> CACHE = new WeakHashMap<>();
 	
 	private final PsiClass underlying;
 	
-	public static @Nullable JPsiClass of(@Nullable PsiClass underlying){
+	@Contract("null -> null; !null -> !null")
+	public static @Nullable JPsiType of(@Nullable PsiClass underlying){
 		if(underlying == null)
 			return null;
-		return CACHE.computeIfAbsent(underlying, JPsiClass::new);
+		return CACHE.computeIfAbsent(underlying, JPsiType::new);
 	}
 	
-	public static @Nullable JPsiClass of(String fullyQualifiedName, Project in){
+	public static @Nullable JPsiType of(String fullyQualifiedName, Project in){
 		return of(JavaPsiFacade.getInstance(in).findClass(fullyQualifiedName, GlobalSearchScope.everythingScope(in)));
 	}
 	
-	private JPsiClass(PsiClass underlying){
+	private JPsiType(PsiClass underlying){
 		this.underlying = underlying;
 	}
 	
@@ -56,6 +58,14 @@ public class JPsiClass implements CPsiClass{
 	
 	public boolean isFinal(){
 		return underlying.hasModifier(JvmModifier.FINAL);
+	}
+	
+	public @NotNull List<CPsiMethod> methods(){
+		return Arrays.stream(underlying.getMethods()).map(JPsiMethod::of).collect(Collectors.toList());
+	}
+	
+	public @NotNull List<CycVariable> fields(){
+		return Arrays.stream(underlying.getFields()).map(JPsiField::of).collect(Collectors.toList());
 	}
 	
 	public @NotNull String name(){

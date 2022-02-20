@@ -2,7 +2,7 @@ package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.impl.source.tree.CompositeElement;
-import cyclic.intellij.psi.utils.CPsiClass;
+import cyclic.intellij.psi.types.CPsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +14,7 @@ public class CycExpression extends CycElement{
 		super(node);
 	}
 	
-	public @Nullable CPsiClass type(){
+	public @Nullable CPsiType type(){
 		return null;
 	}
 	

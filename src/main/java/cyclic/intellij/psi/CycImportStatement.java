@@ -3,7 +3,7 @@ package cyclic.intellij.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiReference;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.psi.utils.CPsiClass;
+import cyclic.intellij.psi.types.CPsiType;
 import cyclic.intellij.psi.utils.CycIdHolder;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -33,7 +33,7 @@ public class CycImportStatement extends CycElement implements CycIdHolder{
 		return getIdElement().map(id -> new CycTypeReference(id, this)).orElse(null);
 	}
 	
-	public boolean importsType(CPsiClass cpc){
+	public boolean importsType(CPsiType cpc){
 		return importsType(cpc.fullyQualifiedName());
 	}
 	

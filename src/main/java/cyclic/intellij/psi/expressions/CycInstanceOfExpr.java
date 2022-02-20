@@ -2,8 +2,8 @@ package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
 import cyclic.intellij.psi.CycExpression;
-import cyclic.intellij.psi.utils.CPsiClass;
-import cyclic.intellij.psi.utils.PrimPsiClass;
+import cyclic.intellij.psi.types.CPsiType;
+import cyclic.intellij.psi.types.PrimPsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +13,7 @@ public class CycInstanceOfExpr extends CycExpression{
 		super(node);
 	}
 	
-	public @Nullable CPsiClass type(){
-		return PrimPsiClass.BOOLEAN;
+	public @Nullable CPsiType type(){
+		return PrimPsiType.BOOLEAN;
 	}
 }

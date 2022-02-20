@@ -15,6 +15,8 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.inspections.fixes.AddImportFix;
 import cyclic.intellij.psi.*;
+import cyclic.intellij.psi.types.CPsiType;
+import cyclic.intellij.psi.types.JPsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,31 +45,30 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		return id.getTextRangeInParent();
 	}
 	
-	public @Nullable CPsiClass resolveClass(){
+	public @Nullable CPsiType resolveClass(){
 		if(id == null)
 			return null;
 		var p = id.getProject();
 		// possible names come from imports
-		if(from.getContainingFile() instanceof CycFile){
-			CycFile file = (CycFile)from.getContainingFile();
-			Optional<String> pkg = file.getPackage().map(CycPackageStatement::getPackageName);
-			List<String> candidates = file.getImports().stream()
-					.filter(x -> !x.isStatic())
-					.map(x -> x.isWildcard() ? (x.getImportName() + "." + id.getText()) : (x.getImportName().endsWith(id.getText()) ? x.getImportName() : null))
-					.filter(Objects::nonNull)
-					.collect(Collectors.toList());
-			candidates.add(0, id.getText());
-			// TODO: all implicit imports
-			candidates.add(1, "java.lang." + id.getText());
-			pkg.ifPresent(s -> candidates.add(2, s + "." + id.getText()));
-			for(String candidate : candidates){
-				var type = ProjectTypeFinder.findByName(p, candidate);
-				if(type.isPresent())
-					return type.get();
-			}
-			return null;
-		}
+		var file = from.getContainingFile();
+		if(file instanceof CycFile)
+			return ProjectTypeFinder.firstType(p, getCandidates((CycFile)file, id.getText()));
 		return ProjectTypeFinder.findByName(p, id.getText()).orElse(null);
+	}
+	
+	@NotNull
+	public static List<String> getCandidates(CycFile file, String id){
+		Optional<String> pkg = file.getPackage().map(CycPackageStatement::getPackageName);
+		List<String> candidates = file.getImports().stream()
+				.filter(x -> !x.isStatic())
+				.map(x -> x.isWildcard() ? (x.getImportName() + "." + id) : (x.getImportName().endsWith(id) ? x.getImportName() : null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+		candidates.add(0, id);
+		// TODO: all implicit imports
+		candidates.add(1, "java.lang." + id);
+		pkg.ifPresent(s -> candidates.add(2, s + "." + id));
+		return candidates;
 	}
 	
 	public @Nullable PsiElement resolve(){
@@ -94,7 +95,9 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	}
 	
 	public boolean isReferenceTo(@NotNull PsiElement element){
-		return element instanceof CycType && matchesType((CycType)element);
+		if(element instanceof CycType)
+			return matchesType((CycType)element);
+		return resolve() == element;
 	}
 	
 	public boolean isSoft(){
@@ -141,9 +144,9 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 			return new LocalQuickFix[0];
 		
 		var project = id.getProject();
-		List<CPsiClass> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName));
+		List<CPsiType> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName));
 		for(PsiClass psiClass : PsiShortNamesCache.getInstance(project).getClassesByName(shortName, GlobalSearchScope.everythingScope(project)))
-			candidates.add(JPsiClass.of(psiClass));
+			candidates.add(JPsiType.of(psiClass));
 		
 		return candidates.stream()
 				.map(x -> new AddImportFix(x.fullyQualifiedName(), id))
@@ -151,25 +154,25 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	}
 	
 	public Object @NotNull [] getVariants(){
-		Predicate<CPsiClass> isWrongClause = (aClass) -> {
+		Predicate<CPsiType> isWrongClause = (aClass) -> {
 			CycType in;
 			if(PsiTreeUtil.getParentOfType(id, CycImplementsClause.class) != null)
-				if(aClass.kind() != CPsiClass.Kind.INTERFACE)
+				if(aClass.kind() != CPsiType.Kind.INTERFACE)
 					return true;
 			if(PsiTreeUtil.getParentOfType(id, CycExtendsClause.class) != null && (in = PsiTreeUtil.getParentOfType(id, CycType.class)) != null)
 				return aClass.isFinal()
-						|| (in.kind() != CPsiClass.Kind.INTERFACE && aClass.kind() == CPsiClass.Kind.INTERFACE)
-						|| (in.kind() == CPsiClass.Kind.INTERFACE && aClass.kind() != CPsiClass.Kind.INTERFACE)
-						|| aClass.kind() == CPsiClass.Kind.ANNOTATION;
+						|| (in.kind() != CPsiType.Kind.INTERFACE && aClass.kind() == CPsiType.Kind.INTERFACE)
+						|| (in.kind() == CPsiType.Kind.INTERFACE && aClass.kind() != CPsiType.Kind.INTERFACE)
+						|| aClass.kind() == CPsiType.Kind.ANNOTATION;
 			return false;
 		};
 		
 		return fillCompletion(id, isWrongClause);
 	}
 	
-	public static Object @NotNull [] fillCompletion(CycElement at, Predicate<CPsiClass> isWrongClause){
+	public static Object @NotNull [] fillCompletion(CycElement at, Predicate<CPsiType> isWrongClause){
 		List<LookupElementBuilder> list = new ArrayList<>();
-		for(CPsiClass aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), at)){
+		for(CPsiType aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), at)){
 			boolean wrongClause = isWrongClause.test(aClass);
 			PsiElement decl = aClass.declaration();
 			if(decl != null){

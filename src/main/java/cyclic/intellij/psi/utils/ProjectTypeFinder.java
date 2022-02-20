@@ -7,7 +7,10 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.psi.*;
+import cyclic.intellij.psi.types.CPsiType;
+import cyclic.intellij.psi.types.JPsiType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -16,7 +19,17 @@ import java.util.stream.Collectors;
 
 public class ProjectTypeFinder{
 	
-	public static List<CPsiClass> allVisibleAt(Project in, CycElement at){
+	@Nullable
+	public static CPsiType firstType(Project p, List<String> candidates){
+		for(String candidate : candidates){
+			var type = ProjectTypeFinder.findByName(p, candidate);
+			if(type.isPresent())
+				return type.get();
+		}
+		return null;
+	}
+	
+	public static List<CPsiType> allVisibleAt(Project in, CycElement at){
 		// TODO: check visibility modifiers
 		var types = findAll(in, x -> true);
 		addTypesFromPackage(in, types, "java.lang");
@@ -26,26 +39,26 @@ public class ProjectTypeFinder{
 			else if(!imp.isWildcard()){
 				var t = JavaPsiFacade.getInstance(in).findClass(imp.getImportName(), GlobalSearchScope.allScope(in));
 				if(t != null)
-					types.add(JPsiClass.of(t));
+					types.add(JPsiType.of(t));
 			}
 		}
 		return types;
 	}
 	
-	private static void addTypesFromPackage(Project in, List<CPsiClass> types, String pkg){
+	private static void addTypesFromPackage(Project in, List<CPsiType> types, String pkg){
 		var aPackage = JavaPsiFacade.getInstance(in).findPackage(pkg);
 		if(aPackage != null)
 			types.addAll(
 					Arrays.stream(aPackage.getClasses())
-							.map(JPsiClass::of)
+							.map(JPsiType::of)
 							.collect(Collectors.toList()));
 	}
 	
-	public static Optional<CPsiClass> findByName(Project in, String qualifiedName){
+	public static Optional<CPsiType> findByName(Project in, String qualifiedName){
 		// first check types in project
 		// can appear in any file due to inner types
 		return find(in, y -> y.fullyQualifiedName().equals(qualifiedName))
-				.or(() -> Optional.ofNullable(JPsiClass.of(JavaPsiFacade.getInstance(in).findClass(qualifiedName, GlobalSearchScope.allScope(in)))));
+				.or(() -> Optional.ofNullable(JPsiType.of(JavaPsiFacade.getInstance(in).findClass(qualifiedName, GlobalSearchScope.allScope(in)))));
 	}
 	
 	/**
@@ -58,8 +71,8 @@ public class ProjectTypeFinder{
 	 * 		The criteria to search against.
 	 * @return The first type found that matches the criteria.
 	 */
-	public static Optional<CPsiClass> find(@NotNull Project in, @NotNull Predicate<CycType> checker){
-		AtomicReference<Optional<CPsiClass>> ret = new AtomicReference<>(Optional.empty());
+	public static Optional<CPsiType> find(@NotNull Project in, @NotNull Predicate<CycType> checker){
+		AtomicReference<Optional<CPsiType>> ret = new AtomicReference<>(Optional.empty());
 		ProjectRootManager.getInstance(in).getFileIndex().iterateContent(vf -> {
 			if(!vf.isDirectory() && Objects.equals(vf.getExtension(), "cyc") && vf.getFileType() == CyclicFileType.FILE_TYPE){
 				CycFile file = (CycFile)PsiManager.getInstance(in).findFile(vf);
@@ -79,8 +92,8 @@ public class ProjectTypeFinder{
 		return ret.get();
 	}
 	
-	public static List<CPsiClass> findAll(@NotNull Project in, @NotNull Predicate<CycType> checker){
-		List<CPsiClass> ret = new ArrayList<>();
+	public static List<CPsiType> findAll(@NotNull Project in, @NotNull Predicate<CycType> checker){
+		List<CPsiType> ret = new ArrayList<>();
 		ProjectRootManager.getInstance(in).getFileIndex().iterateContent(vf -> {
 			if(!vf.isDirectory() && Objects.equals(vf.getExtension(), "cyc") && vf.getFileType() == CyclicFileType.FILE_TYPE){
 				CycFile file = (CycFile)PsiManager.getInstance(in).findFile(vf);
@@ -100,7 +113,7 @@ public class ProjectTypeFinder{
 		return ret;
 	}
 	
-	public static Optional<CPsiClass> checkTypeAndMembers(@NotNull CycType type, @NotNull Predicate<CycType> checker){
+	public static Optional<CPsiType> checkTypeAndMembers(@NotNull CycType type, @NotNull Predicate<CycType> checker){
 		if(checker.test(type))
 			return Optional.of(type);
 		for(CycMember member : type.getMembers()){
