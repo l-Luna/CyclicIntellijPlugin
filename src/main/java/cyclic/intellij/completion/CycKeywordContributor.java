@@ -42,10 +42,6 @@ public class CycKeywordContributor extends CompletionContributor{
 				new KeywordsCompletionProvider(STATEMENT_KEYWORDS));
 	}
 	
-	public void beforeCompletion(@NotNull CompletionInitializationContext context){
-		context.setDummyIdentifier("");
-	}
-	
 	private static class KeywordsCompletionProvider extends CompletionProvider<CompletionParameters>{
 		private final String[] KEYWORDS;
 		
