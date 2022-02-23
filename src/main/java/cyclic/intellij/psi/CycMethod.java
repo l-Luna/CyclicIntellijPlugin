@@ -49,7 +49,7 @@ public class CycMethod extends CycDefinition implements CycModifiersHolder, CycV
 	}
 	
 	public @Nullable JvmType returnType(){
-		return returns().map(CycTypeRef::asClass).orElse(null);
+		return returns().map(CycTypeRef::asType).orElse(null);
 	}
 	
 	public List<? extends CycVariable> available(){

@@ -21,6 +21,6 @@ public class CycCastExpr extends CycExpression{
 	}
 	
 	public @Nullable JvmType type(){
-		return castingTo().map(CycTypeRef::asClass).orElse(null);
+		return castingTo().map(CycTypeRef::asType).orElse(null);
 	}
 }

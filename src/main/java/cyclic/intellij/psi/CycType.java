@@ -1,6 +1,7 @@
 package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.jvm.JvmClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
@@ -17,6 +18,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CycType extends CycDefinition implements CycModifiersHolder{
 	
@@ -87,16 +90,8 @@ public class CycType extends CycDefinition implements CycModifiersHolder{
 		return PsiUtils.childrenOfType(this, CycMember.class);
 	}
 	
-	public PsiElement declaration(){
-		return this;
-	}
-	
 	public @NotNull String name(){
 		return getName();
-	}
-	
-	public @NotNull String packageName(){
-		return getContainer().flatMap(CycFileWrapper::getPackage).map(CycPackageStatement::getPackageName).orElse("");
 	}
 	
 	public @Nullable Icon getIcon(int flags){
@@ -116,5 +111,24 @@ public class CycType extends CycDefinition implements CycModifiersHolder{
 				return CyclicIcons.SINGLE;
 		}
 		return CyclicIcons.CYCLIC_FILE;
+	}
+	
+	@Nullable
+	public JvmClass getSuperType(){
+		if(kind() == CycKind.INTERFACE)
+			return null;
+		var exts = PsiUtils.childOfType(this, CycExtendsClause.class);
+		return exts.flatMap(clause -> PsiUtils.childOfType(clause, CycTypeRef.class).map(CycTypeRef::asClass)).orElse(null);
+	}
+	
+	@NotNull
+	public List<JvmClass> getInterfaces(){
+		Optional<? extends CycElement> list;
+		if(kind() == CycKind.INTERFACE)
+			list = PsiUtils.childOfType(this, CycExtendsClause.class);
+		else
+			list = PsiUtils.childOfType(this, CycImplementsClause.class);
+		return list.map(x -> PsiUtils.childrenOfType(x, CycTypeRef.class)
+				.stream().map(CycTypeRef::asClass).collect(Collectors.toList())).orElse(List.of());
 	}
 }

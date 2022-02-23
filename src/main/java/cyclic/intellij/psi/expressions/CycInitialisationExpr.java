@@ -21,6 +21,6 @@ public class CycInitialisationExpr extends CycExpression{
 	}
 	
 	public @Nullable JvmType type(){
-		return initialising().map(CycTypeRef::asClass).orElse(null);
+		return initialising().map(CycTypeRef::asType).orElse(null);
 	}
 }

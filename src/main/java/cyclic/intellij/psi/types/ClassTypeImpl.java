@@ -26,6 +26,7 @@ public class ClassTypeImpl implements JvmReferenceType{
 		this.underlying = underlying;
 	}
 	
+	@Nullable
 	public static ClassTypeImpl of(JvmClass jClass){
 		if(jClass == null)
 			return null;

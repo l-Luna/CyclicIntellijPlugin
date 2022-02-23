@@ -83,6 +83,12 @@
                          groupName="Errors" displayName="'this' in static context"
                          implementationClass="cyclic.intellij.inspections.ThisInStaticMethodInspection"/>
 
+        <localInspection language="Cyclic"
+                         groupPath="Cyclic"
+                         enabledByDefault="true" level="ERROR"
+                         groupName="Errors" displayName="Invalid supertype"
+                         implementationClass="cyclic.intellij.inspections.InvalidSupertypeInspection"/>
+
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
         </intentionAction>

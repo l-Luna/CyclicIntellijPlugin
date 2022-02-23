@@ -23,6 +23,6 @@ public class CycNewArrayExpr extends CycExpression{
 	}
 	
 	public @Nullable JvmType type(){
-		return elementType().map(CycTypeRef::asClass).map(ArrayTypeImpl::of).orElse(null);
+		return elementType().map(CycTypeRef::asType).map(ArrayTypeImpl::of).orElse(null);
 	}
 }

@@ -25,7 +25,7 @@ public class CycVariableDef extends CycDefinition implements CycVariable{
 	
 	public JvmType varType(){
 		return PsiUtils.childOfType(this, CycTypeRef.class)
-				.map(CycTypeRef::asClass)
+				.map(CycTypeRef::asType)
 				// for var/val
 				.orElseGet(() -> PsiUtils.childOfType(this, CycExpression.class).map(CycExpression::type).orElse(null));
 	}

@@ -23,7 +23,7 @@ public class CycParameter extends CycDefinition implements CycVariable{
 	}
 	
 	public JvmType varType(){
-		return PsiUtils.childOfType(this, CycTypeRef.class).map(CycTypeRef::asClass).orElse(null);
+		return PsiUtils.childOfType(this, CycTypeRef.class).map(CycTypeRef::asType).orElse(null);
 	}
 	
 	public boolean isMethodParameter(){

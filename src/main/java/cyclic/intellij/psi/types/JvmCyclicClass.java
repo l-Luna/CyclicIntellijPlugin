@@ -46,11 +46,11 @@ public class JvmCyclicClass implements JvmClass{
 	}
 	
 	public @Nullable JvmReferenceType getSuperClassType(){
-		return null;
+		return ClassTypeImpl.of(underlying.getSuperType());
 	}
 	
 	public JvmReferenceType @NotNull [] getInterfaceTypes(){
-		return new JvmReferenceType[0];
+		return underlying.getInterfaces().stream().map(ClassTypeImpl::of).toArray(JvmReferenceType[]::new);
 	}
 	
 	public JvmMethod @NotNull [] getMethods(){
