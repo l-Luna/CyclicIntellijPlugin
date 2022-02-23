@@ -2,6 +2,7 @@ package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
+import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.CycExpression;
 import cyclic.intellij.psi.CycTypeRef;
 import cyclic.intellij.psi.types.ArrayTypeImpl;
@@ -18,7 +19,7 @@ public class CycNewListArrayExpr extends CycExpression{
 	}
 	
 	public Optional<CycTypeRef> elementType(){
-		return PsiUtils.wrappedChildOfType(this, CycTypeRef.class);
+		return PsiUtils.childOfType(this, CycElement.class).flatMap(x -> PsiUtils.childOfType(x, CycTypeRef.class));
 	}
 	
 	public @Nullable JvmType type(){

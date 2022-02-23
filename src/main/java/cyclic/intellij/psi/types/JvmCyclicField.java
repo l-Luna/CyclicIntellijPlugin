@@ -39,7 +39,7 @@ public class JvmCyclicField implements JvmField{
 	}
 	
 	public @NotNull JvmType getType(){
-		return null;
+		return underlying.varType();
 	}
 	
 	public boolean hasModifier(@NotNull JvmModifier modifier){

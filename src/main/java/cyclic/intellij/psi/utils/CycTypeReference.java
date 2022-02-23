@@ -177,6 +177,7 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 				LookupElementBuilder builder = LookupElementBuilder
 						.createWithIcon((PsiNamedElement)decl)
 						.withTailText(" " + JvmClassUtils.getPackageName(aClass))
+						.withPsiElement(aClass.getSourceElement())
 						.withInsertHandler((ctx, elem) -> {
 							if(ctx.getFile() instanceof CycFile){
 								CycFile cFile = (CycFile)ctx.getFile();

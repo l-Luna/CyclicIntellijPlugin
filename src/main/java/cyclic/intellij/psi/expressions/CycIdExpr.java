@@ -41,9 +41,14 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 		return PsiUtils.childOfType(this, CycIdPart.class).map(PsiElement::getText).orElse("");
 	}
 	
+	@Nullable
+	public CycExpression on(){
+		return PsiUtils.childOfType(this, CycExpression.class).orElse(null);
+	}
+	
 	// [JvmClass | PsiPackage | CycVariable | JvmField | String | null]
 	public Object resolveTarget(){
-		var on = PsiUtils.childOfType(this, CycExpression.class).orElse(null);
+		var on = on();
 		String id = id();
 		if(on == null){
 			var scope = CycVarScope.scopeOf(this);

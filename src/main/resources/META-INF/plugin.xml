@@ -48,7 +48,10 @@
                                 implementationClass="cyclic.intellij.completion.CycKeywordContributor"/>
 
         <completion.contributor language="Cyclic"
-                                implementationClass="cyclic.intellij.completion.CycTypeCompletionProvider"/>
+                                implementationClass="cyclic.intellij.completion.CycTypeContributor"/>
+
+        <completion.contributor language="Cyclic"
+                                implementationClass="cyclic.intellij.completion.CycExpressionContributor"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
