@@ -45,6 +45,14 @@ public class PsiUtils{
 		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_importDecl)).getFirstChild();
 	}
 	
+	public static PsiElement createExtendsClauseFromText(@NotNull PsiElement context, String text){
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_objectExtends)).getFirstChild();
+	}
+	
+	public static PsiElement createImplementsClauseFromText(@NotNull PsiElement context, String text){
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_objectImplements)).getFirstChild();
+	}
+	
 	public static PsiElement createWhitespace(@NotNull PsiElement context, String text){
 		assert text.isBlank();
 		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID)).getFirstChild();
