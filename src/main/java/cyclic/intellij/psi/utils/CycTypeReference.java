@@ -3,8 +3,10 @@ package cyclic.intellij.psi.utils;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.LocalQuickFixProvider;
+import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.JvmClassKind;
+import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
@@ -15,15 +17,11 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.inspections.fixes.AddImportFix;
 import cyclic.intellij.psi.*;
-import cyclic.intellij.psi.types.CPsiType;
-import cyclic.intellij.psi.types.JPsiType;
+import cyclic.intellij.psi.types.CycKind;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -45,7 +43,7 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		return id.getTextRangeInParent();
 	}
 	
-	public @Nullable CPsiType resolveClass(){
+	public @Nullable JvmClass resolveClass(){
 		if(id == null)
 			return null;
 		var p = id.getProject();
@@ -73,12 +71,12 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	
 	public @Nullable PsiElement resolve(){
 		var cClass = resolveClass();
-		return cClass != null ? cClass.declaration() : null;
+		return cClass != null ? cClass.getSourceElement() : null;
 	}
 	
 	public @NotNull String getCanonicalText(){
 		var cClass = resolveClass();
-		return cClass != null ? cClass.fullyQualifiedName() : id.getText();
+		return cClass != null ? cClass.getQualifiedName() : id.getText();
 	}
 	
 	public PsiElement handleElementRename(@NotNull String name) throws IncorrectOperationException{
@@ -144,42 +142,41 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 			return new LocalQuickFix[0];
 		
 		var project = id.getProject();
-		List<CPsiType> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName));
-		for(PsiClass psiClass : PsiShortNamesCache.getInstance(project).getClassesByName(shortName, GlobalSearchScope.everythingScope(project)))
-			candidates.add(JPsiType.of(psiClass));
+		List<JvmClass> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName));
+		candidates.addAll(Arrays.asList(PsiShortNamesCache.getInstance(project).getClassesByName(shortName, GlobalSearchScope.everythingScope(project))));
 		
 		return candidates.stream()
-				.map(x -> new AddImportFix(x.fullyQualifiedName(), id))
+				.map(x -> new AddImportFix(x.getQualifiedName(), id))
 				.toArray(LocalQuickFix[]::new);
 	}
 	
 	public Object @NotNull [] getVariants(){
-		Predicate<CPsiType> isWrongClause = (aClass) -> {
+		Predicate<JvmClass> isWrongClause = (aClass) -> {
 			CycType in;
 			if(PsiTreeUtil.getParentOfType(id, CycImplementsClause.class) != null)
-				if(aClass.kind() != CPsiType.Kind.INTERFACE)
+				if(aClass.getClassKind() != JvmClassKind.INTERFACE)
 					return true;
 			if(PsiTreeUtil.getParentOfType(id, CycExtendsClause.class) != null && (in = PsiTreeUtil.getParentOfType(id, CycType.class)) != null)
-				return aClass.isFinal()
-						|| (in.kind() != CPsiType.Kind.INTERFACE && aClass.kind() == CPsiType.Kind.INTERFACE)
-						|| (in.kind() == CPsiType.Kind.INTERFACE && aClass.kind() != CPsiType.Kind.INTERFACE)
-						|| aClass.kind() == CPsiType.Kind.ANNOTATION;
+				return aClass.hasModifier(JvmModifier.FINAL)
+						|| (in.kind() != CycKind.INTERFACE && aClass.getClassKind() == JvmClassKind.INTERFACE)
+						|| (in.kind() == CycKind.INTERFACE && aClass.getClassKind() != JvmClassKind.INTERFACE)
+						|| aClass.getClassKind() == JvmClassKind.ANNOTATION;
 			return false;
 		};
 		
 		return fillCompletion(id, isWrongClause);
 	}
 	
-	public static Object @NotNull [] fillCompletion(CycElement at, Predicate<CPsiType> isWrongClause){
+	public static Object @NotNull [] fillCompletion(CycElement at, Predicate<JvmClass> isWrongClause){
 		List<LookupElementBuilder> list = new ArrayList<>();
-		for(CPsiType aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), at)){
+		for(JvmClass aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), at)){
 			boolean wrongClause = isWrongClause.test(aClass);
-			PsiElement decl = aClass.declaration();
+			PsiElement decl = aClass.getSourceElement();
 			if(decl != null){
-				var fqName = aClass.fullyQualifiedName();
+				var fqName = aClass.getQualifiedName();
 				LookupElementBuilder builder = LookupElementBuilder
 						.createWithIcon((PsiNamedElement)decl)
-						.withTailText(" " + aClass.packageName())
+						.withTailText(" " + JvmClassUtils.getPackageName(aClass))
 						.withInsertHandler((ctx, elem) -> {
 							if(ctx.getFile() instanceof CycFile){
 								CycFile cFile = (CycFile)ctx.getFile();

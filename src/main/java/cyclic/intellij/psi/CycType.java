@@ -3,13 +3,11 @@ package cyclic.intellij.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.psi.types.CPsiMethod;
-import cyclic.intellij.psi.types.CPsiType;
+import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -20,7 +18,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CycType extends CycDefinition implements CPsiType, CycModifiersHolder{
+public class CycType extends CycDefinition implements CycModifiersHolder{
 	
 	public CycType(@NotNull ASTNode node){
 		super(node);
@@ -45,30 +43,30 @@ public class CycType extends CycDefinition implements CPsiType, CycModifiersHold
 		return super.fullyQualifiedName();
 	}
 	
-	public @NotNull Kind kind(){
+	public @NotNull CycKind kind(){
 		var objType = getNode().findChildByType(Tokens.getRuleFor(CyclicLangParser.RULE_objectType));
 		if(objType != null){
 			if(objType.findChildByType(Tokens.TOK_CLASS) != null)
-				return Kind.CLASS;
+				return CycKind.CLASS;
 			if(objType.findChildByType(Tokens.TOK_INTERFACE) != null)
-				return Kind.INTERFACE;
+				return CycKind.INTERFACE;
 			if(objType.findChildByType(Tokens.TOK_ANNOTATION) != null || objType.findChildByType(Tokens.TOK_AT) != null)
-				return Kind.ANNOTATION;
+				return CycKind.ANNOTATION;
 			if(objType.findChildByType(Tokens.TOK_ENUM) != null)
-				return Kind.ENUM;
+				return CycKind.ENUM;
 			if(objType.findChildByType(Tokens.TOK_RECORD) != null)
-				return Kind.RECORD;
+				return CycKind.RECORD;
 			if(objType.findChildByType(Tokens.TOK_SINGLE) != null)
-				return Kind.SINGLE;
+				return CycKind.SINGLE;
 		}
-		return Kind.CLASS;
+		return CycKind.CLASS;
 	}
 	
 	public boolean isFinal(){
 		return hasModifier("final");
 	}
 	
-	public @NotNull List<? extends CPsiMethod> methods(){
+	public @NotNull List<? extends CycMethod> methods(){
 		return PsiUtils.childrenOfType(this, CycMethod.class);
 	}
 	

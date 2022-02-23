@@ -1,6 +1,10 @@
 package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.JvmField;
+import com.intellij.lang.jvm.types.JvmReferenceType;
+import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NlsSafe;
 import com.intellij.openapi.util.TextRange;
@@ -11,10 +15,12 @@ import cyclic.intellij.psi.CycExpression;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.CycIdPart;
 import cyclic.intellij.psi.CycType;
-import cyclic.intellij.psi.types.CPsiType;
+import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CycIdExpr extends CycExpression implements PsiReference{
@@ -35,7 +41,7 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 		return PsiUtils.childOfType(this, CycIdPart.class).map(PsiElement::getText).orElse("");
 	}
 	
-	// [CPsiType | PsiPackage | CycVariable | String | null]
+	// [JvmClass | PsiPackage | CycVariable | JvmField | String | null]
 	public Object resolveTarget(){
 		var on = PsiUtils.childOfType(this, CycExpression.class).orElse(null);
 		String id = id();
@@ -47,7 +53,7 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 				if(byName.isPresent())
 					return byName.get();
 			}
-			CPsiType inside = PsiTreeUtil.getParentOfType(this, CycType.class);
+			CycType inside = PsiTreeUtil.getParentOfType(this, CycType.class);
 			if(inside != null){
 				var field = inside.fields().stream()
 						.filter(x -> x.varName().equals(id))
@@ -70,13 +76,15 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 					narrowId = ((PsiPackage)res).getQualifiedName() + "." + narrowId;
 				ret = resolveById(narrowId, getContainingFile(), getProject());
 			}
-			CPsiType type = on.type();
-			if(type == null)
+			JvmType type = on.type();
+			if(!(type instanceof JvmReferenceType))
 				return ret;
-			return type.fields().stream()
-					.filter(x -> x.varName().equals(id))
+			var res = ((JvmReferenceType)type).resolve();
+			if(!(res instanceof JvmClass))
+				return ret;
+			return Arrays.stream(((JvmClass)res).getFields())
+					.filter(x -> x.getName().equals(id))
 					.findFirst()
-					.map(CycVariable::declaration)
 					.map(Object.class::cast)
 					.orElse(ret);
 		}
@@ -95,12 +103,14 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 		return id;
 	}
 	
-	public @Nullable CPsiType type(){
+	public @Nullable JvmType type(){
 		var res = resolveTarget();
-		if(res instanceof CPsiType)
-			return (CPsiType)res;
+		if(res instanceof JvmClass)
+			return ClassTypeImpl.of((JvmClass)res);
 		if(res instanceof CycVariable)
 			return ((CycVariable)res).varType();
+		if(res instanceof JvmField)
+			return ((JvmField)res).getType();
 		return null;
 	}
 	
@@ -118,8 +128,8 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 	
 	public @Nullable PsiElement resolve(){
 		var res = resolveTarget();
-		if(res instanceof CPsiType)
-			return ((CPsiType)res).declaration();
+		if(res instanceof JvmClass)
+			return ((JvmClass)res).getSourceElement();
 		if(res instanceof PsiElement)
 			return (PsiElement)res;
 		return null;
@@ -127,8 +137,10 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 	
 	public @NotNull @NlsSafe String getCanonicalText(){
 		var res = resolveTarget();
-		if(res instanceof CPsiType)
-			return ((CPsiType)res).fullyQualifiedName();
+		if(res instanceof JvmClass){
+			var qName = ((JvmClass)res).getQualifiedName();
+			return qName != null ? qName : "<anonymous>";
+		}
 		if(res instanceof PsiPackage)
 			return ((PsiPackage)res).getQualifiedName();
 		if(res instanceof CycVariable)
@@ -151,8 +163,8 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 	
 	public boolean isReferenceTo(@NotNull PsiElement element){
 		var res = resolveTarget();
-		if(res instanceof CPsiType)
-			return ((CPsiType)res).declaration() == element;
+		if(res instanceof JvmClass)
+			return ((JvmClass)res).getSourceElement() == element;
 		if(res instanceof PsiElement)
 			return res == element;
 		return false;

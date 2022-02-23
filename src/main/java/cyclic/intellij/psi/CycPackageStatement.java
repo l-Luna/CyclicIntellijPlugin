@@ -19,5 +19,5 @@ public class CycPackageStatement extends CycElement{
 		return null;
 	}
 	
-	// TODO: resolve against packages. maybe look at JvmPackage, PriDirectoryContainer?
+	// TODO: resolve against packages
 }

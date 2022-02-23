@@ -1,9 +1,9 @@
 package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.jvm.types.JvmArrayType;
+import com.intellij.lang.jvm.types.JvmType;
 import cyclic.intellij.psi.CycExpression;
-import cyclic.intellij.psi.types.ArrayPsiType;
-import cyclic.intellij.psi.types.CPsiType;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,11 +24,11 @@ public class CycArrayIndexExpr extends CycExpression{
 		return PsiUtils.childOfType(this, CycExpression.class, 1);
 	}
 	
-	public @Nullable CPsiType type(){
+	public @Nullable JvmType type(){
 		return arrayExpr()
 				.map(CycExpression::type)
-				.map(x -> x instanceof ArrayPsiType ? x : null)
-				.map(x-> ((ArrayPsiType)x).getElement())
+				.map(x -> x instanceof JvmArrayType ? x : null)
+				.map(x-> ((JvmArrayType)x).getComponentType())
 				.orElse(null);
 	}
 }

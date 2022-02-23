@@ -1,7 +1,7 @@
 package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
-import cyclic.intellij.psi.types.CPsiMethod;
+import com.intellij.lang.jvm.JvmMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +12,7 @@ public class CycCall extends CycElement{
 	}
 	
 	@Nullable
-	public CPsiMethod resolve(@Nullable CycExpression on){
+	public JvmMethod resolve(){
 		
 		return null;
 	}

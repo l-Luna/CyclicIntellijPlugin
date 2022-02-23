@@ -1,9 +1,9 @@
 package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.jvm.types.JvmType;
 import cyclic.intellij.psi.CycExpression;
 import cyclic.intellij.psi.CycTypeRef;
-import cyclic.intellij.psi.types.CPsiType;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +20,7 @@ public class CycInitialisationExpr extends CycExpression{
 		return PsiUtils.wrappedChildOfType(this, CycTypeRef.class);
 	}
 	
-	public @Nullable CPsiType type(){
+	public @Nullable JvmType type(){
 		return initialising().map(CycTypeRef::asClass).orElse(null);
 	}
 }

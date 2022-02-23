@@ -1,10 +1,8 @@
 package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
+import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.util.PsiTreeUtil;
-import cyclic.intellij.psi.types.CPsiType;
-import cyclic.intellij.psi.types.CPsiMethod;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVarScope;
 import cyclic.intellij.psi.utils.CycVariable;
@@ -15,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class CycMethod extends CycDefinition implements CycModifiersHolder, CPsiMethod, CycVarScope{
+public class CycMethod extends CycDefinition implements CycModifiersHolder, CycVarScope{
 	
 	public CycMethod(@NotNull ASTNode node){
 		super(node);
@@ -50,11 +48,7 @@ public class CycMethod extends CycDefinition implements CycModifiersHolder, CPsi
 		return PsiUtils.wrappedChildrenOfType(this, CycParameter.class);
 	}
 	
-	public @NotNull PsiElement declaration(){
-		return this;
-	}
-	
-	public @Nullable CPsiType returnType(){
+	public @Nullable JvmType returnType(){
 		return returns().map(CycTypeRef::asClass).orElse(null);
 	}
 	

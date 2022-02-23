@@ -1,9 +1,9 @@
 package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.jvm.JvmClass;
 import com.intellij.psi.PsiReference;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.psi.types.CPsiType;
 import cyclic.intellij.psi.utils.CycIdHolder;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -33,8 +33,8 @@ public class CycImportStatement extends CycElement implements CycIdHolder{
 		return getIdElement().map(id -> new CycTypeReference(id, this)).orElse(null);
 	}
 	
-	public boolean importsType(CPsiType cpc){
-		return importsType(cpc.fullyQualifiedName());
+	public boolean importsType(JvmClass cpc){
+		return importsType(cpc.getQualifiedName());
 	}
 	
 	public boolean importsType(String fqTypeName){

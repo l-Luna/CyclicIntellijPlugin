@@ -1,10 +1,10 @@
 package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.jvm.types.JvmType;
+import com.intellij.psi.PsiType;
 import cyclic.intellij.psi.CycExpression;
 import cyclic.intellij.psi.Tokens;
-import cyclic.intellij.psi.types.CPsiType;
-import cyclic.intellij.psi.types.PrimPsiType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,16 +14,16 @@ public class CycLiteralExpr extends CycExpression{
 		super(node);
 	}
 	
-	public @Nullable CPsiType type(){
+	public @Nullable JvmType type(){
 		if(getNode().findChildByType(Tokens.TOK_NULL) != null)
-			return PrimPsiType.NULL;
+			return PsiType.NULL;
 		if(getNode().findChildByType(Tokens.TOK_BOOLLIT) != null)
-			return PrimPsiType.BOOLEAN;
+			return PsiType.BOOLEAN;
 		// TODO: implicit conversions
 		if(getNode().findChildByType(Tokens.TOK_INTLIT) != null)
-			return PrimPsiType.INT;
+			return PsiType.INT;
 		if(getNode().findChildByType(Tokens.TOK_DECLIT) != null)
-			return PrimPsiType.DOUBLE;
+			return PsiType.DOUBLE;
 		return null;
 	}
 }
