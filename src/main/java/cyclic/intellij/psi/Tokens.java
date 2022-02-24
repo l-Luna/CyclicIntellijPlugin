@@ -46,6 +46,7 @@ public class Tokens{
 			CyclicLangLexer.STATIC,
 			CyclicLangLexer.ABSTRACT,
 			CyclicLangLexer.SYNCHRONISED,
+			CyclicLangLexer.NATIVE,
 			
 			CyclicLangLexer.CLASS,
 			CyclicLangLexer.INTERFACE,

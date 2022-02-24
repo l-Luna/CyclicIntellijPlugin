@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 	
-	private static final Set<String> PRIMITIVE_NAMES = Set.of("boolean", "byte", "short", "char", "int", "long", "float", "double");
+	private static final Set<String> PRIMITIVE_NAMES = Set.of("boolean", "byte", "short", "char", "int", "long", "float", "double", "void");
 	private static final Set<String> INFERRED_TYPES = Set.of("var", "val");
 	
 	public @Nullable @Nls String generateDoc(PsiElement element, @Nullable PsiElement originalElement){
@@ -65,7 +65,9 @@ public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 					appendType(current, param.getTypeName().orElse(null));
 					current.append(" ");
 					appendId(current, param.varName());
+					current.append(",");
 				}
+				current.deleteCharAt(current.length() - 1); // unnecessary last comma
 				current.append("\n)");
 			}
 			
@@ -87,6 +89,69 @@ public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 		}
 		
 		return super.generateDoc(element, originalElement);
+	}
+	
+	public @Nullable @Nls String getQuickNavigateInfo(PsiElement element, PsiElement originalElement){
+		// copy-paste
+		// put method args on one line, show declaring file, don't use definition formatting
+		if(element instanceof CycType){
+			var type = (CycType)element;
+			var current = new StringBuilder(element.getContainingFile().getName() + "\n");
+			
+			appendModifiers(current, type::hasModifier);
+			
+			if(type.kind() != CycKind.CONSTRUCTED)
+				appendKeyword(current, type.kind().name().toLowerCase(Locale.ROOT) + " ");
+			
+			appendId(current, type.getName());
+			
+			return current.toString();
+		}
+		
+		if(element instanceof CycMethod){
+			var method = (CycMethod)element;
+			var current = new StringBuilder(element.getContainingFile().getName() + "\n");
+			
+			appendModifiers(current, method::hasModifier);
+			
+			method.returns().ifPresent(x -> {
+				appendType(current, x);
+				current.append(" ");
+			});
+			
+			appendId(current, method.getName());
+			
+			if(method.parameters().size() == 0)
+				appendId(current, "()");
+			else{
+				appendId(current, "(");
+				for(var param : method.parameters()){
+					appendType(current, param.getTypeName().orElse(null));
+					current.append(" ");
+					appendId(current, param.varName());
+					current.append(", ");
+				}
+				current.deleteCharAt(current.length() - 1); // unnecessary last comma
+				current.deleteCharAt(current.length() - 1);
+				current.append(")");
+			}
+			
+			return current.toString();
+		}
+		
+		if(element instanceof CycVariable){
+			var variable = (CycVariable)element;
+			var current = new StringBuilder(element.getContainingFile().getName() + "\n");
+			
+			appendModifiers(current, variable::hasModifier);
+			appendType(current, PsiUtils.childOfType(element, CycTypeRef.class).orElse(null), variable::varType);
+			current.append(" ");
+			appendId(current, variable.varName());
+			
+			return current.toString();
+		}
+		
+		return super.getQuickNavigateInfo(element, originalElement);
 	}
 	
 	protected static void appendKeyword(StringBuilder builder, String append){

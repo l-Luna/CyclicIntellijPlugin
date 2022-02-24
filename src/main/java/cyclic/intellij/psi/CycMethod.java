@@ -45,7 +45,10 @@ public class CycMethod extends CycDefinition implements CycModifiersHolder, CycV
 	}
 	
 	public List<CycParameter> parameters(){
-		return PsiUtils.wrappedChildrenOfType(this, CycParameter.class);
+		var paramList = PsiUtils.childOfType(this, CycParametersList.class);
+		if(paramList.isPresent())
+			return PsiUtils.childrenOfType(paramList.get(), CycParameter.class);
+		return List.of();
 	}
 	
 	public @Nullable JvmType returnType(){
