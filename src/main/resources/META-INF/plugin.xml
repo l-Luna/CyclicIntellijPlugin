@@ -53,6 +53,9 @@
         <completion.contributor language="Cyclic"
                                 implementationClass="cyclic.intellij.completion.CycExpressionContributor"/>
 
+        <codeInsight.inlayProvider language="Cyclic"
+                                   implementationClass="cyclic.intellij.presentation.CycImplicitTypeInlayProvider"/>
+
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
         <fileIconPatcher implementation="cyclic.intellij.presentation.CycFileIconPatcher"/>

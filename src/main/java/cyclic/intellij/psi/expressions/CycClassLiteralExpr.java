@@ -2,11 +2,8 @@ package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
 import cyclic.intellij.psi.CycExpression;
-import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.utils.CycIdHolder;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import org.jetbrains.annotations.NotNull;

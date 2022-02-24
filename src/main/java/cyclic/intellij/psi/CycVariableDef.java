@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Optional;
 
 public class CycVariableDef extends CycDefinition implements CycVariable{
 	
@@ -32,6 +33,16 @@ public class CycVariableDef extends CycDefinition implements CycVariable{
 	
 	public boolean isLocalVar(){
 		return PsiTreeUtil.getParentOfType(this, CycStatement.class) != null;
+	}
+	
+	public Optional<CycExpression> initializer(){
+		return PsiUtils.childOfType(this, CycExpression.class);
+	}
+	
+	public boolean hasInferredType(){
+		return PsiUtils.childOfType(this, CycTypeRef.class)
+				.map(x -> x.getText().equals("var") || x.getText().equals("val"))
+				.orElse(false);
 	}
 	
 	public @NotNull SearchScope getUseScope(){
