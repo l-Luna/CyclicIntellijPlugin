@@ -70,7 +70,7 @@ public class CycType extends CycDefinition implements CycModifiersHolder{
 	}
 	
 	public @NotNull List<? extends CycMethod> methods(){
-		return PsiUtils.childrenOfType(this, CycMethod.class);
+		return PsiUtils.wrappedChildrenOfType(this, CycMethod.class);
 	}
 	
 	public @NotNull List<? extends CycVariable> fields(){

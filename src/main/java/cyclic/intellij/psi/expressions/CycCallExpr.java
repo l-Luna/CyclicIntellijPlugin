@@ -32,6 +32,6 @@ public class CycCallExpr extends CycExpression{
 	}
 	
 	public @Nullable JvmType type(){
-		return call().map(CycCall::resolve).map(JvmMethod::getReturnType).orElse(null);
+		return call().map(CycCall::resolveMethod).map(JvmMethod::getReturnType).orElse(null);
 	}
 }

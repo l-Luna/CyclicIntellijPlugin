@@ -15,8 +15,12 @@ public class InvalidTypeRefInspection extends LocalInspectionTool{
 				super.visitElement(element);
 				var ref = element.getReference();
 				if(ref instanceof CycTypeReference)
-					if(ref.resolve() == null)
-						holder.registerProblem(ref);
+					if(ref.resolve() == null){
+						var text = element.getText();
+						if(text.length() > 0 && !(text.equals("boolean") || text.equals("byte") || text.equals("short") || text.equals("char")
+							|| text.equals("int") || text.equals("long") || text.equals("float") || text.equals("double")))
+							holder.registerProblem(ref);
+					}
 			}
 		};
 	}
