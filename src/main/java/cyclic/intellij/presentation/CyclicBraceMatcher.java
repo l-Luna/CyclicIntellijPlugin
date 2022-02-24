@@ -9,7 +9,7 @@ import cyclic.intellij.psi.Tokens;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CycPairedBraceMatcher implements PairedBraceMatcher{
+public class CyclicBraceMatcher implements PairedBraceMatcher{
 	
 	public BracePair @NotNull [] getPairs(){
 		return new BracePair[] {

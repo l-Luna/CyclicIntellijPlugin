@@ -5,12 +5,14 @@ import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.PlatformIcons;
+import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Optional;
 
 public class CycParameter extends CycDefinition implements CycVariable{
 	
@@ -23,7 +25,18 @@ public class CycParameter extends CycDefinition implements CycVariable{
 	}
 	
 	public JvmType varType(){
-		return PsiUtils.childOfType(this, CycTypeRef.class).map(CycTypeRef::asType).orElse(null);
+		return getTypeName().map(CycTypeRef::asType).orElse(null);
+	}
+	
+	public boolean hasModifier(String modifier){
+		if(!modifier.equals("final"))
+			return false;
+		return getNode().findChildByType(Tokens.getFor(CyclicLangLexer.FINAL)) != null;
+	}
+	
+	@NotNull
+	public Optional<CycTypeRef> getTypeName(){
+		return PsiUtils.childOfType(this, CycTypeRef.class);
 	}
 	
 	public boolean isMethodParameter(){

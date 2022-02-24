@@ -94,6 +94,7 @@ primitiveType
     : BOOL
     | BYTE
     | SHORT
+    | CHAR
     | INT
     | LONG
     | FLOAT
@@ -342,6 +343,7 @@ EQARROW: '=>'; // Unused
 BOOL: 'boolean';
 BYTE: 'byte';
 SHORT: 'short';
+CHAR: 'char';
 INT: 'int';
 LONG: 'long';
 FLOAT: 'float';

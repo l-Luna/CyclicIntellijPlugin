@@ -28,6 +28,7 @@ public class Tokens{
 			CyclicLangLexer.BOOL,
 			CyclicLangLexer.BYTE,
 			CyclicLangLexer.SHORT,
+			CyclicLangLexer.CHAR,
 			CyclicLangLexer.INT,
 			CyclicLangLexer.LONG,
 			CyclicLangLexer.FLOAT,

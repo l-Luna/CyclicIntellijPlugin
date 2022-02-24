@@ -1,7 +1,6 @@
 package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.utils.CycVarScope;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -19,8 +18,8 @@ public class CycBlock extends CycElement implements CycVarScope{
 	public List<? extends CycVariable> available(){
 		// all wrapped CycVariableDefs
 		// plus our super-scope's variable
-		var defined = PsiUtils.wrappedChildrenOfType(this, CycVariableDef.class);
-		var available = new ArrayList<CycVariable>(defined);
+		var defined = PsiUtils.wrappedChildrenOfType(this, CycVariable.class);
+		var available = new ArrayList<>(defined);
 		CycVarScope.scopeOf(this).ifPresent(scope -> available.addAll(scope.available()));
 		return available;
 	}

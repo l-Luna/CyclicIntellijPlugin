@@ -6,6 +6,7 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
+import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.Optional;
 
-public class CycVariableDef extends CycDefinition implements CycVariable{
+public class CycVariableDef extends CycDefinition implements CycVariable, CycModifiersHolder{
 	
 	public CycVariableDef(@NotNull ASTNode node){
 		super(node);
@@ -29,6 +30,10 @@ public class CycVariableDef extends CycDefinition implements CycVariable{
 				.map(CycTypeRef::asType)
 				// for var/val
 				.orElseGet(() -> PsiUtils.childOfType(this, CycExpression.class).map(CycExpression::type).orElse(null));
+	}
+	
+	public boolean hasModifier(String modifier){
+		return CycModifiersHolder.super.hasModifier(modifier);
 	}
 	
 	public boolean isLocalVar(){

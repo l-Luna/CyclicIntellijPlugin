@@ -106,6 +106,9 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycParametersList(node);
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_binaryop))
 			return new CycBinaryOp(node);
+		
+		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_foreachStatement))
+			return new CycForeachLoop(node);
 		return new CycElement(node);
 	}
 	

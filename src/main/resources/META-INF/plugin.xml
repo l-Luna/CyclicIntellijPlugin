@@ -33,10 +33,10 @@
                                  implementationClass="cyclic.intellij.refactoring.CycRefactoringSupport"/>
 
         <lang.foldingBuilder language="Cyclic"
-                             implementationClass="cyclic.intellij.presentation.CycFoldingBuilder"/>
+                             implementationClass="cyclic.intellij.presentation.CyclicFoldingBuilder"/>
 
         <lang.braceMatcher language="Cyclic"
-                           implementationClass="cyclic.intellij.presentation.CycPairedBraceMatcher"/>
+                           implementationClass="cyclic.intellij.presentation.CyclicBraceMatcher"/>
 
         <lang.commenter language="Cyclic"
                         implementationClass="cyclic.intellij.refactoring.CycCommenter"/>
@@ -54,11 +54,14 @@
                                 implementationClass="cyclic.intellij.completion.CycExpressionContributor"/>
 
         <codeInsight.inlayProvider language="Cyclic"
-                                   implementationClass="cyclic.intellij.presentation.CycImplicitTypeInlayProvider"/>
+                                   implementationClass="cyclic.intellij.presentation.CyclicImplicitTypeInlayProvider"/>
+
+        <lang.documentationProvider language="Cyclic"
+                                    implementationClass="cyclic.intellij.presentation.CyclicDocumentationProvider"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
-        <fileIconPatcher implementation="cyclic.intellij.presentation.CycFileIconPatcher"/>
+        <fileIconPatcher implementation="cyclic.intellij.presentation.CyclicFileIconPatcher"/>
         <createFromTemplateHandler implementation="cyclic.intellij.CyclicTemplates"/>
 
         <internalFileTemplate name="Cyclic Class"/>

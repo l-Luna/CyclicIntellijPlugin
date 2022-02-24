@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class CycImplicitTypeInlayProvider implements InlayHintsProvider<NoSettings>{
+public class CyclicImplicitTypeInlayProvider implements InlayHintsProvider<NoSettings>{
 	
 	@Nullable
 	public InlayHintsCollector getCollectorFor(@NotNull PsiFile file, @NotNull Editor e, @NotNull NoSettings __, @NotNull InlayHintsSink s){

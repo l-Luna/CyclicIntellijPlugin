@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class CycFoldingBuilder implements FoldingBuilder{
+public class CyclicFoldingBuilder implements FoldingBuilder{
 	
 	public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document){
 		FoldingDescriptor[] descriptors = new FoldingDescriptor[0];

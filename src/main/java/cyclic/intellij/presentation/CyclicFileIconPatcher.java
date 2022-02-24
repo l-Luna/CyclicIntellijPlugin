@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class CycFileIconPatcher implements FileIconPatcher{
+public class CyclicFileIconPatcher implements FileIconPatcher{
 	
 	public Icon patchIcon(Icon baseIcon, VirtualFile file, int flags, @Nullable Project project){
 		if(file.getFileType() != CyclicFileType.FILE_TYPE || project == null)

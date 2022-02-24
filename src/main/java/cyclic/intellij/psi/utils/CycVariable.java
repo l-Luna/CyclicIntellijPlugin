@@ -10,6 +10,8 @@ public interface CycVariable{
 	
 	JvmType varType();
 	
+	boolean hasModifier(String modifier);
+	
 	@Nullable
 	default PsiElement declaration(){
 		if(this instanceof PsiElement)

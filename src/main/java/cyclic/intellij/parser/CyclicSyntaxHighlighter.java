@@ -15,14 +15,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class CyclicSyntaxHighlighter extends SyntaxHighlighterFactory implements SyntaxHighlighter{
 	
-	private static final TextAttributesKey ID = TextAttributesKey.createTextAttributesKey("Cyclic-ID", DefaultLanguageHighlighterColors.IDENTIFIER);
-	private static final TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey("Cyclic-Keyword", DefaultLanguageHighlighterColors.KEYWORD);
-	private static final TextAttributesKey NUMLIT = TextAttributesKey.createTextAttributesKey("Cyclic-Number-Literal", DefaultLanguageHighlighterColors.NUMBER);
-	private static final TextAttributesKey STRLIT = TextAttributesKey.createTextAttributesKey("Cyclic-String-Literal", DefaultLanguageHighlighterColors.STRING);
-	private static final TextAttributesKey SYMBOLS = TextAttributesKey.createTextAttributesKey("Cyclic-Symbols", DefaultLanguageHighlighterColors.SEMICOLON);
-	private static final TextAttributesKey DOTCOMMA = TextAttributesKey.createTextAttributesKey("Cyclic-Dot-Comma", DefaultLanguageHighlighterColors.DOT);
-	private static final TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("Cyclic-Operators", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-	private static final TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("Cyclic-Comment", DefaultLanguageHighlighterColors.LINE_COMMENT);
+	public static final TextAttributesKey ID = TextAttributesKey.createTextAttributesKey("Cyclic-ID", DefaultLanguageHighlighterColors.IDENTIFIER);
+	public static final TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey("Cyclic-Keyword", DefaultLanguageHighlighterColors.KEYWORD);
+	public static final TextAttributesKey NUMLIT = TextAttributesKey.createTextAttributesKey("Cyclic-Number-Literal", DefaultLanguageHighlighterColors.NUMBER);
+	public static final TextAttributesKey STRLIT = TextAttributesKey.createTextAttributesKey("Cyclic-String-Literal", DefaultLanguageHighlighterColors.STRING);
+	public static final TextAttributesKey SYMBOLS = TextAttributesKey.createTextAttributesKey("Cyclic-Symbols", DefaultLanguageHighlighterColors.SEMICOLON);
+	public static final TextAttributesKey DOTCOMMA = TextAttributesKey.createTextAttributesKey("Cyclic-Dot-Comma", DefaultLanguageHighlighterColors.DOT);
+	public static final TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("Cyclic-Operators", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+	public static final TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("Cyclic-Comment", DefaultLanguageHighlighterColors.LINE_COMMENT);
 	
 	@NotNull
 	@Override public Lexer getHighlightingLexer(){
