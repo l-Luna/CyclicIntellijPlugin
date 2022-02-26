@@ -7,7 +7,6 @@ import com.intellij.psi.PsiType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.utils.CycIdHolder;
 import cyclic.intellij.psi.utils.CycTypeReference;
-import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,6 +39,8 @@ public class CycRawTypeRef extends CycElement implements CycIdHolder{
 				return PsiType.FLOAT;
 			case "double":
 				return PsiType.DOUBLE;
+			case "void":
+				return PsiType.VOID;
 		}
 		var ref = getReference();
 		if(ref instanceof CycTypeReference)

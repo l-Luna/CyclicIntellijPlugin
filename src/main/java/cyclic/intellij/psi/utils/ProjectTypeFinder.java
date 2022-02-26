@@ -3,6 +3,7 @@ package cyclic.intellij.psi.utils;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -53,7 +54,7 @@ public class ProjectTypeFinder{
 	public static Optional<JvmClass> findByName(Project in, String qualifiedName){
 		// first check types in project
 		// can appear in any file due to inner types
-		return find(in, y -> y.fullyQualifiedName().equals(qualifiedName))
+		return find(in, y -> y.fullyQualifiedName().equals(qualifiedName), null)
 				.or(() -> Optional.ofNullable(JavaPsiFacade.getInstance(in).findClass(qualifiedName, GlobalSearchScope.allScope(in))));
 	}
 	
@@ -67,9 +68,11 @@ public class ProjectTypeFinder{
 	 * 		The criteria to search against.
 	 * @return The first type found that matches the criteria.
 	 */
-	public static Optional<JvmClass> find(@NotNull Project in, @NotNull Predicate<CycType> checker){
+	public static Optional<JvmClass> find(@NotNull Project in, @NotNull Predicate<CycType> checker, @Nullable Predicate<VirtualFile> directCheck){
 		AtomicReference<Optional<JvmClass>> ret = new AtomicReference<>(Optional.empty());
 		ProjectRootManager.getInstance(in).getFileIndex().iterateContent(vf -> {
+			if(directCheck != null && !directCheck.test(vf))
+				return true;
 			if(!vf.isDirectory() && Objects.equals(vf.getExtension(), "cyc") && vf.getFileType() == CyclicFileType.FILE_TYPE){
 				CycFile file = (CycFile)PsiManager.getInstance(in).findFile(vf);
 				if(file != null){

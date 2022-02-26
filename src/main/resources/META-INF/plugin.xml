@@ -64,8 +64,18 @@
                                  displayName="Cyclic"
                                  instance="cyclic.intellij.sdks.config.CyclicLanguageConfiguration"/>
 
+        <runLineMarkerContributor language="Cyclic"
+                                  implementationClass="cyclic.intellij.presentation.CyclicProjectRunLineMarkerContributor"/>
+
+        <jvm.declarationSearcher language="Cyclic"
+                                 implementationClass="cyclic.intellij.presentation.CyclicJvmDeclarationSearcher"/>
+
+        <compiler.task execute="BEFORE"
+                       implementation="cyclic.intellij.compiler.CyclicCompileTask"/>
+
         <frameworkSupport implementation="cyclic.intellij.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.facet.CyclicFacetType"/>
+        <jvm.elementProvider implementation="cyclic.intellij.presentation.CyclicJvmElementProvider"/>
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
         <fileIconPatcher implementation="cyclic.intellij.presentation.CyclicFileIconPatcher"/>

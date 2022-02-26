@@ -4,7 +4,7 @@ plugins {
     java
 }
 
-group = "com.github.l-Luna.CyclicCompiler"
+group = "com.github.l-Luna.CyclicIntellijPlugin"
 version = "0.0.1"
 
 repositories {
