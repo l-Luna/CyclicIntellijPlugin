@@ -11,7 +11,7 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.java</depends>
 
-    <!-- <depends>org.jetbrains.plugins.yaml</depends> -->
+    <depends>org.jetbrains.plugins.yaml</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
@@ -59,6 +59,13 @@
         <lang.documentationProvider language="Cyclic"
                                     implementationClass="cyclic.intellij.presentation.CyclicDocumentationProvider"/>
 
+        <applicationConfigurable groupId="language"
+                                 id="preferences.language.cyclic"
+                                 displayName="Cyclic"
+                                 instance="cyclic.intellij.sdks.config.CyclicLanguageConfiguration"/>
+
+        <frameworkSupport implementation="cyclic.intellij.facet.CyclicFrameworkSupport"/>
+        <facetType implementation="cyclic.intellij.facet.CyclicFacetType"/>
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
         <fileIconPatcher implementation="cyclic.intellij.presentation.CyclicFileIconPatcher"/>
