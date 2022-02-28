@@ -1,4 +1,4 @@
-package cyclic.intellij.sdks;
+package cyclic.intellij.model.sdks;
 
 import com.intellij.openapi.util.Version;
 import com.intellij.util.xmlb.annotations.OptionTag;

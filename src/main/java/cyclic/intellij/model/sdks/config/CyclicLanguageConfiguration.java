@@ -1,4 +1,4 @@
-package cyclic.intellij.sdks.config;
+package cyclic.intellij.model.sdks.config;
 
 import com.intellij.openapi.options.ConfigurableWithId;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -7,8 +7,8 @@ import com.intellij.util.Function;
 import com.intellij.util.ui.CollectionItemEditor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.table.TableModelEditor;
-import cyclic.intellij.sdks.CyclicSdk;
-import cyclic.intellij.sdks.CyclicSdks;
+import cyclic.intellij.model.sdks.CyclicSdk;
+import cyclic.intellij.model.sdks.CyclicSdks;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

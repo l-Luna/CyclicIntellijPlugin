@@ -1,13 +1,11 @@
-package cyclic.intellij.facet;
+package cyclic.intellij.model.facet;
 
 import com.intellij.facet.Facet;
 import com.intellij.facet.FacetType;
 import com.intellij.facet.FacetTypeId;
-import com.intellij.facet.mock.AnotherMockFacet;
 import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
-import com.intellij.openapi.util.NlsSafe;
 import cyclic.intellij.CyclicIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

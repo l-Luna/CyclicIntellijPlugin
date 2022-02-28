@@ -1,4 +1,4 @@
-package cyclic.intellij.sdks;
+package cyclic.intellij.model.sdks;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;

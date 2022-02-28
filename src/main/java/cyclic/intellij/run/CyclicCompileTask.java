@@ -1,4 +1,4 @@
-package cyclic.intellij.compiler;
+package cyclic.intellij.run;
 
 import com.intellij.compiler.ModuleSourceSet;
 import com.intellij.compiler.server.BuildManager;
@@ -11,7 +11,7 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import cyclic.intellij.facet.WorkspaceSdk;
+import cyclic.intellij.model.facet.WorkspaceSdk;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -30,7 +30,7 @@ public class CyclicCompileTask implements CompileTask{
 	// We're *supposed* to use the JPS module system to handle building.
 	// but there's literally no point to it,
 	// we still have to manage the compiler process manually
-	// except that way we have to re-serialize stuff for no reason :p
+	// except that way we have to re-serialize stuff twice
 	
 	public boolean execute(CompileContext context){
 		var project = context.getProject();

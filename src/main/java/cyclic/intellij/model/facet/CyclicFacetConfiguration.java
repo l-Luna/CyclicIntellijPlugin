@@ -1,4 +1,4 @@
-package cyclic.intellij.facet;
+package cyclic.intellij.model.facet;
 
 import com.intellij.facet.FacetConfiguration;
 import com.intellij.facet.ui.FacetEditorContext;
@@ -11,8 +11,8 @@ import com.intellij.openapi.util.NlsContexts.ConfigurableName;
 import com.intellij.openapi.util.Version;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.OptionTag;
-import cyclic.intellij.sdks.CyclicSdks;
-import cyclic.intellij.sdks.VersionConverter;
+import cyclic.intellij.model.sdks.CyclicSdks;
+import cyclic.intellij.model.sdks.VersionConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

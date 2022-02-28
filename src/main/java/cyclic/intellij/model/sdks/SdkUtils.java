@@ -1,4 +1,4 @@
-package cyclic.intellij.sdks;
+package cyclic.intellij.model.sdks;
 
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.options.ConfigurationException;

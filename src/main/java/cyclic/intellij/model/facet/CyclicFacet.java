@@ -1,4 +1,4 @@
-package cyclic.intellij.facet;
+package cyclic.intellij.model.facet;
 
 import com.intellij.facet.Facet;
 import com.intellij.facet.FacetType;

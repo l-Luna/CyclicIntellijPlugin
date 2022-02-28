@@ -1,4 +1,4 @@
-package cyclic.intellij.facet;
+package cyclic.intellij.model.facet;
 
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
