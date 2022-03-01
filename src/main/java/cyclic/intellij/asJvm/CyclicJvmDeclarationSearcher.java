@@ -1,4 +1,4 @@
-package cyclic.intellij.presentation;
+package cyclic.intellij.asJvm;
 
 import com.intellij.lang.jvm.JvmElement;
 import com.intellij.lang.jvm.source.JvmDeclarationSearcher;

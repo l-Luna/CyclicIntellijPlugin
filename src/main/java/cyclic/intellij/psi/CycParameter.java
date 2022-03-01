@@ -2,10 +2,12 @@ package cyclic.intellij.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
+import cyclic.intellij.psi.types.ArrayTypeImpl;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +27,11 @@ public class CycParameter extends CycDefinition implements CycVariable{
 	}
 	
 	public JvmType varType(){
-		return getTypeName().map(CycTypeRef::asType).orElse(null);
+		// method resolution and main class finding expects this
+		var type = getTypeName()
+				.map(CycTypeRef::asType)
+				.orElse(PsiType.NULL);
+		return isVarargs() ? ArrayTypeImpl.of(type) : type;
 	}
 	
 	public boolean hasModifier(String modifier){
@@ -52,5 +58,9 @@ public class CycParameter extends CycDefinition implements CycVariable{
 			return PlatformIcons.PARAMETER_ICON;
 		else
 			return PlatformIcons.FIELD_ICON;
+	}
+	
+	public boolean isVarargs(){
+		return getNode().findChildByType(Tokens.getFor(CyclicLangLexer.ELIPSES)) != null;
 	}
 }

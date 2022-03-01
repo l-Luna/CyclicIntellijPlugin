@@ -19,7 +19,7 @@ public class JvmCyclicClass implements JvmClass{
 	
 	private final CycType underlying;
 	
-	private JvmCyclicClass(CycType underlying){
+	protected JvmCyclicClass(CycType underlying){
 		this.underlying = underlying;
 	}
 	
@@ -80,6 +80,10 @@ public class JvmCyclicClass implements JvmClass{
 	}
 	
 	public @Nullable PsiElement getSourceElement(){
+		return underlying;
+	}
+	
+	public CycType getUnderlying(){
 		return underlying;
 	}
 }

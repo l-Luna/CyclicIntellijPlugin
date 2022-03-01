@@ -5,9 +5,11 @@ import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.psi.CycMethod;
+import cyclic.intellij.psi.CycParameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -50,7 +52,7 @@ public class JvmCyclicMethod implements JvmMethod{
 	}
 	
 	public boolean isVarArgs(){
-		return false;
+		return underlying.parameters().stream().anyMatch(CycParameter::isVarargs);
 	}
 	
 	public JvmReferenceType @NotNull [] getThrowsTypes(){

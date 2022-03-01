@@ -8,11 +8,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.LayeredIcon;
-import com.intellij.util.PlatformIcons;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import org.jetbrains.annotations.Nullable;
 
