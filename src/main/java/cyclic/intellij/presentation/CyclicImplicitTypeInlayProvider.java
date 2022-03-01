@@ -2,8 +2,10 @@ package cyclic.intellij.presentation;
 
 import com.intellij.codeInsight.hints.*;
 import com.intellij.codeInsight.hints.presentation.InlayPresentation;
+import com.intellij.codeInsight.hints.presentation.MenuOnClickPresentation;
 import com.intellij.codeInsight.hints.presentation.PresentationFactory;
 import com.intellij.lang.Language;
+import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -20,11 +22,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.List;
 
 public class CyclicImplicitTypeInlayProvider implements InlayHintsProvider<NoSettings>{
 	
 	@Nullable
 	public InlayHintsCollector getCollectorFor(@NotNull PsiFile file, @NotNull Editor e, @NotNull NoSettings __, @NotNull InlayHintsSink s){
+		var provider = this;
 		return new FactoryInlayHintsCollector(e){
 			public boolean collect(@NotNull PsiElement element, @NotNull Editor editor, @NotNull InlayHintsSink sink){
 				if(element instanceof CycVariableDef){
@@ -42,7 +46,9 @@ public class CyclicImplicitTypeInlayProvider implements InlayHintsProvider<NoSet
 						return true;
 					
 					var presentation = withColon(type, getFactory());
-					var shifted = getFactory().inset(presentation, 3, 0, 0, 0);
+					var withHandler = new MenuOnClickPresentation(presentation, element.getProject(),
+							() -> List.of(new InlayProviderDisablingAction(provider.getName(), file.getLanguage(), element.getProject(), provider.getKey())));
+					var shifted = getFactory().inset(withHandler, 3, 0, 0, 0);
 					sink.addInlineElement(id.getTextRange().getEndOffset(), true, shifted, false);
 				}
 				return true;
@@ -51,7 +57,14 @@ public class CyclicImplicitTypeInlayProvider implements InlayHintsProvider<NoSet
 	}
 	
 	protected static InlayPresentation withColon(JvmType type, PresentationFactory factory){
-		return factory.roundWithBackground(factory.seq(factory.smallText(": "), factory.smallText(JvmClassUtils.name(type))));
+		var text = factory.smallText(JvmClassUtils.name(type));
+		// TODO: better handle arrays and generics
+		if(type instanceof JvmReferenceType){
+			var typeDef = ((JvmReferenceType)type).resolve();
+			if(typeDef != null)
+				text = factory.psiSingleReference(text, typeDef::getSourceElement);
+		}
+		return factory.roundWithBackground(factory.seq(factory.smallText(": "), text));
 	}
 	
 	public boolean isVisibleInSettings(){
