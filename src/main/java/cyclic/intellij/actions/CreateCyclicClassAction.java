@@ -1,5 +1,6 @@
 package cyclic.intellij.actions;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateTemplateInPackageAction;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -72,7 +73,7 @@ public class CreateCyclicClassAction extends CreateTemplateInPackageAction<CycTy
 				.addKind("Record", PlatformIcons.RECORD_ICON, "Cyclic Record")
 				.addKind("Enum", PlatformIcons.ENUM_ICON, "Cyclic Enum")
 				.addKind("Annotation", PlatformIcons.ANNOTATION_TYPE_ICON, "Cyclic Annotation")
-				.addKind("Single", CyclicIcons.SINGLE, "Cyclic Single");
+				.addKind("Single", AllIcons.Nodes.Static, "Cyclic Single");
 	}
 	
 	@SuppressWarnings("UnstableApiUsage")

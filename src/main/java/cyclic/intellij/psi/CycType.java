@@ -1,14 +1,18 @@
 package cyclic.intellij.psi;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.util.JvmMainMethodUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.ui.LayeredIcon;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.types.CycKind;
+import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -95,22 +99,25 @@ public class CycType extends CycDefinition implements CycModifiersHolder{
 	}
 	
 	public @Nullable Icon getIcon(int flags){
+		var result = CyclicIcons.CYCLIC_FILE;
 		var objType = getNode().findChildByType(Tokens.getRuleFor(CyclicLangParser.RULE_objectType));
 		if(objType != null){
 			if(objType.findChildByType(Tokens.TOK_CLASS) != null)
-				return PlatformIcons.CLASS_ICON;
-			if(objType.findChildByType(Tokens.TOK_INTERFACE) != null)
-				return PlatformIcons.INTERFACE_ICON;
-			if(objType.findChildByType(Tokens.TOK_ANNOTATION) != null || objType.findChildByType(Tokens.TOK_AT) != null)
-				return PlatformIcons.ANNOTATION_TYPE_ICON;
-			if(objType.findChildByType(Tokens.TOK_ENUM) != null)
-				return PlatformIcons.ENUM_ICON;
-			if(objType.findChildByType(Tokens.TOK_RECORD) != null)
-				return PlatformIcons.RECORD_ICON;
-			if(objType.findChildByType(Tokens.TOK_SINGLE) != null)
-				return CyclicIcons.SINGLE;
+				result = PlatformIcons.CLASS_ICON;
+			else if(objType.findChildByType(Tokens.TOK_INTERFACE) != null)
+				result = PlatformIcons.INTERFACE_ICON;
+			else if(objType.findChildByType(Tokens.TOK_ANNOTATION) != null || objType.findChildByType(Tokens.TOK_AT) != null)
+				result = PlatformIcons.ANNOTATION_TYPE_ICON;
+			else if(objType.findChildByType(Tokens.TOK_ENUM) != null)
+				result = PlatformIcons.ENUM_ICON;
+			else if(objType.findChildByType(Tokens.TOK_RECORD) != null)
+				result = PlatformIcons.RECORD_ICON;
+			else if(objType.findChildByType(Tokens.TOK_SINGLE) != null)
+				result = AllIcons.Nodes.Static;
 		}
-		return CyclicIcons.CYCLIC_FILE;
+		if(JvmMainMethodUtil.hasMainMethodInHierarchy(JvmCyclicClass.of(this)))
+			result = new LayeredIcon(result, AllIcons.Nodes.RunnableMark);
+		return new LayeredIcon(result, CyclicIcons.CYCLIC_DECORATION);
 	}
 	
 	@Nullable
