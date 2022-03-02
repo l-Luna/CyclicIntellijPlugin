@@ -86,6 +86,7 @@
         <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
         <annotator language="Cyclic" implementationClass="cyclic.intellij.presentation.CyclicNameAnnotator"/>
+        <!--<lineIndentProvider implementation="cyclic.intellij.refactoring.CycLineIndentProvider"/>-->
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>

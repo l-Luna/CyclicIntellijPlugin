@@ -2,7 +2,7 @@ package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
-import cyclic.intellij.psi.CycExpression;
+import cyclic.intellij.psi.elements.CycExpression;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -7,7 +7,7 @@ import com.intellij.navigation.GotoClassContributor;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import cyclic.intellij.CyclicLanguage;
-import cyclic.intellij.psi.CycType;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.utils.ProjectTypeFinder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

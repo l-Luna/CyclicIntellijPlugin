@@ -1,8 +1,10 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.types.JvmType;
+import cyclic.intellij.psi.CycElement;
+import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.types.ArrayTypeImpl;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.PsiUtils;

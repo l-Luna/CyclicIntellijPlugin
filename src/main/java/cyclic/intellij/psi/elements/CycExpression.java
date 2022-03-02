@@ -1,8 +1,9 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.impl.source.tree.CompositeElement;
+import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

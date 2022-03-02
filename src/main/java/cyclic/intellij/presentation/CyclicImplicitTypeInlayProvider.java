@@ -12,7 +12,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiPrimitiveType;
 import cyclic.intellij.CyclicLanguage;
-import cyclic.intellij.psi.CycVariableDef;
+import cyclic.intellij.psi.elements.CycVariableDef;
 import cyclic.intellij.psi.expressions.CycCastExpr;
 import cyclic.intellij.psi.expressions.CycInitialisationExpr;
 import cyclic.intellij.psi.expressions.CycLiteralExpr;

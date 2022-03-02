@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.search.GlobalSearchScope;
-import cyclic.intellij.psi.CycType;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import org.jetbrains.annotations.NotNull;

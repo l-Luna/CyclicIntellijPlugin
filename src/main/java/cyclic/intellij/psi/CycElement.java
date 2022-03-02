@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
+import cyclic.intellij.psi.elements.CycFileWrapper;
 import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.psi.Trees;
 import org.jetbrains.annotations.NotNull;

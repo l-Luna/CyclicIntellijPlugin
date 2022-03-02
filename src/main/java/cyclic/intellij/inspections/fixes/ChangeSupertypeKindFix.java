@@ -8,9 +8,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
-import cyclic.intellij.psi.CycExtendsClause;
-import cyclic.intellij.psi.CycImplementsClause;
-import cyclic.intellij.psi.CycTypeRef;
+import cyclic.intellij.psi.elements.CycExtendsClause;
+import cyclic.intellij.psi.elements.CycImplementsClause;
+import cyclic.intellij.psi.elements.CycTypeRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

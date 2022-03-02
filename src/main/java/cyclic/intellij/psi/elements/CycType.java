@@ -1,4 +1,4 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
@@ -11,6 +11,10 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
+import cyclic.intellij.psi.CycDefinition;
+import cyclic.intellij.psi.CycElement;
+import cyclic.intellij.psi.CycFile;
+import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.CycModifiersHolder;

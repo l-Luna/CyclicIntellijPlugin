@@ -10,7 +10,7 @@ import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
-import cyclic.intellij.psi.CycExpression;
+import cyclic.intellij.psi.elements.CycExpression;
 import cyclic.intellij.psi.expressions.CycIdExpr;
 import cyclic.intellij.psi.utils.CycVarScope;
 import cyclic.intellij.psi.utils.CycVariable;

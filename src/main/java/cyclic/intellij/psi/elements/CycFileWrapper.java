@@ -1,7 +1,8 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
+import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 

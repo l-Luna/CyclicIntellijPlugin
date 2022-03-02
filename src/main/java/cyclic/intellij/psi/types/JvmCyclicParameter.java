@@ -5,7 +5,7 @@ import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.JvmParameter;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.CycParameter;
+import cyclic.intellij.psi.elements.CycParameter;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

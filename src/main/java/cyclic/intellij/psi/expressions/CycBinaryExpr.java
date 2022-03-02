@@ -2,8 +2,8 @@ package cyclic.intellij.psi.expressions;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.CycBinaryOp;
-import cyclic.intellij.psi.CycExpression;
+import cyclic.intellij.psi.elements.CycBinaryOp;
+import cyclic.intellij.psi.elements.CycExpression;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 

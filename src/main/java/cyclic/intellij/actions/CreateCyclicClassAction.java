@@ -16,7 +16,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.CycType;
+import cyclic.intellij.psi.elements.CycType;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

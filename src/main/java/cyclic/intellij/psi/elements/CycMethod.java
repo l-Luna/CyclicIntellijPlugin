@@ -1,8 +1,9 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.util.PsiTreeUtil;
+import cyclic.intellij.psi.CycDefinition;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVarScope;
 import cyclic.intellij.psi.utils.CycVariable;

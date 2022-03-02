@@ -4,12 +4,11 @@ import com.intellij.lang.jvm.*;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.CycMethod;
-import cyclic.intellij.psi.CycParameter;
+import cyclic.intellij.psi.elements.CycMethod;
+import cyclic.intellij.psi.elements.CycParameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;

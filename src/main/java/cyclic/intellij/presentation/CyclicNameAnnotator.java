@@ -7,7 +7,7 @@ import com.intellij.lang.jvm.JvmField;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.*;
+import cyclic.intellij.psi.elements.*;
 import cyclic.intellij.psi.expressions.CycIdExpr;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;

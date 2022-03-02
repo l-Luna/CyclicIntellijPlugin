@@ -5,7 +5,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.psi.PsiFile;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.CycType;
+import cyclic.intellij.psi.elements.CycType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

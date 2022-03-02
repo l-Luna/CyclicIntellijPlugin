@@ -3,10 +3,10 @@ package cyclic.intellij.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.util.ProcessingContext;
-import cyclic.intellij.psi.CycBlock;
-import cyclic.intellij.psi.CycExpression;
-import cyclic.intellij.psi.CycMember;
-import cyclic.intellij.psi.CycType;
+import cyclic.intellij.psi.elements.CycBlock;
+import cyclic.intellij.psi.elements.CycExpression;
+import cyclic.intellij.psi.elements.CycMember;
+import cyclic.intellij.psi.elements.CycType;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.patterns.PlatformPatterns.*;

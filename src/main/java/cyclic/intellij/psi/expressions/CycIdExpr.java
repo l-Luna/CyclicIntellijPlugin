@@ -11,10 +11,10 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import cyclic.intellij.psi.CycExpression;
+import cyclic.intellij.psi.elements.CycExpression;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.CycIdPart;
-import cyclic.intellij.psi.CycType;
+import cyclic.intellij.psi.elements.CycIdPart;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,7 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 	 - a local variable (int x = 0; int y = x;)
 	 - a type (CycExpression)
 	 - a field (CycExpression.COMPOSITE_ELEMENT_WRAPPER)
-	 - a package (cyclic.intellij.psi.CycExpression)
+	 - a package (cyclic.intellij.psi.elements.CycExpression)
 	*/
 	
 	public String id(){

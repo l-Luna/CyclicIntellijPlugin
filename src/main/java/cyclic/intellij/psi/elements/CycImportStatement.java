@@ -1,9 +1,11 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.psi.PsiReference;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
+import cyclic.intellij.psi.CycElement;
+import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.utils.CycIdHolder;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import cyclic.intellij.psi.utils.PsiUtils;

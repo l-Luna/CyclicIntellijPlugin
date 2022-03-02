@@ -6,7 +6,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.parser.LexerAdapter;
 import cyclic.intellij.psi.CycDefinition;
-import cyclic.intellij.psi.CycType;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.Tokens;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;

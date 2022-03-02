@@ -1,8 +1,7 @@
 package cyclic.intellij.psi.utils;
 
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.CycId;
-import cyclic.intellij.psi.CycModifierList;
+import cyclic.intellij.psi.elements.CycModifierList;
 
 import java.util.List;
 import java.util.Optional;

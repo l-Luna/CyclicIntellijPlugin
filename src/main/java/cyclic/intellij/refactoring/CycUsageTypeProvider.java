@@ -3,7 +3,7 @@ package cyclic.intellij.refactoring;
 import com.intellij.psi.PsiElement;
 import com.intellij.usages.impl.rules.UsageType;
 import com.intellij.usages.impl.rules.UsageTypeProvider;
-import cyclic.intellij.psi.CycImportStatement;
+import cyclic.intellij.psi.elements.CycImportStatement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

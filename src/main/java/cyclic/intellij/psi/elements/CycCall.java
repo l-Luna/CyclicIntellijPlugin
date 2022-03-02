@@ -1,4 +1,4 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmMethod;
@@ -12,6 +12,7 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.types.JvmCyclicMethod;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.MethodUtils;

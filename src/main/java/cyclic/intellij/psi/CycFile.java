@@ -6,6 +6,10 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.CyclicLanguage;
+import cyclic.intellij.psi.elements.CycFileWrapper;
+import cyclic.intellij.psi.elements.CycImportStatement;
+import cyclic.intellij.psi.elements.CycPackageStatement;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 

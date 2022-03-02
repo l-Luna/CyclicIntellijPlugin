@@ -1,7 +1,10 @@
 package cyclic.intellij.psi.utils;
 
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.*;
+import cyclic.intellij.psi.elements.CycArgumentsList;
+import cyclic.intellij.psi.elements.CycCall;
+import cyclic.intellij.psi.elements.CycExpression;
+import cyclic.intellij.psi.elements.CycStatement;
 import cyclic.intellij.psi.expressions.CycBinaryExpr;
 import cyclic.intellij.psi.expressions.CycParenthesisedExpr;
 

@@ -1,7 +1,7 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
-import cyclic.intellij.psi.utils.CycModifiersHolder;
+import cyclic.intellij.psi.CycElement;
 import org.jetbrains.annotations.NotNull;
 
 public class CycVariableAssignment extends CycElement{

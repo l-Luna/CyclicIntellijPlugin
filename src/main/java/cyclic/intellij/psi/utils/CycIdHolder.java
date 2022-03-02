@@ -2,8 +2,7 @@ package cyclic.intellij.psi.utils;
 
 import com.intellij.extapi.psi.ASTDelegatePsiElement;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.CycId;
-import cyclic.intellij.psi.utils.PsiUtils;
+import cyclic.intellij.psi.elements.CycId;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

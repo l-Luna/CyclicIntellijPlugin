@@ -1,4 +1,4 @@
-package cyclic.intellij.psi;
+package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
@@ -6,6 +6,7 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
+import cyclic.intellij.psi.CycDefinition;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
