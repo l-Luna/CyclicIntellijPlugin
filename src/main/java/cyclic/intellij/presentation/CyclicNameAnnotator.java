@@ -60,7 +60,8 @@ public class CyclicNameAnnotator implements Annotator{
 				if(variable.hasModifier("final") || (target instanceof CycParameter && !((CycParameter)target).isMethodParameter()))
 					isFinal = true; // record components are a CycParameter
 				if(!(target instanceof CycParameter && ((CycParameter)target).isMethodParameter())
-					&& !(target instanceof CycVariableDef && ((CycVariableDef)target).isLocalVar()))
+						&& !(target instanceof CycVariableDef && ((CycVariableDef)target).isLocalVar())
+						&& !(target instanceof CycForeachLoop)) // TODO: better way of doing this lol
 					isField = true;
 			}
 			if(isField && name != null){
