@@ -63,6 +63,8 @@ public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 				for(var param : method.parameters()){
 					current.append("\n    ");
 					appendType(current, param.getTypeName().orElse(null));
+					if(param.isVarargs())
+						current.append("...");
 					current.append(" ");
 					appendId(current, param.varName());
 					current.append(",");
@@ -127,11 +129,13 @@ public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 				appendId(current, "(");
 				for(var param : method.parameters()){
 					appendType(current, param.getTypeName().orElse(null));
+					if(param.isVarargs())
+						current.append("...");
 					current.append(" ");
 					appendId(current, param.varName());
 					current.append(", ");
 				}
-				current.deleteCharAt(current.length() - 1); // unnecessary last comma
+				current.deleteCharAt(current.length() - 1); // unnecessary last comma + space
 				current.deleteCharAt(current.length() - 1);
 				current.append(")");
 			}

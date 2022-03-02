@@ -85,6 +85,7 @@
         <gotoClassContributor implementation="cyclic.intellij.presentation.CyclicGoToClassContributor"/>
         <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
+        <annotator language="Cyclic" implementationClass="cyclic.intellij.presentation.CyclicNameAnnotator"/>
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>
