@@ -5,6 +5,7 @@ import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.search.GlobalSearchScope;
 import cyclic.intellij.psi.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
@@ -45,7 +46,7 @@ public class JvmClassUtils{
 	public static String name(JvmType type){
 		if(type instanceof JvmArrayType)
 			return name(((JvmArrayType)type).getComponentType()) + "[]";
-		if(type instanceof JvmPrimitiveType)
+		if(type instanceof JvmPrimitiveType && !type.equals(PsiPrimitiveType.NULL))
 			return ((JvmPrimitiveType)type).getKind().getName();
 		if(type instanceof JvmReferenceType)
 			return ((JvmReferenceType)type).getName();
