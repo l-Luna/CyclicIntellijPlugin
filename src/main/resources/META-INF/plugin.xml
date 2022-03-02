@@ -83,6 +83,8 @@
         <runConfigurationProducer implementation="cyclic.intellij.run.CyclicRunConfigProducer"/>
         <java.elementFinder implementation="cyclic.intellij.asJvm.CyclicPsiElementProvider"/>
         <gotoClassContributor implementation="cyclic.intellij.presentation.CyclicGoToClassContributor"/>
+        <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
+        <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>

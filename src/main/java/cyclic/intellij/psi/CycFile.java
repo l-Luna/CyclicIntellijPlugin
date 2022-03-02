@@ -1,6 +1,7 @@
 package cyclic.intellij.psi;
 
 import com.intellij.extapi.psi.PsiFileBase;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import cyclic.intellij.CyclicFileType;
@@ -48,7 +49,8 @@ public class CycFile extends PsiFileBase{
 	
 	public @NotNull String getName(){
 		var o = super.getName();
-		if(getTypeDef().isPresent())
+		var typeDef = ReadAction.compute(this::getTypeDef);
+		if(typeDef.isPresent())
 			return o.substring(0, o.length() - ".cyc".length());
 		return o;
 	}
