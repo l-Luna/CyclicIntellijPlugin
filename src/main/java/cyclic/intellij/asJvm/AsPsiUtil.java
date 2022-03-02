@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class AsPsiUtil{
 	
 	public static PsiClass asPsiClass(CycType type){
@@ -120,6 +122,25 @@ public class AsPsiUtil{
 		
 		public @NotNull PsiClassType setLanguageLevel(@NotNull LanguageLevel languageLevel){
 			return this;
+		}
+		
+		public boolean equals(Object o){
+			if(this == o)
+				return true;
+			if(!(o instanceof CycPsiClassReferenceType))
+				return false;
+			if(!super.equals(o))
+				return false;
+			
+			CycPsiClassReferenceType type = (CycPsiClassReferenceType)o;
+			
+			return Objects.equals(underlying, type.underlying);
+		}
+		
+		public int hashCode(){
+			int result = super.hashCode();
+			result = 31 * result + (underlying != null ? underlying.hashCode() : 0);
+			return result;
 		}
 	}
 }

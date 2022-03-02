@@ -31,4 +31,12 @@ public class ArrayTypeImpl implements JvmArrayType{
 	public JvmAnnotation @NotNull [] getAnnotations(){
 		return new JvmAnnotation[0];
 	}
+	
+	public boolean equals(Object o){
+		return o instanceof JvmArrayType && component.equals(((JvmArrayType)o).getComponentType());
+	}
+	
+	public int hashCode(){
+		return component != null ? component.hashCode() : 0;
+	}
 }

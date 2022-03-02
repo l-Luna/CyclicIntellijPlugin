@@ -65,4 +65,12 @@ public class ClassTypeImpl implements JvmReferenceType{
 	public JvmAnnotation @NotNull [] getAnnotations(){
 		return new JvmAnnotation[0];
 	}
+	
+	public boolean equals(Object o){
+		return o instanceof JvmReferenceType && underlying.equals(((JvmReferenceType)o).resolve());
+	}
+	
+	public int hashCode(){
+		return underlying != null ? underlying.hashCode() : 0;
+	}
 }

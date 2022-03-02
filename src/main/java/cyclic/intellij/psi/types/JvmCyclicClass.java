@@ -86,4 +86,12 @@ public class JvmCyclicClass implements JvmClass{
 	public CycType getUnderlying(){
 		return underlying;
 	}
+	
+	public boolean equals(Object o){
+		return o instanceof JvmClass && underlying.fullyQualifiedName().equals(((JvmClass)o).getQualifiedName());
+	}
+	
+	public int hashCode(){
+		return underlying.fullyQualifiedName().hashCode();
+	}
 }

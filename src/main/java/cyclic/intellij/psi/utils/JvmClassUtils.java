@@ -1,6 +1,7 @@
 package cyclic.intellij.psi.utils;
 
 import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.JvmMember;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.*;
 import com.intellij.openapi.project.Project;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.intellij.lang.jvm.types.JvmPrimitiveTypeKind.*;
 
@@ -140,5 +142,25 @@ public class JvmClassUtils{
 					return true;
 		}
 		return false;
+	}
+	
+	public static @Nullable JvmMethod findMethodInSupertypes(JvmClass jClass, Predicate<JvmMethod> filter){
+		if(jClass == null)
+			return null;
+		for(JvmMethod method : jClass.getMethods())
+			if(filter.test(method))
+				return method;
+		if(jClass.getSuperClassType() != null && jClass.getSuperClassType() instanceof JvmClass){
+			var ret = findMethodInSupertypes((JvmClass)jClass.getSuperClassType(), filter);
+			if(ret != null)
+				return ret;
+		}
+		for(JvmReferenceType type : jClass.getInterfaceTypes())
+			if(type instanceof JvmClass){
+				var ret = findMethodInSupertypes((JvmClass)type, filter);
+				if(ret != null)
+					return ret;
+			}
+		return null;
 	}
 }

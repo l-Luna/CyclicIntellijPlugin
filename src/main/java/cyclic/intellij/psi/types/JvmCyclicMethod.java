@@ -5,7 +5,6 @@ import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.psi.elements.CycMethod;
-import cyclic.intellij.psi.elements.CycParameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +33,7 @@ public class JvmCyclicMethod implements JvmMethod{
 		return false;
 	}
 	
-	public @Nullable JvmClass getContainingClass(){
+	public @NotNull JvmClass getContainingClass(){
 		return JvmCyclicClass.of(underlying.containingType());
 	}
 	
@@ -51,7 +50,7 @@ public class JvmCyclicMethod implements JvmMethod{
 	}
 	
 	public boolean isVarArgs(){
-		return underlying.parameters().stream().anyMatch(CycParameter::isVarargs);
+		return underlying.isVarargs();
 	}
 	
 	public JvmReferenceType @NotNull [] getThrowsTypes(){
@@ -65,6 +64,9 @@ public class JvmCyclicMethod implements JvmMethod{
 	public boolean hasModifier(@NotNull JvmModifier modifier){
 		if(modifier == JvmModifier.PACKAGE_LOCAL)
 			return !(underlying.hasModifier("public") || underlying.hasModifier("protected") || underlying.hasModifier("private"));
+		if(modifier == JvmModifier.ABSTRACT && getContainingClass().getClassKind() == JvmClassKind.INTERFACE)
+			if(underlying.hasSemicolon()) // note that a semicolon does not mean abstract in classes
+				return true;
 		return underlying.hasModifier(modifier.name().toLowerCase(Locale.ROOT));
 	}
 	

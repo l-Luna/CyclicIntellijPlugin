@@ -73,6 +73,12 @@
         <compiler.task execute="BEFORE"
                        implementation="cyclic.intellij.run.CyclicCompileTask"/>
 
+        <codeInsight.lineMarkerProvider language="Cyclic"
+                                        implementationClass="cyclic.intellij.presentation.CyclicLineMarkerProvider"/>
+
+        <codeInsight.gotoSuper language="Cyclic"
+                               implementationClass="cyclic.intellij.presentation.find.CyclicGoToSuperHandler"/>
+
         <frameworkSupport implementation="cyclic.intellij.model.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>
         <jvm.elementProvider implementation="cyclic.intellij.asJvm.CyclicJvmElementProvider"/>
@@ -82,7 +88,7 @@
         <createFromTemplateHandler implementation="cyclic.intellij.CyclicTemplates"/>
         <runConfigurationProducer implementation="cyclic.intellij.run.CyclicRunConfigProducer"/>
         <java.elementFinder implementation="cyclic.intellij.asJvm.CyclicPsiElementProvider"/>
-        <gotoClassContributor implementation="cyclic.intellij.presentation.CyclicGoToClassContributor"/>
+        <gotoClassContributor implementation="cyclic.intellij.presentation.find.CyclicGoToClassContributor"/>
         <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
         <annotator language="Cyclic" implementationClass="cyclic.intellij.presentation.CyclicNameAnnotator"/>

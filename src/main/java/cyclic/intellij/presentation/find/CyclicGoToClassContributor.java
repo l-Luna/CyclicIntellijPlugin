@@ -1,4 +1,4 @@
-package cyclic.intellij.presentation;
+package cyclic.intellij.presentation.find;
 
 import com.intellij.lang.Language;
 import com.intellij.lang.jvm.JvmClass;
