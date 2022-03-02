@@ -21,8 +21,6 @@ import static com.intellij.lang.jvm.util.JvmMainMethodUtil.isMainMethod;
 public class CyclicRunLineMarkerContributor extends RunLineMarkerContributor{
 	
 	public @Nullable Info getInfo(@NotNull PsiElement element){
-		// this is exactly what JvmApplicationRunLineMarkerContributor does,
-		// but it's disabled by default
 		if(element instanceof CycElement){
 			for(JvmElement declaration : getElementsByIdentifier(element)){
 				if((declaration instanceof JvmMethod && isMainMethod((JvmMethod)declaration))

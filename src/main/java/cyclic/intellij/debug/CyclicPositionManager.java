@@ -26,7 +26,6 @@ public class CyclicPositionManager implements PositionManager{
 	
 	public CyclicPositionManager(DebugProcess process){
 		this.process = process;
-		
 	}
 	
 	protected String sourcePathByLocation(Location location){

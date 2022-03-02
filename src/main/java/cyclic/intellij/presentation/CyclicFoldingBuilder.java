@@ -1,10 +1,12 @@
 package cyclic.intellij.presentation;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.folding.FoldingBuilder;
+import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.Tokens;
@@ -14,9 +16,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class CyclicFoldingBuilder implements FoldingBuilder{
+public class CyclicFoldingBuilder extends FoldingBuilderEx implements DumbAware{
 	
-	public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document){
+	public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick){
+		return buildFoldRegions(root.getNode(), document, quick);
+	}
+	
+	public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document, boolean quick){
+		// we don't use `quick` yet, but using FoldingBuilderEx means we can fold immediately
 		FoldingDescriptor[] descriptors = new FoldingDescriptor[0];
 		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl) || node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_block)){
 			var opBrace = node.findChildByType(Tokens.getFor(CyclicLangLexer.LBRACE));
