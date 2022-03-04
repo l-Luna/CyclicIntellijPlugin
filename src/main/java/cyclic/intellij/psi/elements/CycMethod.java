@@ -8,7 +8,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinition;
 import cyclic.intellij.psi.Tokens;
-import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

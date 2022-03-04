@@ -163,4 +163,14 @@ public class JvmClassUtils{
 			}
 		return null;
 	}
+	
+	public static @Nullable JvmType highest(@Nullable JvmType left, @Nullable JvmType right){
+		if(left == null || right == null)
+			return null;
+		if(isConvertibleTo(left, right))
+			return right;
+		if(isConvertibleTo(right, left))
+			return left;
+		return null;
+	}
 }
