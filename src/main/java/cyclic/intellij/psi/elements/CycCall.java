@@ -44,7 +44,7 @@ public class CycCall extends CycElement implements PsiReference{
 		//  our receiver is one level up
 		//  pass expressions can be any number of levels up, so long as there's only passes or parenthesis
 		// TODO: super calls, constructors
-		CycExpression on = PsiUtils.childOfType(getParent(), CycExpression.class).orElse(null);
+		CycExpression on = getOn();
 		List<CycExpression> args = MethodUtils.getRealArgs(this);
 		String name = getCanonicalText();
 		
@@ -119,6 +119,11 @@ public class CycCall extends CycElement implements PsiReference{
 				.min(Comparator.comparingInt(x -> x.reach))
 				.map(x -> x.ref)
 				.orElse(null);
+	}
+	
+	@Nullable
+	public CycExpression getOn(){
+		return PsiUtils.childOfType(getParent(), CycExpression.class).orElse(null);
 	}
 	
 	public PsiReference getReference(){
