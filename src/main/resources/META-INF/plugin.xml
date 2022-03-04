@@ -12,6 +12,7 @@
     <depends>com.intellij.java</depends>
 
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>Coverage</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
@@ -91,6 +92,8 @@
         <gotoClassContributor implementation="cyclic.intellij.presentation.find.CyclicGoToClassContributor"/>
         <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
+        <javaCoverageEngineExtension implementation="cyclic.intellij.coverage.CyclicCoverageExtension"/>
+        <projectViewNodeDecorator implementation="cyclic.intellij.coverage.CyclicCoverageNodeDecorator"/>
         <annotator language="Cyclic" implementationClass="cyclic.intellij.presentation.CyclicNameAnnotator"/>
         <!--<lineIndentProvider implementation="cyclic.intellij.refactoring.CycLineIndentProvider"/>-->
 

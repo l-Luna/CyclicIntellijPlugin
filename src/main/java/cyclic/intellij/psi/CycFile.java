@@ -4,8 +4,12 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.CyclicLanguage;
+import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.psi.elements.CycFileWrapper;
 import cyclic.intellij.psi.elements.CycImportStatement;
 import cyclic.intellij.psi.elements.CycPackageStatement;
@@ -17,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CycFile extends PsiFileBase{
+public class CycFile extends PsiFileBase implements PsiClassOwner{
 	
 	public CycFile(@NotNull FileViewProvider viewProvider){
 		super(viewProvider, CyclicLanguage.LANGUAGE);
@@ -35,8 +39,21 @@ public class CycFile extends PsiFileBase{
 		return wrapper().flatMap(CycFileWrapper::getPackage);
 	}
 	
+	public PsiClass @NotNull [] getClasses(){
+		return getTypeDef()
+				.map(AsPsiUtil::asPsiClass)
+				.map(x -> new PsiClass[]{x})
+				.orElse(PsiClass.EMPTY_ARRAY);
+	}
+	
 	public String getPackageName(){
 		return getPackage().map(CycPackageStatement::getPackageName).orElse("");
+	}
+	
+	public void setPackageName(String packageName) throws IncorrectOperationException{
+		getPackage()
+				.flatMap(CycPackageStatement::getId)
+				.ifPresent(x -> x.replace(PsiUtils.createIdFromText(x.getParent(), packageName)));
 	}
 	
 	public List<CycImportStatement> getImports(){

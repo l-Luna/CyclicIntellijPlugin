@@ -4,11 +4,13 @@ import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.util.JvmMainMethodUtil;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
+import com.intellij.util.ui.EDT;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.CycDefinition;
@@ -119,7 +121,9 @@ public class CycType extends CycDefinition implements CycModifiersHolder{
 			else if(objType.findChildByType(Tokens.TOK_SINGLE) != null)
 				result = AllIcons.Nodes.Static;
 		}
-		if(JvmMainMethodUtil.hasMainMethodInHierarchy(JvmCyclicClass.of(this)))
+		if(!DumbService.isDumb(getProject())
+				&& !EDT.isCurrentThreadEdt() // TODO: can this can be refactored to not require slow operations?
+				&& JvmMainMethodUtil.hasMainMethodInHierarchy(JvmCyclicClass.of(this)))
 			result = new LayeredIcon(result, AllIcons.Nodes.RunnableMark);
 		return new LayeredIcon(result, CyclicIcons.CYCLIC_DECORATION);
 	}
