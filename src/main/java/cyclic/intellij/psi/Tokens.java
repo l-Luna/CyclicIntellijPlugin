@@ -59,7 +59,6 @@ public class Tokens{
 			CyclicLangLexer.PACKAGE,
 			CyclicLangLexer.EXTENDS,
 			CyclicLangLexer.IMPLEMENTS,
-			CyclicLangLexer.PERMITS,
 			
 			CyclicLangLexer.RETURN,
 			CyclicLangLexer.THROW,
@@ -140,6 +139,16 @@ public class Tokens{
 			
 			CyclicLangLexer.EXCLAMATION,
 			CyclicLangLexer.QUESTION
+	);
+	
+	public static final TokenSet CONTEXT_KEYWORDS = createTokenSet(
+			CyclicLanguage.LANGUAGE,
+			
+			CyclicLangLexer.ANNOTATION,
+			CyclicLangLexer.IN,
+			CyclicLangLexer.OUT,
+			CyclicLangLexer.SEALED,
+			CyclicLangLexer.PERMITS
 	);
 	
 	public static final TokenSet WHITESPACES = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.WS);

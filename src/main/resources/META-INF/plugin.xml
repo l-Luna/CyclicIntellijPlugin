@@ -94,8 +94,13 @@
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
         <javaCoverageEngineExtension implementation="cyclic.intellij.coverage.CyclicCoverageExtension"/>
         <projectViewNodeDecorator implementation="cyclic.intellij.coverage.CyclicCoverageNodeDecorator"/>
-        <annotator language="Cyclic" implementationClass="cyclic.intellij.presentation.CyclicNameAnnotator"/>
-        <!--<lineIndentProvider implementation="cyclic.intellij.refactoring.CycLineIndentProvider"/>-->
+
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.NameAnnotator"/>
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.ContextKeywordAnnotator"/>
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.AnnotationAnnotator"/>
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>
