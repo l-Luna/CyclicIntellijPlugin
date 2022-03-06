@@ -32,13 +32,13 @@ public class CyclicPositionManager implements PositionManager{
 		return location.declaringType().name().replace(".", "/") + ".cyc";
 	}
 	
-	public @Nullable SourcePosition getSourcePosition(@Nullable Location location){
+	public @Nullable SourcePosition getSourcePosition(@Nullable Location location) throws NoDataException{
 		if(location == null)
 			return null;
 		String path = sourcePathByLocation(location);
 		PsiFile file = CyclicSourcesFinder.findSourceFile(path, process.getProject());
-		if(file == null)
-			return null;
+		if(!(file instanceof CycFile))
+			throw NoDataException.INSTANCE;
 		return SourcePosition.createFromLine(file, location.lineNumber() - 1);
 	}
 	
