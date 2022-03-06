@@ -1,13 +1,13 @@
 package cyclic.intellij.psi.elements;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinition;
 import cyclic.intellij.psi.Tokens;
+import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,9 +48,7 @@ public class CycMethod extends CycDefinition implements CycModifiersHolder, CycV
 	
 	public List<CycParameter> parameters(){
 		var paramList = PsiUtils.childOfType(this, CycParametersList.class);
-		if(paramList.isPresent())
-			return PsiUtils.childrenOfType(paramList.get(), CycParameter.class);
-		return List.of();
+		return paramList.map(list -> PsiUtils.childrenOfType(list, CycParameter.class)).orElseGet(List::of);
 	}
 	
 	public @Nullable JvmType returnType(){
@@ -81,16 +79,7 @@ public class CycMethod extends CycDefinition implements CycModifiersHolder, CycV
 	}
 	
 	public @Nullable JvmMethod overriddenMethod(){
-		// skip the containing class
-		var fromSuper = JvmClassUtils.findMethodInSupertypes(containingType().getSuperType(), this::overrides);
-		if(fromSuper != null)
-			return fromSuper;
-		for(JvmClass anInterface : containingType().getInterfaces()){
-			var fromInterface = JvmClassUtils.findMethodInSupertypes(anInterface, this::overrides);
-			if(fromInterface != null)
-				return fromInterface;
-		}
-		return null;
+		return JvmClassUtils.findMethodInHierarchy(JvmCyclicClass.of(containingType()), this::overrides, true);
 	}
 	
 	public boolean hasSemicolon(){

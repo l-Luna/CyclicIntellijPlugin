@@ -16,6 +16,7 @@ import cyclic.intellij.psi.types.JvmCyclicClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -150,24 +151,42 @@ public class JvmClassUtils{
 		return false;
 	}
 	
-	public static @Nullable JvmMethod findMethodInSupertypes(JvmClass jClass, Predicate<JvmMethod> filter){
+	public static @Nullable JvmMethod findMethodInHierarchy(JvmClass jClass, Predicate<JvmMethod> filter, boolean strict){
 		if(jClass == null)
 			return null;
-		for(JvmMethod method : jClass.getMethods())
-			if(filter.test(method))
-				return method;
-		if(jClass.getSuperClassType() != null && jClass.getSuperClassType() instanceof JvmClass){
-			var ret = findMethodInSupertypes((JvmClass)jClass.getSuperClassType(), filter);
+		if(!strict)
+			for(JvmMethod method : jClass.getMethods())
+				if(filter.test(method))
+					return method;
+		if(jClass.getSuperClassType() != null){
+			var ret = findMethodInHierarchy(asClass(jClass.getSuperClassType()), filter, false);
 			if(ret != null)
 				return ret;
 		}
 		for(JvmReferenceType type : jClass.getInterfaceTypes())
-			if(type instanceof JvmClass){
-				var ret = findMethodInSupertypes((JvmClass)type, filter);
+			if(type != null){
+				var ret = findMethodInHierarchy(asClass(type), filter, false);
 				if(ret != null)
 					return ret;
 			}
 		return null;
+	}
+	
+	@NotNull
+	public static List<JvmMethod> findAllMethodsInHierarchy(JvmClass jClass, Predicate<JvmMethod> filter, boolean strict){
+		if(jClass == null)
+			return List.of();
+		var found = new ArrayList<JvmMethod>();
+		if(!strict)
+			for(JvmMethod method : jClass.getMethods())
+				if(filter.test(method))
+					found.add(method);
+		if(jClass.getSuperClassType() != null)
+			found.addAll(findAllMethodsInHierarchy(asClass(jClass.getSuperClassType()), filter, false));
+		for(JvmReferenceType type : jClass.getInterfaceTypes())
+			if(type != null)
+				found.addAll(findAllMethodsInHierarchy(asClass(type), filter, false));
+		return found;
 	}
 	
 	public static @Nullable JvmType highest(@Nullable JvmType left, @Nullable JvmType right){

@@ -4,6 +4,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiPrimitiveType;
 import cyclic.intellij.psi.elements.CycExpression;
 import cyclic.intellij.psi.elements.CycVariableAssignment;
 import cyclic.intellij.psi.elements.CycVariableDef;
@@ -25,7 +26,7 @@ public class TypeCheckingAnnotator implements Annotator{
 			if(left.isPresent() && right.isPresent()){
 				var lType = left.get().type();
 				var rType = right.get().type();
-				if(rType != null && lType != null && !JvmClassUtils.isConvertibleTo(rType, lType))
+				if(rType != null && lType != null && rType != PsiPrimitiveType.NULL && !JvmClassUtils.isConvertibleTo(rType, lType))
 					holder.newAnnotation(HighlightSeverity.ERROR,
 									"Incompatible types: '" + name(rType) + "' is not assignable to '" + name(lType) + "'")
 							.range(right.get())
@@ -37,7 +38,7 @@ public class TypeCheckingAnnotator implements Annotator{
 			rightO.ifPresent(right -> {
 				var rType = right.type();
 				var lType = ((CycVariableDef)element).varType();
-				if(rType != null && lType != null && !JvmClassUtils.isConvertibleTo(rType, lType))
+				if(rType != null && lType != null && rType != PsiPrimitiveType.NULL && !JvmClassUtils.isConvertibleTo(rType, lType))
 					holder.newAnnotation(HighlightSeverity.ERROR,
 									"Incompatible types: '" + name(rType) + "' is not assignable to '" + name(lType) + "'")
 							.range(right)
