@@ -101,6 +101,12 @@
                    implementationClass="cyclic.intellij.presentation.annotators.ContextKeywordAnnotator"/>
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.AnnotationAnnotator"/>
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.InvalidElementAnnotator"/>
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.InvalidReferenceInspection"/>
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.TypeCheckingAnnotator"/>
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>
@@ -114,12 +120,6 @@
                          enabledByDefault="true" level="ERROR"
                          groupName="Errors" displayName="Wrong type name for file name"
                          implementationClass="cyclic.intellij.inspections.WrongFileNameForTypeNameInspection"/>
-
-        <localInspection language="Cyclic"
-                         groupPath="Cyclic"
-                         enabledByDefault="true" level="ERROR"
-                         groupName="Errors" displayName="Invalid type reference"
-                         implementationClass="cyclic.intellij.inspections.InvalidTypeRefInspection"/>
 
         <localInspection language="Cyclic"
                          groupPath="Cyclic"

@@ -3,6 +3,7 @@ package cyclic.intellij.completion;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmField;
 import com.intellij.lang.jvm.JvmMethod;
@@ -11,10 +12,13 @@ import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.psi.elements.CycExpression;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.expressions.CycIdExpr;
+import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.CycVarScope;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.JvmClassUtils;
+import cyclic.intellij.psi.utils.Visibility;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -50,6 +54,7 @@ public class CycExpressionContributor extends CompletionContributor{
 					}
 				});
 			}else{
+				var container = JvmCyclicClass.of(PsiTreeUtil.getParentOfType(innerFakeExpr, CycType.class));
 				var type = on.type();
 				if(type != null){
 					if(type instanceof JvmArrayType)
@@ -59,6 +64,8 @@ public class CycExpressionContributor extends CompletionContributor{
 						if(cType instanceof JvmClass){
 							var t = (JvmClass)cType;
 							for(JvmField field : t.getFields()){
+								if(!Visibility.visibleFrom(field, container))
+									continue;
 								var decl = field.getSourceElement();
 								var builder =
 										create(field.getName())
@@ -71,6 +78,8 @@ public class CycExpressionContributor extends CompletionContributor{
 							for(JvmMethod method : t.getMethods()){
 								if(method.isConstructor())
 									continue;
+								if(!Visibility.visibleFrom(method, container))
+									continue;
 								var decl = method.getSourceElement();
 								var builder =
 										create(method.getName())
@@ -78,12 +87,14 @@ public class CycExpressionContributor extends CompletionContributor{
 												.withTailText(
 														Arrays.stream(method.getParameters())
 																.map(x -> JvmClassUtils.name(x.getType()) + " " + x.getName())
-																.collect(Collectors.joining(", ", "(", ")")));
+																.collect(Collectors.joining(", ", "(", ")")))
+												.withInsertHandler(method.getParameters().length > 0
+														? ParenthesesInsertHandler.WITH_PARAMETERS
+														: ParenthesesInsertHandler.NO_PARAMETERS);
 								if(decl != null)
 									builder = builder.withIcon(decl.getIcon(0));
 								if(method.getReturnType() != null)
 									builder = builder.withTypeText(JvmClassUtils.name(method.getReturnType()));
-								// TODO: add parentheses and move cursor to complete
 								result.addElement(withPriority(builder, 10));
 							}
 						}

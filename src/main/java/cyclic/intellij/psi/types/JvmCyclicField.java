@@ -6,10 +6,14 @@ import com.intellij.lang.jvm.JvmField;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
+import cyclic.intellij.psi.CycElement;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.utils.CycVariable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -31,6 +35,8 @@ public class JvmCyclicField implements JvmField{
 	}
 	
 	public @Nullable JvmClass getContainingClass(){
+		if(underlying instanceof CycElement)
+			return JvmCyclicClass.of(PsiTreeUtil.getParentOfType((CycElement)underlying, CycType.class));
 		return null;
 	}
 	
@@ -43,7 +49,9 @@ public class JvmCyclicField implements JvmField{
 	}
 	
 	public boolean hasModifier(@NotNull JvmModifier modifier){
-		return false;
+		if(modifier == JvmModifier.PACKAGE_LOCAL)
+			return !(underlying.hasModifier("public") || underlying.hasModifier("protected") || underlying.hasModifier("private"));
+		return underlying.hasModifier(modifier.name().toLowerCase(Locale.ROOT));
 	}
 	
 	public JvmAnnotation @NotNull [] getAnnotations(){

@@ -20,6 +20,7 @@ import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.elements.*;
 import cyclic.intellij.psi.types.CycKind;
+import cyclic.intellij.psi.types.JvmCyclicClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -171,7 +172,10 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	
 	public static Object @NotNull [] fillCompletion(CycElement at, Predicate<JvmClass> isWrongClause){
 		List<LookupElementBuilder> list = new ArrayList<>();
+		var container = PsiTreeUtil.getParentOfType(at, CycType.class);
 		for(JvmClass aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), at)){
+			if(!Visibility.visibleFrom(aClass, JvmCyclicClass.of(container)))
+				continue;
 			boolean wrongClause = isWrongClause.test(aClass);
 			PsiElement decl = aClass.getSourceElement();
 			if(decl != null){

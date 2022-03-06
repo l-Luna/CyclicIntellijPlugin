@@ -29,6 +29,8 @@ public class CycCall extends CycElement implements PsiReference{
 		super(node);
 	}
 	
+	// FIXME: update to match compiler logic
+	
 	@Nullable
 	public JvmMethod resolveMethod(){
 		class Target{

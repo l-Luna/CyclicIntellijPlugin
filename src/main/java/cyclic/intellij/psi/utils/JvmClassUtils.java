@@ -1,9 +1,11 @@
 package cyclic.intellij.psi.utils;
 
 import com.intellij.lang.jvm.JvmClass;
-import com.intellij.lang.jvm.JvmMember;
 import com.intellij.lang.jvm.JvmMethod;
-import com.intellij.lang.jvm.types.*;
+import com.intellij.lang.jvm.types.JvmArrayType;
+import com.intellij.lang.jvm.types.JvmPrimitiveType;
+import com.intellij.lang.jvm.types.JvmReferenceType;
+import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiPrimitiveType;
@@ -22,7 +24,9 @@ import static com.intellij.lang.jvm.types.JvmPrimitiveTypeKind.*;
 public class JvmClassUtils{
 	
 	@NotNull
-	public static String getPackageName(JvmClass jClass){
+	public static String getPackageName(@Nullable JvmClass jClass){
+		if(jClass == null)
+			return "";
 		String name = jClass.getName(), qName = jClass.getQualifiedName();
 		if(name == null || qName == null)
 			return "";
@@ -99,6 +103,8 @@ public class JvmClassUtils{
 				var k = ((JvmPrimitiveType)value).getKind();
 				var tk = ((JvmPrimitiveType)to).getKind();
 				// why isn't this an enum :p
+				if(tk == BOOLEAN)
+					return k == BOOLEAN;
 				if(tk == SHORT || tk == CHAR)
 					return k == BYTE || k == SHORT || k == CHAR;
 				if(tk == INT)
