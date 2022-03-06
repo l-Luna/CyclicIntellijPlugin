@@ -11,9 +11,12 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
+import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.presentation.find.CMarkerTypes;
 import cyclic.intellij.psi.elements.CycCall;
 import cyclic.intellij.psi.elements.CycMethod;
@@ -24,7 +27,10 @@ import cyclic.intellij.psi.expressions.CycThisExpr;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CyclicLineMarkerProvider implements LineMarkerProvider{
 	
@@ -65,6 +71,30 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 					ContainerUtil.addIfNotNull(result, RecursiveCallMarkerInfo.create(call));
 				}
 			}
+			if(element instanceof CycType){
+				CycType type = (CycType)element;
+				PsiClass aClass = AsPsiUtil.asPsiClass(type);
+				PsiClass subClass = DirectClassInheritorsSearch.search(aClass).findFirst();
+				if(subClass != null){
+					final Icon icon = aClass.isInterface() ? AllIcons.Gutter.ImplementedMethod : AllIcons.Gutter.OverridenMethod;
+					PsiElement range = type.getNameIdentifier();
+					if(range != null)
+						range = range.getFirstChild();
+					if(range == null)
+						range = aClass;
+					MarkerType marker = CMarkerTypes.CYC_SUBCLASSED_CLASS;
+					LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(range, range.getTextRange(),
+							icon, marker.getTooltip(),
+							marker.getNavigationHandler(),
+							GutterIconRenderer.Alignment.RIGHT,
+							type::getName);
+					NavigateAction.setNavigateAction(info,
+							aClass.isInterface()
+									? JavaBundle.message("action.go.to.implementation.text") : JavaBundle.message("action.go.to.subclass.text"),
+							IdeActions.ACTION_GOTO_IMPLEMENTATION);
+					result.add(info);
+				}
+			}
 		}
 	}
 	
@@ -93,7 +123,7 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 			super(name,
 					name.getTextRange(),
 					AllIcons.Gutter.RecursiveMethod,
-					__ -> (JavaBundle.message("tooltip.recursive.call")),
+					__ -> JavaBundle.message("tooltip.recursive.call"),
 					null,
 					GutterIconRenderer.Alignment.RIGHT,
 					name::getText);

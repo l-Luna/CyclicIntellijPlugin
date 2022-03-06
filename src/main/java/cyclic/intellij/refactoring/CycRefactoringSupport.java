@@ -10,4 +10,8 @@ public class CycRefactoringSupport extends RefactoringSupportProvider{
 	public boolean isInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context){
 		return element instanceof CycDefinition;
 	}
+	
+	public boolean isSafeDeleteAvailable(@NotNull PsiElement element){
+		return element instanceof CycDefinition;
+	}
 }

@@ -94,6 +94,7 @@
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
         <javaCoverageEngineExtension implementation="cyclic.intellij.coverage.CyclicCoverageExtension"/>
         <projectViewNodeDecorator implementation="cyclic.intellij.coverage.CyclicCoverageNodeDecorator"/>
+        <directClassInheritorsSearch implementation="cyclic.intellij.presentation.find.CyclicDirectInheritorsSearcher"/>
 
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.NameAnnotator"/>

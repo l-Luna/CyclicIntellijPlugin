@@ -6,8 +6,11 @@ import com.intellij.codeInsight.daemon.impl.MarkerType;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.actionSystem.IdeActions;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.psi.elements.CycMethod;
+import cyclic.intellij.psi.elements.CycType;
 
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -42,6 +45,29 @@ public final class CMarkerTypes{
 						var element = overrides.getSourceElement();
 						if(element instanceof NavigationItem)
 							((NavigationItem)element).navigate(true);
+					}
+				}
+			}
+	);
+	
+	public static final MarkerType CYC_SUBCLASSED_CLASS = new MarkerType(
+			"CYC_SUBCLASSED_CLASS",
+			id -> {
+				var par = id.getParent().getParent();
+				if(par instanceof CycType){
+					CycType type = (CycType)par;
+					PsiClass asPsi = AsPsiUtil.asPsiClass(type);
+					return MarkerType.getSubclassedClassTooltip(asPsi);
+				}
+				return null;
+			},
+			new LineMarkerNavigator(){
+				public void browse(MouseEvent e, PsiElement id){
+					var par = id.getParent().getParent();
+					if(par instanceof CycType){
+						CycType type = (CycType)par;
+						PsiClass asPsi = AsPsiUtil.asPsiClass(type);
+						MarkerType.navigateToSubclassedClass(e, asPsi);
 					}
 				}
 			}

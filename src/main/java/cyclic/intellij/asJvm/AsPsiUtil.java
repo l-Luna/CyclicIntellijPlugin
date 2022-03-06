@@ -1,5 +1,6 @@
 package cyclic.intellij.asJvm;
 
+import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
@@ -12,6 +13,7 @@ import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.psi.elements.CycMethod;
 import cyclic.intellij.psi.elements.CycParameter;
 import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import org.jetbrains.annotations.NonNls;
@@ -24,23 +26,7 @@ import java.util.Objects;
 public class AsPsiUtil{
 	
 	public static PsiClass asPsiClass(CycType type){
-		var builder = new LightPsiClassBuilder(type, type.name()){
-			public String getQualifiedName(){
-				return type.fullyQualifiedName();
-			}
-			
-			public @NotNull PsiElement getNavigationElement(){
-				return type;
-			}
-			
-			public @Nullable Icon getIcon(int flags){
-				return type.getIcon(flags);
-			}
-			
-			public PsiFile getContainingFile(){
-				return type.getContainingFile();
-			}
-		};
+		var builder = new CycAsPsiClass(type);
 		
 		for(CycMethod method : type.methods()){
 			var mBuilder = new LightMethodBuilder(builder.getManager(), CyclicLanguage.LANGUAGE, method.getName());
@@ -60,7 +46,22 @@ public class AsPsiUtil{
 			
 			builder.addMethod(mBuilder);
 		}
-		// TODO: extends/implements lists, fields (on IJ's side)
+		
+		for(JvmClass inter : type.getInterfaces()){
+			PsiClass clss = inter instanceof PsiClass ? (PsiClass)inter :
+			                inter instanceof CycType ? asPsiClass((CycType)inter) : null;
+			if(clss != null)
+				(type.kind() == CycKind.INTERFACE ? builder.getExtendsList() : builder.getImplementsList())
+						.addReference(clss);
+		}
+		var sType = type.getSuperType();
+		if(sType != null){
+			PsiClass clss = sType instanceof PsiClass ? (PsiClass)sType :
+			                sType instanceof CycType ? asPsiClass((CycType)sType) : null;
+			if(clss != null)
+				builder.getExtendsList().addReference(clss);
+		}
+		// TODO: fields
 		return builder;
 	}
 	
@@ -154,6 +155,43 @@ public class AsPsiUtil{
 			int result = super.hashCode();
 			result = 31 * result + (underlying != null ? underlying.hashCode() : 0);
 			return result;
+		}
+	}
+	
+	private static class CycAsPsiClass extends LightPsiClassBuilder{
+		private final CycType type;
+		
+		public CycAsPsiClass(CycType type){
+			super(type, type.name());
+			this.type = type;
+		}
+		
+		public String getQualifiedName(){
+			return type.fullyQualifiedName();
+		}
+		
+		public @NotNull PsiElement getNavigationElement(){
+			return type;
+		}
+		
+		public @Nullable Icon getIcon(int flags){
+			return type.getIcon(flags);
+		}
+		
+		public PsiFile getContainingFile(){
+			return type.getContainingFile();
+		}
+		
+		public boolean isInterface(){
+			return type.kind() == CycKind.INTERFACE;
+		}
+		
+		public boolean isAnnotationType(){
+			return type.kind() == CycKind.ANNOTATION;
+		}
+		
+		public boolean isEnum(){
+			return type.kind() == CycKind.ENUM;
 		}
 	}
 }

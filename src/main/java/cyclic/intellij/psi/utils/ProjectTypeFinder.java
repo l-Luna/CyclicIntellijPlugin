@@ -10,7 +10,10 @@ import com.intellij.psi.search.GlobalSearchScope;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.elements.*;
+import cyclic.intellij.psi.elements.CycFileWrapper;
+import cyclic.intellij.psi.elements.CycImportStatement;
+import cyclic.intellij.psi.elements.CycMember;
+import cyclic.intellij.psi.elements.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,13 +39,14 @@ public class ProjectTypeFinder{
 		var types = findAll(in, x -> true);
 		addTypesFromPackage(in, types, "java.lang");
 		for(CycImportStatement imp : at.getContainer().map(CycFileWrapper::getImports).orElse(Collections.emptyList())){
-			if(imp.isWildcard())
-				addTypesFromPackage(in, types, imp.getImportName());
-			else if(!imp.isWildcard()){
-				var t = JavaPsiFacade.getInstance(in).findClass(imp.getImportName(), GlobalSearchScope.allScope(in));
-				if(t != null)
-					types.add(t);
-			}
+			if(!imp.isStatic())
+				if(imp.isWildcard())
+					addTypesFromPackage(in, types, imp.getImportName());
+				else{
+					var t = JavaPsiFacade.getInstance(in).findClass(imp.getImportName(), GlobalSearchScope.allScope(in));
+					if(t != null)
+						types.add(t);
+				}
 		}
 		return types;
 	}
