@@ -43,6 +43,8 @@ public class CyclicBlock extends AbstractBlock{
 				|| type == Tokens.getRuleFor(CyclicLangParser.RULE_statement)
 				|| Tokens.COMMENTS.contains(type))
 			return Indent.getNormalIndent();
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_value))
+			return Indent.getContinuationWithoutFirstIndent();
 		return Indent.getNoneIndent();
 	}
 	
