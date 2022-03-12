@@ -6,8 +6,7 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
-import cyclic.intellij.psi.CycAstElement;
-import cyclic.intellij.psi.CycDefinition;
+import cyclic.intellij.psi.CycDefinitionAstElement;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.statements.CycStatement;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.Optional;
 
-public class CycVariableDef extends CycAstElement implements CycVariable, CycModifiersHolder, CycDefinition{
+public class CycVariableDef extends CycDefinitionAstElement implements CycVariable, CycModifiersHolder{
 	
 	public CycVariableDef(@NotNull ASTNode node){
 		super(node);
@@ -63,10 +62,5 @@ public class CycVariableDef extends CycAstElement implements CycVariable, CycMod
 			return PlatformIcons.VARIABLE_ICON;
 		else
 			return PlatformIcons.FIELD_ICON;
-	}
-	
-	@NotNull
-	public String getName(){
-		return CycDefinition.super.getName();
 	}
 }

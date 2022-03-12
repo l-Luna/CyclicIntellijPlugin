@@ -7,8 +7,7 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
-import cyclic.intellij.psi.CycAstElement;
-import cyclic.intellij.psi.CycDefinition;
+import cyclic.intellij.psi.CycDefinitionAstElement;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.types.CycRecordComponents;
 import cyclic.intellij.psi.types.ArrayTypeImpl;
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.Optional;
 
-public class CycParameter extends CycAstElement implements CycVariable, CycDefinition{
+public class CycParameter extends CycDefinitionAstElement implements CycVariable{
 	
 	public CycParameter(@NotNull ASTNode node){
 		super(node);
@@ -66,10 +65,5 @@ public class CycParameter extends CycAstElement implements CycVariable, CycDefin
 	
 	public boolean isVarargs(){
 		return getNode().findChildByType(Tokens.getFor(CyclicLangLexer.ELIPSES)) != null;
-	}
-	
-	@NotNull
-	public String getName(){
-		return CycDefinition.super.getName();
 	}
 }

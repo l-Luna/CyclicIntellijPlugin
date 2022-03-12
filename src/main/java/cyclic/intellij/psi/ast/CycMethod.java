@@ -6,8 +6,7 @@ import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
-import cyclic.intellij.psi.CycAstElement;
-import cyclic.intellij.psi.CycDefinition;
+import cyclic.intellij.psi.CycDefinitionAstElement;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class CycMethod extends CycAstElement implements CycModifiersHolder, CycVarScope, CycDefinition{
+public class CycMethod extends CycDefinitionAstElement implements CycModifiersHolder, CycVarScope{
 	
 	public CycMethod(@NotNull ASTNode node){
 		super(node);
@@ -88,10 +87,5 @@ public class CycMethod extends CycAstElement implements CycModifiersHolder, CycV
 	public boolean hasSemicolon(){
 		var node = getNode().getLastChildNode().getFirstChildNode();
 		return node != null && node.getElementType() == Tokens.getFor(CyclicLangLexer.SEMICOLON);
-	}
-	
-	@NotNull
-	public String getName(){
-		return CycDefinition.super.getName();
 	}
 }

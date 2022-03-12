@@ -6,8 +6,7 @@ import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
-import cyclic.intellij.psi.CycAstElement;
-import cyclic.intellij.psi.CycDefinition;
+import cyclic.intellij.psi.CycDefinitionAstElement;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.CycTypeRef;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import static cyclic.intellij.psi.utils.JvmClassUtils.getByName;
 
 // Introduces the for-each variable into scope
-public class CycForeachLoop extends CycAstElement implements CycVariable, CycDefinition{
+public class CycForeachLoop extends CycDefinitionAstElement implements CycVariable{
 	
 	public CycForeachLoop(@NotNull ASTNode node){
 		super(node);
@@ -47,10 +46,5 @@ public class CycForeachLoop extends CycAstElement implements CycVariable, CycDef
 	
 	public @NotNull SearchScope getUseScope(){
 		return new LocalSearchScope(getContainingFile());
-	}
-	
-	@NotNull
-	public String getName(){
-		return CycDefinition.super.getName();
 	}
 }

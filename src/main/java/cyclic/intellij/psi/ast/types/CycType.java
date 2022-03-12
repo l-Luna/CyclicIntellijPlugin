@@ -14,9 +14,8 @@ import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.EDT;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.psi.CycDefinition;
+import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.CycStubElement;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.CycMethod;
@@ -38,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CycType extends CycStubElement<CycType, StubCycType> implements CycModifiersHolder, CycDefinition{
+public class CycType extends CycDefinitionStubElement<CycType, StubCycType> implements CycModifiersHolder{
 	
 	public CycType(@NotNull ASTNode node){
 		super(node);
@@ -67,8 +66,8 @@ public class CycType extends CycStubElement<CycType, StubCycType> implements Cyc
 		
 		PsiFile file = getContainingFile();
 		if(file instanceof CycFile)
-			return ((CycFile)file).getPackage().map(k -> k.getPackageName() + ".").orElse("") + CycDefinition.super.fullyQualifiedName();
-		return CycDefinition.super.fullyQualifiedName();
+			return ((CycFile)file).getPackage().map(k -> k.getPackageName() + ".").orElse("") + super.fullyQualifiedName();
+		return super.fullyQualifiedName();
 	}
 	
 	public @NotNull CycKind kind(){
@@ -112,7 +111,7 @@ public class CycType extends CycStubElement<CycType, StubCycType> implements Cyc
 		// also change the file name if top level
 		if(isTopLevelType())
 			getContainingFile().setName(name + ".cyc");
-		return CycDefinition.super.setName(name);
+		return super.setName(name);
 	}
 	
 	public List<CycMember> getMembers(){
@@ -120,7 +119,7 @@ public class CycType extends CycStubElement<CycType, StubCycType> implements Cyc
 	}
 	
 	public @NotNull String name(){
-		return CycDefinition.super.getName();
+		return getName();
 	}
 	
 	public @Nullable Icon getIcon(int flags){
@@ -178,10 +177,5 @@ public class CycType extends CycStubElement<CycType, StubCycType> implements Cyc
 	
 	public IStubElementType<StubCycType, CycType> getElementType(){
 		return StubTypes.CYC_TYPE;
-	}
-	
-	@NotNull
-	public String getName(){
-		return CycDefinition.super.getName();
 	}
 }
