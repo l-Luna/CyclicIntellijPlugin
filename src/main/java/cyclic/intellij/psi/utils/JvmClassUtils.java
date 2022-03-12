@@ -84,6 +84,7 @@ public class JvmClassUtils{
 		if(to instanceof JvmPrimitiveType){
 			return value instanceof JvmPrimitiveType
 					&& value != PsiPrimitiveType.NULL
+					&& to != PsiPrimitiveType.NULL
 					&& (((JvmPrimitiveType)value).getKind() == ((JvmPrimitiveType)to).getKind());
 		}
 		if(to instanceof JvmArrayType)
@@ -94,7 +95,7 @@ public class JvmClassUtils{
 			var toClass = asClass(to);
 			if(toClass != null){
 				if(toClass.getQualifiedName() != null && toClass.getQualifiedName().equals("java.lang.Object"))
-					return !(value instanceof JvmPrimitiveType);
+					return true;
 				return isClassAssignableTo(asClass(value), toClass);
 			}
 		}
@@ -106,7 +107,7 @@ public class JvmClassUtils{
 			return to == value;
 		if(to instanceof JvmPrimitiveType){
 			if(value instanceof JvmPrimitiveType){
-				if(value == PsiPrimitiveType.NULL)
+				if(value == PsiPrimitiveType.NULL || to == PsiPrimitiveType.NULL)
 					return false;
 				var k = ((JvmPrimitiveType)value).getKind();
 				var tk = ((JvmPrimitiveType)to).getKind();
@@ -139,7 +140,7 @@ public class JvmClassUtils{
 			var toClass = asClass(to);
 			if(toClass != null){
 				if(toClass.getQualifiedName() != null && toClass.getQualifiedName().equals("java.lang.Object"))
-					return !(value instanceof JvmPrimitiveType);
+					return true;
 				return isClassAssignableTo(asClass(value), toClass);
 			}
 		}
