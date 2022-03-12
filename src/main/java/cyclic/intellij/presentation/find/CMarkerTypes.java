@@ -9,8 +9,8 @@ import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.asJvm.AsPsiUtil;
-import cyclic.intellij.psi.elements.CycMethod;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.ast.types.CycType;
 
 import java.awt.event.MouseEvent;
 import java.util.List;

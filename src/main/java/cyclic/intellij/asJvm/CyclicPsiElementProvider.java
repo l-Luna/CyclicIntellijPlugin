@@ -18,7 +18,7 @@ public class CyclicPsiElementProvider extends PsiElementFinder{
 	public @Nullable PsiClass findClass(@NotNull String qualifiedName, @NotNull GlobalSearchScope scope){
 		if(scope.getProject() == null)
 			return null;
-		Optional<JvmClass> type = ProjectTypeFinder.find(scope.getProject(), x -> x.fullyQualifiedName().equals(qualifiedName), scope::accept);
+		Optional<JvmClass> type = ProjectTypeFinder.find(scope.getProject(), x -> x.fullyQualifiedName().equals(qualifiedName), scope);
 		return type
 				.map(x -> x instanceof JvmCyclicClass ? ((JvmCyclicClass)x).getUnderlying() : null)
 				.map(AsPsiUtil::asPsiClass)

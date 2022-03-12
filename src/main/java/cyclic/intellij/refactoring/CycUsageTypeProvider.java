@@ -5,8 +5,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.impl.rules.UsageType;
 import com.intellij.usages.impl.rules.UsageTypeProvider;
-import cyclic.intellij.psi.elements.*;
-import cyclic.intellij.psi.expressions.*;
+import cyclic.intellij.psi.ast.*;
+import cyclic.intellij.psi.ast.expressions.*;
+import cyclic.intellij.psi.ast.types.CycExtendsClause;
+import cyclic.intellij.psi.ast.types.CycImplementsClause;
+import cyclic.intellij.psi.ast.types.CycPermitsClause;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

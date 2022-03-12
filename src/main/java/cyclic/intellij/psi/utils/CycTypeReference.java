@@ -18,15 +18,22 @@ import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.inspections.fixes.AddImportFix;
 import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.elements.*;
+import cyclic.intellij.psi.ast.CycId;
+import cyclic.intellij.psi.ast.CycImportStatement;
+import cyclic.intellij.psi.ast.CycPackageStatement;
+import cyclic.intellij.psi.ast.types.CycExtendsClause;
+import cyclic.intellij.psi.ast.types.CycImplementsClause;
+import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 	
@@ -50,26 +57,8 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		if(id == null)
 			return null;
 		var p = id.getProject();
-		// possible names come from imports
-		var file = from.getContainingFile();
-		if(file instanceof CycFile)
-			return ProjectTypeFinder.firstType(p, getCandidates((CycFile)file, id.getText()));
-		return ProjectTypeFinder.findByName(p, id.getText()).orElse(null);
-	}
-	
-	@NotNull
-	public static List<String> getCandidates(CycFile file, String id){
-		Optional<String> pkg = file.getPackage().map(CycPackageStatement::getPackageName);
-		List<String> candidates = file.getImports().stream()
-				.filter(x -> !x.isStatic())
-				.map(x -> x.isWildcard() ? (x.getImportName() + "." + id) : (x.getImportName().endsWith(id) ? x.getImportName() : null))
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList());
-		candidates.add(0, id);
-		// TODO: all implicit imports
-		candidates.add(1, "java.lang." + id);
-		pkg.ifPresent(s -> candidates.add(2, s + "." + id));
-		return candidates;
+		var name = id.getText();
+		return ProjectTypeFinder.getByName(p, name, from);
 	}
 	
 	public @Nullable PsiElement resolve(){
@@ -145,7 +134,7 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 			return new LocalQuickFix[0];
 		
 		var project = id.getProject();
-		List<JvmClass> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName));
+		List<JvmClass> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName), null);
 		candidates.addAll(Arrays.asList(PsiShortNamesCache.getInstance(project).getClassesByName(shortName, GlobalSearchScope.everythingScope(project))));
 		
 		return candidates.stream()

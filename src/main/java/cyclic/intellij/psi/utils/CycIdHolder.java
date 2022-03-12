@@ -1,8 +1,8 @@
 package cyclic.intellij.psi.utils;
 
 import com.intellij.extapi.psi.ASTDelegatePsiElement;
-import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.elements.CycId;
+import cyclic.intellij.psi.CycElement;
+import cyclic.intellij.psi.ast.CycId;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Contains common logic for finding and changing the name of elements that have an immediate CycId child.
  */
-public interface CycIdHolder extends PsiElement{
+public interface CycIdHolder extends CycElement{
 	
 	default Optional<CycId> getIdElement(){
 		return PsiUtils.childOfType(this, CycId.class);

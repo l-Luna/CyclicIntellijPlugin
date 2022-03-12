@@ -6,6 +6,7 @@ import com.intellij.psi.tree.TokenSet;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
+import cyclic.intellij.psi.stubs.StubTypes;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.lexer.TokenIElementType;
@@ -19,8 +20,8 @@ public class Tokens{
 	
 	public static IElementType BAD_TOKEN_TYPE = TokenType.BAD_CHARACTER;
 	
-	public static final List<TokenIElementType> TOKEN_ELEMENT_TYPES = PSIElementTypeFactory.getTokenIElementTypes(CyclicLanguage.LANGUAGE);
-	public static final List<RuleIElementType> RULE_ELEMENT_TYPES = PSIElementTypeFactory.getRuleIElementTypes(CyclicLanguage.LANGUAGE);
+	private static final List<TokenIElementType> TOKEN_ELEMENT_TYPES = PSIElementTypeFactory.getTokenIElementTypes(CyclicLanguage.LANGUAGE);
+	private static final List<RuleIElementType> RULE_ELEMENT_TYPES = PSIElementTypeFactory.getRuleIElementTypes(CyclicLanguage.LANGUAGE);
 	
 	public static final TokenSet KEYWORDS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
@@ -197,11 +198,22 @@ public class Tokens{
 			CyclicLangLexer.BOOLLIT
 	);
 	
-	@Contract(pure = true) public static IElementType getFor(int type){
+	@Contract(pure = true)
+	public static IElementType getFor(int type){
 		return TOKEN_ELEMENT_TYPES.get(type);
 	}
 	
-	@Contract(pure = true) public static IElementType getRuleFor(int type){
+	@Contract(pure = true)
+	public static IElementType getRuleFor(int type){
+		if(type == CyclicLangParser.RULE_classDecl)
+			return StubTypes.CYC_TYPE;
+		else if(type == CyclicLangParser.RULE_objectExtends)
+			return StubTypes.CYC_EXTENDS_LIST;
+		else if(type == CyclicLangParser.RULE_objectImplements)
+			return StubTypes.CYC_IMPLEMENTS_LIST;
+		else if(type == CyclicLangParser.RULE_objectPermits)
+			return StubTypes.CYC_PERMITS_LIST;
+		
 		return RULE_ELEMENT_TYPES.get(type);
 	}
 }

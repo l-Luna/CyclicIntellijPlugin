@@ -7,7 +7,7 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.parser.CyclicSyntaxHighlighter;
 import cyclic.intellij.psi.Tokens;
-import cyclic.intellij.psi.elements.CycIdPart;
+import cyclic.intellij.psi.ast.CycIdPart;
 import org.jetbrains.annotations.NotNull;
 
 public class ContextKeywordAnnotator implements Annotator, DumbAware{

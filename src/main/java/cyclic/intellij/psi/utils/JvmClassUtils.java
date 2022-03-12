@@ -10,7 +10,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.search.GlobalSearchScope;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import org.jetbrains.annotations.NotNull;
@@ -81,11 +81,16 @@ public class JvmClassUtils{
 	public static boolean isAssignableTo(@Nullable JvmType value, @Nullable JvmType to){
 		if(value == null || to == null)
 			return to == value;
-		if(to instanceof JvmPrimitiveType)
-			return value instanceof JvmPrimitiveType && (((JvmPrimitiveType)value).getKind() == ((JvmPrimitiveType)to).getKind());
+		if(to instanceof JvmPrimitiveType){
+			return value instanceof JvmPrimitiveType
+					&& value != PsiPrimitiveType.NULL
+					&& (((JvmPrimitiveType)value).getKind() == ((JvmPrimitiveType)to).getKind());
+		}
 		if(to instanceof JvmArrayType)
 			return value instanceof JvmArrayType && (isAssignableTo(((JvmArrayType)value).getComponentType(), ((JvmArrayType)to).getComponentType()));
 		if(to instanceof JvmReferenceType){
+			if(value instanceof JvmPrimitiveType)
+				return value == PsiPrimitiveType.NULL;
 			var toClass = asClass(to);
 			if(toClass != null){
 				if(toClass.getQualifiedName() != null && toClass.getQualifiedName().equals("java.lang.Object"))
@@ -101,6 +106,8 @@ public class JvmClassUtils{
 			return to == value;
 		if(to instanceof JvmPrimitiveType){
 			if(value instanceof JvmPrimitiveType){
+				if(value == PsiPrimitiveType.NULL)
+					return false;
 				var k = ((JvmPrimitiveType)value).getKind();
 				var tk = ((JvmPrimitiveType)to).getKind();
 				// why isn't this an enum :p
@@ -127,6 +134,8 @@ public class JvmClassUtils{
 		if(to instanceof JvmArrayType) // Integer[] != int[]
 			return value instanceof JvmArrayType && (isAssignableTo(((JvmArrayType)value).getComponentType(), ((JvmArrayType)to).getComponentType()));
 		if(to instanceof JvmReferenceType){
+			if(value instanceof JvmPrimitiveType)
+				return value == PsiPrimitiveType.NULL;
 			var toClass = asClass(to);
 			if(toClass != null){
 				if(toClass.getQualifiedName() != null && toClass.getQualifiedName().equals("java.lang.Object"))

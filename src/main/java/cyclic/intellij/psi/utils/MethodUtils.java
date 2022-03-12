@@ -1,12 +1,12 @@
 package cyclic.intellij.psi.utils;
 
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.elements.CycArgumentsList;
-import cyclic.intellij.psi.elements.CycCall;
-import cyclic.intellij.psi.elements.CycExpression;
-import cyclic.intellij.psi.elements.CycStatement;
-import cyclic.intellij.psi.expressions.CycBinaryExpr;
-import cyclic.intellij.psi.expressions.CycParenthesisedExpr;
+import cyclic.intellij.psi.ast.CycArgumentsList;
+import cyclic.intellij.psi.ast.CycCall;
+import cyclic.intellij.psi.ast.expressions.CycBinaryExpr;
+import cyclic.intellij.psi.ast.expressions.CycExpression;
+import cyclic.intellij.psi.ast.expressions.CycParenthesisedExpr;
+import cyclic.intellij.psi.ast.statements.CycStatement;
 
 import java.util.ArrayList;
 import java.util.List;

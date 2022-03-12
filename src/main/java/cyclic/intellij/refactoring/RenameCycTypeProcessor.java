@@ -6,7 +6,7 @@ import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

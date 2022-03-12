@@ -9,7 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

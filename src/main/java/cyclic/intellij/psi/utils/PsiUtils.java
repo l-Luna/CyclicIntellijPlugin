@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PsiUtils{
 	
@@ -59,18 +60,26 @@ public class PsiUtils{
 	}
 	
 	@NotNull public static <X> List<X> childrenOfType(@NotNull PsiElement parent, Class<X> filter){
-		return Arrays.stream(parent.getChildren())
-				.filter(filter::isInstance)
-				.map(z -> (X)z)
+		return streamChildrenOfType(parent, filter)
 				.collect(Collectors.toList());
 	}
 	
+	@NotNull public static <X> Stream<X> streamChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
+		return Arrays.stream(parent.getChildren())
+				.filter(filter::isInstance)
+				.map(z -> (X)z);
+	}
+	
 	@NotNull public static <X> List<X> wrappedChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
+		return streamWrappedChildrenOfType(parent, filter)
+				.collect(Collectors.toList());
+	}
+	
+	@NotNull public static <X> Stream<X> streamWrappedChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
 		return Arrays.stream(parent.getChildren())
 				.map(PsiElement::getFirstChild)
 				.filter(filter::isInstance)
-				.map(z -> (X)z)
-				.collect(Collectors.toList());
+				.map(z -> (X)z);
 	}
 	
 	@NotNull public static List<PsiElement> matchingChildren(@NotNull PsiElement parent, Predicate<PsiElement> filter){
@@ -80,7 +89,7 @@ public class PsiUtils{
 	}
 	
 	@NotNull public static <X extends PsiElement> Optional<X> childOfType(@NotNull PsiElement parent, Class<X> filter){
-		return childOfType(parent, filter, 0);
+		return streamChildrenOfType(parent, filter).findFirst();
 	}
 	
 	@NotNull public static <X extends PsiElement> Optional<X> childOfType(@NotNull PsiElement parent, Class<X> filter, int index){
@@ -92,7 +101,7 @@ public class PsiUtils{
 	}
 	
 	@NotNull public static <X extends PsiElement> Optional<X> wrappedChildOfType(@NotNull PsiElement parent, Class<X> filter){
-		return wrappedChildOfType(parent, filter, 0);
+		return streamWrappedChildrenOfType(parent, filter).findFirst();
 	}
 	
 	@NotNull public static <X extends PsiElement> Optional<X> wrappedChildOfType(@NotNull PsiElement parent, Class<X> filter, int index){

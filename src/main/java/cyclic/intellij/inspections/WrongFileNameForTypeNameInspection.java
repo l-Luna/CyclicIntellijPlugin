@@ -7,7 +7,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import cyclic.intellij.inspections.fixes.RenameFileToTypeFix;
 import cyclic.intellij.inspections.fixes.RenameTypeToFileFix;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 
 public class WrongFileNameForTypeNameInspection extends CyclicInspection{

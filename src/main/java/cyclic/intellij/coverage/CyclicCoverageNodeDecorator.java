@@ -13,7 +13,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

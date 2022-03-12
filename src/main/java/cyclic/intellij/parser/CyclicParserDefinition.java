@@ -9,19 +9,33 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
+import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.psi.*;
-import cyclic.intellij.psi.elements.*;
-import cyclic.intellij.psi.expressions.*;
+import cyclic.intellij.psi.CycAstElement;
+import cyclic.intellij.psi.CycFile;
+import cyclic.intellij.psi.Tokens;
+import cyclic.intellij.psi.ast.*;
+import cyclic.intellij.psi.ast.expressions.*;
+import cyclic.intellij.psi.ast.statements.CycBlock;
+import cyclic.intellij.psi.ast.statements.CycForeachLoop;
+import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.types.*;
+import cyclic.intellij.psi.stubs.CycFileStub;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class CyclicParserDefinition implements ParserDefinition{
 	
-	public static final IFileElementType FILE = new IFileElementType(CyclicLanguage.LANGUAGE);
+	public static final IStubFileElementType<CycFileStub> FILE =
+			new IStubFileElementType<>("cyclic.FILE", CyclicLanguage.LANGUAGE){
+				public @NonNls @NotNull String getExternalId(){
+					return "cyclic.FILE";
+				}
+			};
 	
 	public CyclicParserDefinition(){
 		PSIElementTypeFactory.defineLanguageIElementTypes(CyclicLanguage.LANGUAGE, CyclicLangLexer.tokenNames, CyclicLangLexer.ruleNames);
@@ -53,66 +67,67 @@ public class CyclicParserDefinition implements ParserDefinition{
 	
 	public @NotNull PsiElement createElement(ASTNode node){
 		// TODO: replace with switch (by rule index)
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_file))
+		var type = node.getElementType();
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_file))
 			return new CycFileWrapper(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_classDecl))
 			return new CycType(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_id))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_id))
 			return new CycId(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_idPart))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_idPart))
 			return new CycIdPart(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_packageDecl))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_packageDecl))
 			return new CycPackageStatement(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_importDecl))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_importDecl))
 			return new CycImportStatement(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_imports))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_imports))
 			return new CycImportList(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_annotation))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_annotation))
 			return new CycAnnotation(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_rawType))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_rawType))
 			return new CycRawTypeRef(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_type))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_type))
 			return new CycTypeRef(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_member))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_member))
 			return new CycMember(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_modifiers))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_modifiers))
 			return new CycModifierList(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_modifier))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_modifier))
 			return new CycModifier(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_function))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_function))
 			return new CycMethod(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_statement))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_statement))
 			return new CycStatement(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_value))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_value))
 			return createExpr(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_call))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_call))
 			return new CycCall(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_varAssignment))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_varAssignment))
 			return new CycVariableAssignment(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_objectExtends))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_objectExtends))
 			return new CycExtendsClause(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_objectImplements))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_objectImplements))
 			return new CycImplementsClause(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_objectPermits))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_objectPermits))
 			return new CycPermitsClause(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_block))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_block))
 			return new CycBlock(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_varDecl))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_varDecl))
 			return new CycVariableDef(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_parameter))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_parameter))
 			return new CycParameter(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_recordComponents))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_recordComponents))
 			return new CycRecordComponents(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_arguments))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_arguments))
 			return new CycArgumentsList(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_parameters))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_parameters))
 			return new CycParametersList(node);
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_binaryop))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_binaryop))
 			return new CycBinaryOp(node);
 		
-		if(node.getElementType() == Tokens.getRuleFor(CyclicLangParser.RULE_foreachStatement))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_foreachStatement))
 			return new CycForeachLoop(node);
-		return new CycElement(node);
+		return new CycAstElement(node);
 	}
 	
 	public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider){

@@ -30,6 +30,11 @@
         <lang.parserDefinition language="Cyclic"
                                implementationClass="cyclic.intellij.parser.CyclicParserDefinition"/>
 
+        <stubElementTypeHolder class="cyclic.intellij.psi.stubs.StubTypes" />
+        <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicClassNameIndex"/>
+        <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicShortClassNameIndex"/>
+        <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicInheritanceListIndex"/>
+
         <lang.refactoringSupport language="Cyclic"
                                  implementationClass="cyclic.intellij.refactoring.CycRefactoringSupport"/>
 

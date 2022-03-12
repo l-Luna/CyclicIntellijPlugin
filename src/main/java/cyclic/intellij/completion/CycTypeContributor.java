@@ -1,14 +1,16 @@
 package cyclic.intellij.completion;
 
-import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.CycElement;
-import cyclic.intellij.psi.elements.CycExpression;
-import cyclic.intellij.psi.elements.CycRawTypeRef;
-import cyclic.intellij.psi.elements.CycType;
-import cyclic.intellij.psi.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.CycRawTypeRef;
+import cyclic.intellij.psi.ast.expressions.CycExpression;
+import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import org.jetbrains.annotations.NotNull;
 

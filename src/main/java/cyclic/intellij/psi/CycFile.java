@@ -10,10 +10,10 @@ import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.asJvm.AsPsiUtil;
-import cyclic.intellij.psi.elements.CycFileWrapper;
-import cyclic.intellij.psi.elements.CycImportStatement;
-import cyclic.intellij.psi.elements.CycPackageStatement;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.CycFileWrapper;
+import cyclic.intellij.psi.ast.CycImportStatement;
+import cyclic.intellij.psi.ast.CycPackageStatement;
+import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 

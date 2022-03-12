@@ -6,8 +6,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import cyclic.intellij.psi.elements.CycExpression;
-import cyclic.intellij.psi.expressions.CycParenthesisedExpr;
+import cyclic.intellij.psi.ast.expressions.CycExpression;
+import cyclic.intellij.psi.ast.expressions.CycParenthesisedExpr;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 

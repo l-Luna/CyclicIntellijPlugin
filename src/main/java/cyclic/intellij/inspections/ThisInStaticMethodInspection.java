@@ -6,8 +6,8 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import cyclic.intellij.psi.elements.CycMethod;
-import cyclic.intellij.psi.expressions.CycThisExpr;
+import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.ast.expressions.CycThisExpr;
 import org.jetbrains.annotations.NotNull;
 
 public class ThisInStaticMethodInspection extends LocalInspectionTool{

@@ -8,11 +8,11 @@ import com.intellij.lang.jvm.JvmField;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.elements.CycCall;
-import cyclic.intellij.psi.elements.CycExpression;
-import cyclic.intellij.psi.elements.CycTypeRef;
-import cyclic.intellij.psi.expressions.CycCallExpr;
-import cyclic.intellij.psi.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.CycCall;
+import cyclic.intellij.psi.ast.CycTypeRef;
+import cyclic.intellij.psi.ast.expressions.CycCallExpr;
+import cyclic.intellij.psi.ast.expressions.CycExpression;
+import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.utils.CycVariable;
 import org.jetbrains.annotations.NotNull;
 

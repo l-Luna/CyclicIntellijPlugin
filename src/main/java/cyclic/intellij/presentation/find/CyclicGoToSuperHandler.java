@@ -13,8 +13,8 @@ import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import cyclic.intellij.psi.elements.CycMethod;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -18,12 +18,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.presentation.find.CMarkerTypes;
-import cyclic.intellij.psi.elements.CycCall;
-import cyclic.intellij.psi.elements.CycMethod;
-import cyclic.intellij.psi.elements.CycStatement;
-import cyclic.intellij.psi.elements.CycType;
-import cyclic.intellij.psi.expressions.CycIdExpr;
-import cyclic.intellij.psi.expressions.CycThisExpr;
+import cyclic.intellij.psi.ast.CycCall;
+import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.expressions.CycThisExpr;
+import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

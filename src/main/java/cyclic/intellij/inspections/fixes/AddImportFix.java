@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.elements.CycImportList;
+import cyclic.intellij.psi.ast.CycImportList;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

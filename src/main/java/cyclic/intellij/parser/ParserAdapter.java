@@ -1,10 +1,12 @@
 package cyclic.intellij.parser;
 
+import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.Tokens;
+import org.antlr.intellij.adaptor.parser.ANTLRParseTreeToPSIConverter;
 import org.antlr.intellij.adaptor.parser.ANTLRParserAdaptor;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -31,5 +33,9 @@ public class ParserAdapter extends ANTLRParserAdaptor{
 		if(root == Tokens.getFor(CyclicLangLexer.ID))
 			return cyclicParser.id();
 		return cyclicParser.file();
+	}
+	
+	protected ANTLRParseTreeToPSIConverter createListener(Parser parser, IElementType root, PsiBuilder builder){
+		return new TypeSubstitutingAntlrParseTreeToPsiTreeConverter(language, parser, builder);
 	}
 }

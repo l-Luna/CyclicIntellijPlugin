@@ -3,7 +3,7 @@ package cyclic.intellij.psi.types;
 import com.intellij.lang.jvm.*;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.elements.CycType;
+import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

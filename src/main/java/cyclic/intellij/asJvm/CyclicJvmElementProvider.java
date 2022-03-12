@@ -14,7 +14,7 @@ public class CyclicJvmElementProvider implements JvmElementProvider{
 		var project = scope.getProject();
 		if(project == null)
 			return List.of();
-		var aClass = ProjectTypeFinder.find(project, x -> x.fullyQualifiedName().equals(qualifiedName), scope::accept);
+		var aClass = ProjectTypeFinder.find(project, x -> x.fullyQualifiedName().equals(qualifiedName), scope);
 		return aClass.map(List::of).orElse(List.of());
 	}
 }

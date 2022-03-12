@@ -9,7 +9,7 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.psi.CycElement;
-import cyclic.intellij.psi.elements.CycAnnotation;
+import cyclic.intellij.psi.ast.CycAnnotation;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import org.jetbrains.annotations.NotNull;
 
