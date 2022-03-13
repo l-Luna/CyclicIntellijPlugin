@@ -207,6 +207,22 @@ public class Tokens{
 	public static IElementType getRuleFor(int type){
 		if(type == CyclicLangParser.RULE_classDecl)
 			return StubTypes.CYC_TYPE;
+		
+		else if(type == CyclicLangParser.RULE_member)
+			return StubTypes.CYC_MEMBER;
+		else if(type == CyclicLangParser.RULE_recordComponents)
+			return StubTypes.CYC_RECORD_COMPONENTS;
+		else if(type == CyclicLangParser.RULE_parameter)
+			return StubTypes.CYC_PARAMETER;
+		else if(type == CyclicLangParser.RULE_modifiers)
+			return StubTypes.CYC_MODIFIER_LIST;
+		else if(type == CyclicLangParser.RULE_function)
+			return StubTypes.CYC_METHOD;
+		else if(type == CyclicLangParser.RULE_varDecl)
+			return StubTypes.CYC_FIELD;
+		else if(type == CyclicLangParser.RULE_parameters)
+			return StubTypes.CYC_PARAMETERS_LIST;
+		
 		else if(type == CyclicLangParser.RULE_objectExtends)
 			return StubTypes.CYC_EXTENDS_LIST;
 		else if(type == CyclicLangParser.RULE_objectImplements)

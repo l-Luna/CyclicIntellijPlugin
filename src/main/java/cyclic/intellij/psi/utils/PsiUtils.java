@@ -20,79 +20,102 @@ import java.util.stream.Stream;
 
 public class PsiUtils{
 	
+	@NotNull
 	private static PsiElement createFromText(Project project, PsiElement context, String text, IElementType type){
 		PsiFileFactoryImpl factory = (PsiFileFactoryImpl)PsiFileFactory.getInstance(project);
-		return factory.createElementFromText(text, CyclicLanguage.LANGUAGE, type, context);
+		var ret = factory.createElementFromText(text, CyclicLanguage.LANGUAGE, type, context);
+		assert ret != null;
+		return ret;
 	}
 	
+	@NotNull
 	public static PsiElement createFromText(@NotNull PsiElement context, String text, IElementType elementType){
-		return createFromText(context.getProject(), context, text, elementType);
+		return createFromText(context.getProject(), context, text, elementType).getFirstChild();
 	}
 	
 	// the ID token is understood in ParserAdaptor to mean a full ID
+	@NotNull
 	public static PsiElement createIdFromText(@NotNull PsiElement context, String text){
-		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID)).getFirstChild();
+		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID));
 	}
 	
+	@NotNull
 	public static PsiElement createIdPartFromText(@NotNull PsiElement context, String text){
 		return createIdFromText(context, text).getFirstChild();
 	}
 	
+	@NotNull
 	public static PsiElement createExpressionFromText(@NotNull PsiElement context, String text){
-		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_value)).getFirstChild();
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_value));
 	}
 	
+	@NotNull
 	public static PsiElement createImportFromText(@NotNull PsiElement context, String text){
-		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_importDecl)).getFirstChild();
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_importDecl));
 	}
 	
+	@NotNull
 	public static PsiElement createExtendsClauseFromText(@NotNull PsiElement context, String text){
-		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_objectExtends)).getFirstChild();
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_objectExtends));
 	}
 	
+	@NotNull
 	public static PsiElement createImplementsClauseFromText(@NotNull PsiElement context, String text){
-		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_objectImplements)).getFirstChild();
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_objectImplements));
 	}
 	
+	@NotNull
+	public static PsiElement createTypeReferenceFromText(@NotNull PsiElement context, String text){
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_type));
+	}
+	
+	@NotNull
 	public static PsiElement createWhitespace(@NotNull PsiElement context, String text){
 		assert text.isBlank();
-		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID)).getFirstChild();
+		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID));
 	}
 	
-	@NotNull public static <X> List<X> childrenOfType(@NotNull PsiElement parent, Class<X> filter){
+	@NotNull
+	public static <X> List<X> childrenOfType(@NotNull PsiElement parent, Class<X> filter){
 		return streamChildrenOfType(parent, filter)
 				.collect(Collectors.toList());
 	}
 	
-	@NotNull public static <X> Stream<X> streamChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
+	@NotNull
+	public static <X> Stream<X> streamChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
 		return Arrays.stream(parent.getChildren())
 				.filter(filter::isInstance)
 				.map(z -> (X)z);
 	}
 	
-	@NotNull public static <X> List<X> wrappedChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
+	@NotNull
+	public static <X> List<X> wrappedChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
 		return streamWrappedChildrenOfType(parent, filter)
 				.collect(Collectors.toList());
 	}
 	
-	@NotNull public static <X> Stream<X> streamWrappedChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
+	@NotNull
+	public static <X> Stream<X> streamWrappedChildrenOfType(@NotNull PsiElement parent, Class<X> filter){
 		return Arrays.stream(parent.getChildren())
 				.map(PsiElement::getFirstChild)
 				.filter(filter::isInstance)
 				.map(z -> (X)z);
 	}
 	
-	@NotNull public static List<PsiElement> matchingChildren(@NotNull PsiElement parent, Predicate<PsiElement> filter){
+	@NotNull
+	public static List<PsiElement> matchingChildren(@NotNull PsiElement parent, Predicate<PsiElement> filter){
 		return Arrays.stream(parent.getChildren())
 				.filter(filter)
 				.collect(Collectors.toList());
 	}
 	
-	@NotNull public static <X extends PsiElement> Optional<X> childOfType(@NotNull PsiElement parent, Class<X> filter){
+	@NotNull
+	public static <X extends PsiElement> Optional<X> childOfType(@NotNull PsiElement parent, Class<X> filter){
 		return streamChildrenOfType(parent, filter).findFirst();
 	}
 	
-	@NotNull public static <X extends PsiElement> Optional<X> childOfType(@NotNull PsiElement parent, Class<X> filter, int index){
+	@NotNull
+	public static <X extends PsiElement> Optional<X> childOfType(@NotNull PsiElement parent, Class<X> filter, int index){
 		var c = childrenOfType(parent, filter);
 		if(c.size() > index)
 			return Optional.of(c.get(index));
@@ -100,11 +123,13 @@ public class PsiUtils{
 			return Optional.empty();
 	}
 	
-	@NotNull public static <X extends PsiElement> Optional<X> wrappedChildOfType(@NotNull PsiElement parent, Class<X> filter){
+	@NotNull
+	public static <X extends PsiElement> Optional<X> wrappedChildOfType(@NotNull PsiElement parent, Class<X> filter){
 		return streamWrappedChildrenOfType(parent, filter).findFirst();
 	}
 	
-	@NotNull public static <X extends PsiElement> Optional<X> wrappedChildOfType(@NotNull PsiElement parent, Class<X> filter, int index){
+	@NotNull
+	public static <X extends PsiElement> Optional<X> wrappedChildOfType(@NotNull PsiElement parent, Class<X> filter, int index){
 		var c = wrappedChildrenOfType(parent, filter);
 		if(c.size() > index)
 			return Optional.of(c.get(index));

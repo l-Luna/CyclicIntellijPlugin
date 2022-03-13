@@ -13,7 +13,10 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
+import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import cyclic.intellij.asJvm.AsPsiUtil;
@@ -77,13 +80,13 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 				PsiClass subClass = DirectClassInheritorsSearch.search(aClass).findFirst();
 				if(subClass != null){
 					final Icon icon = aClass.isInterface() ? AllIcons.Gutter.ImplementedMethod : AllIcons.Gutter.OverridenMethod;
-					PsiElement range = type.getNameIdentifier();
-					if(range != null)
-						range = range.getFirstChild();
-					if(range == null)
-						range = aClass;
+					PsiElement name = type.getNameIdentifier();
+					if(name != null)
+						name = name.getFirstChild();
+					if(name == null)
+						name = aClass;
 					MarkerType marker = CMarkerTypes.CYC_SUBCLASSED_CLASS;
-					LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(range, range.getTextRange(),
+					LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(name, name.getTextRange(),
 							icon, marker.getTooltip(),
 							marker.getNavigationHandler(),
 							GutterIconRenderer.Alignment.RIGHT,
@@ -91,6 +94,36 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 					NavigateAction.setNavigateAction(info,
 							aClass.isInterface()
 									? JavaBundle.message("action.go.to.implementation.text") : JavaBundle.message("action.go.to.subclass.text"),
+							IdeActions.ACTION_GOTO_IMPLEMENTATION);
+					result.add(info);
+				}
+			}
+			if(element instanceof CycMethod){
+				CycMethod cMethod = (CycMethod)element;
+				PsiMethod method = AsPsiUtil.asPsiMethod(cMethod);
+				PsiClass container = AsPsiUtil.asPsiClass(cMethod.containingType());
+				// TODO: don't build the type twice
+				// we do need to set the container or the query won't bother
+				((LightMethodBuilder)method).setContainingClass(container);
+				
+				PsiMethod overridden = OverridingMethodsSearch.search(method).findFirst();
+				if(overridden != null){
+					var abs = cMethod.hasModifier("abstract") || (container.isInterface() && cMethod.hasSemicolon());
+					final Icon icon = abs
+							? AllIcons.Gutter.ImplementedMethod : AllIcons.Gutter.OverridenMethod;
+					PsiElement name = cMethod.getNameIdentifier();
+					if(name != null)
+						name = name.getFirstChild();
+					if(name == null)
+						name = method;
+					MarkerType marker = CMarkerTypes.CYC_OVERRIDDEN_METHOD;
+					LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(name, name.getTextRange(),
+							icon, marker.getTooltip(),
+							marker.getNavigationHandler(),
+							GutterIconRenderer.Alignment.RIGHT,
+							cMethod::getName);
+					NavigateAction.setNavigateAction(info,
+							abs ? JavaBundle.message("action.go.to.implementation.text") : JavaBundle.message("action.go.to.subclass.text"),
 							IdeActions.ACTION_GOTO_IMPLEMENTATION);
 					result.add(info);
 				}

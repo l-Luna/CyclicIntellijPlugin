@@ -1,8 +1,10 @@
 package cyclic.intellij.psi.indexes;
 
 import com.intellij.psi.stubs.StubIndexKey;
+import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.types.CycClassList;
 import cyclic.intellij.psi.ast.types.CycType;
+import cyclic.intellij.psi.utils.CycVariable;
 
 public final class StubIndexes{
 	
@@ -10,4 +12,7 @@ public final class StubIndexes{
 	public static final StubIndexKey<String, CycType> TYPES_BY_SHORT_NAME = StubIndexKey.createIndexKey("cyclic.type.short");
 	
 	public static final StubIndexKey<String, CycClassList<?>> INHERITANCE_LISTS = StubIndexKey.createIndexKey("cyclic.inheritance");
+	
+	public static final StubIndexKey<String, CycMethod> METHODS = StubIndexKey.createIndexKey("cyclic.method");
+	public static final StubIndexKey<String, CycVariable> FIELDS = StubIndexKey.createIndexKey("cyclic.field");
 }

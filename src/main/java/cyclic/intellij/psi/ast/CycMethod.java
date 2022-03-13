@@ -4,11 +4,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.stubs.StubElement;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
-import cyclic.intellij.psi.CycDefinitionAstElement;
+import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.types.CycType;
+import cyclic.intellij.psi.stubs.StubCycMethod;
+import cyclic.intellij.psi.stubs.StubTypes;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
@@ -16,27 +18,30 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class CycMethod extends CycDefinitionAstElement implements CycModifiersHolder, CycVarScope{
+public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod> implements CycModifiersHolder, CycVarScope{
 	
 	public CycMethod(@NotNull ASTNode node){
 		super(node);
 	}
 	
-	public CycType getType(){
-		// parent is CycMember, then CycType
-		return (CycType)getParent().getParent();
+	public CycMethod(@NotNull StubCycMethod method){
+		super(method, StubTypes.CYC_METHOD);
 	}
 	
 	public String fullyQualifiedName(){
-		return getType().fullyQualifiedName() + "::" + getName();
+		return containingType().fullyQualifiedName() + "::" + getName();
 	}
 	
 	public CycType containingType(){
-		return PsiTreeUtil.getParentOfType(this, CycType.class);
+		return getStubOrPsiParentOfType(CycType.class);
 	}
 	
 	public Optional<CycModifierList> modifiers(){
+		var stub = getStub();
+		if(stub != null)
+			return Optional.ofNullable(stub.modifiers()).map(StubElement::getPsi);
 		return PsiUtils.childOfType(this, CycModifierList.class);
 	}
 	
@@ -45,10 +50,20 @@ public class CycMethod extends CycDefinitionAstElement implements CycModifiersHo
 	}
 	
 	public Optional<CycTypeRef> returns(){
+		var stub = getStub();
+		if(stub != null){
+			var type = PsiUtils.createTypeReferenceFromText(this, stub.returnTypeText());
+			return Optional.of((CycTypeRef)type);
+		}
 		return PsiUtils.childOfType(this, CycTypeRef.class);
 	}
 	
 	public List<CycParameter> parameters(){
+		var stub = getStub();
+		if(stub != null){
+			var params = stub.parameters();
+			return params.stream().map(StubElement::getPsi).collect(Collectors.toList());
+		}
 		var paramList = PsiUtils.childOfType(this, CycParametersList.class);
 		return paramList.map(list -> PsiUtils.childrenOfType(list, CycParameter.class)).orElseGet(List::of);
 	}
@@ -85,7 +100,19 @@ public class CycMethod extends CycDefinitionAstElement implements CycModifiersHo
 	}
 	
 	public boolean hasSemicolon(){
+		var stub = getStub();
+		if(stub != null)
+			return stub.hasSemicolon();
+		
 		var node = getNode().getLastChildNode().getFirstChildNode();
 		return node != null && node.getElementType() == Tokens.getFor(CyclicLangLexer.SEMICOLON);
+	}
+	
+	public String getName(){
+		var stub = getStub();
+		if(stub != null)
+			return stub.name();
+		
+		return super.getName();
 	}
 }

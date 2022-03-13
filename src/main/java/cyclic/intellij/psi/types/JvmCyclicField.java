@@ -59,6 +59,6 @@ public class JvmCyclicField implements JvmField{
 	}
 	
 	public @Nullable PsiElement getSourceElement(){
-		return underlying.declaration();
+		return underlying;
 	}
 }

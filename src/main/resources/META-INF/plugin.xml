@@ -30,10 +30,12 @@
         <lang.parserDefinition language="Cyclic"
                                implementationClass="cyclic.intellij.parser.CyclicParserDefinition"/>
 
-        <stubElementTypeHolder class="cyclic.intellij.psi.stubs.StubTypes" />
+        <stubElementTypeHolder class="cyclic.intellij.psi.stubs.StubTypes"/>
         <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicClassNameIndex"/>
         <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicShortClassNameIndex"/>
         <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicInheritanceListIndex"/>
+        <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicFieldIndex"/>
+        <stubIndex implementation="cyclic.intellij.psi.indexes.CyclicMethodIndex"/>
 
         <lang.refactoringSupport language="Cyclic"
                                  implementationClass="cyclic.intellij.refactoring.CycRefactoringSupport"/>
@@ -85,22 +87,26 @@
         <codeInsight.gotoSuper language="Cyclic"
                                implementationClass="cyclic.intellij.presentation.find.CyclicGoToSuperHandler"/>
 
+        <java.elementFinder implementation="cyclic.intellij.asJvm.CyclicPsiElementProvider"/>
+        <jvm.elementProvider implementation="cyclic.intellij.asJvm.CyclicJvmElementProvider"/>
+
         <frameworkSupport implementation="cyclic.intellij.model.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>
-        <jvm.elementProvider implementation="cyclic.intellij.asJvm.CyclicJvmElementProvider"/>
+
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
         <fileIconPatcher implementation="cyclic.intellij.presentation.CyclicFileIconPatcher"/>
         <createFromTemplateHandler implementation="cyclic.intellij.CyclicTemplates"/>
         <runConfigurationProducer implementation="cyclic.intellij.run.CyclicRunConfigProducer"/>
-        <java.elementFinder implementation="cyclic.intellij.asJvm.CyclicPsiElementProvider"/>
-        <gotoClassContributor implementation="cyclic.intellij.presentation.find.CyclicGoToClassContributor"/>
+        <projectViewNodeDecorator implementation="cyclic.intellij.coverage.CyclicCoverageNodeDecorator"/>
+        <lang.formatter language="Cyclic" implementationClass="cyclic.intellij.formatter.CyclicFormattingModelBuilder"/>
+
         <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
         <javaCoverageEngineExtension implementation="cyclic.intellij.coverage.CyclicCoverageExtension"/>
-        <projectViewNodeDecorator implementation="cyclic.intellij.coverage.CyclicCoverageNodeDecorator"/>
+
+        <gotoClassContributor implementation="cyclic.intellij.presentation.find.CyclicGoToClassContributor"/>
         <directClassInheritorsSearch implementation="cyclic.intellij.presentation.find.CyclicDirectInheritorsSearcher"/>
-        <lang.formatter language="Cyclic" implementationClass="cyclic.intellij.formatter.CyclicFormattingModelBuilder"/>
 
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.NameAnnotator"/>

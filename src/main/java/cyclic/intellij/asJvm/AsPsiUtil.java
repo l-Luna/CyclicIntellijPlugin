@@ -25,25 +25,12 @@ import java.util.Objects;
 
 public class AsPsiUtil{
 	
+	@NotNull
 	public static PsiClass asPsiClass(CycType type){
 		var builder = new CycAsPsiClass(type);
 		
 		for(CycMethod method : type.methods()){
-			var mBuilder = new LightMethodBuilder(builder.getManager(), CyclicLanguage.LANGUAGE, method.getName());
-			for(String modifier : method.getModifiers())
-				mBuilder.addModifier(modifier);
-			for(CycParameter parameter : method.parameters()){
-				var jType = parameter.varType();
-				var psiType = asPsiType(jType);
-				if(psiType != null){
-					if(parameter.isVarargs() && psiType instanceof PsiArrayType)
-						psiType = ((PsiArrayType)psiType).getComponentType(); // wrapped in PsiEllipsesType for us
-					mBuilder.addParameter(parameter.varName(), psiType, parameter.isVarargs());
-				}else
-					mBuilder.addParameter(parameter.varName(), JvmClassUtils.name(parameter.varType()));
-			}
-			mBuilder.setMethodReturnType(asPsiType(method.returnType()));
-			
+			PsiMethod mBuilder = asPsiMethod(method);
 			builder.addMethod(mBuilder);
 		}
 		
@@ -63,6 +50,26 @@ public class AsPsiUtil{
 		}
 		// TODO: fields
 		return builder;
+	}
+	
+	@NotNull
+	public static PsiMethod asPsiMethod(CycMethod method){
+		var mBuilder = new LightMethodBuilder(method.getManager(), CyclicLanguage.LANGUAGE, method.getName());
+		mBuilder.setNavigationElement(method);
+		for(String modifier : method.getModifiers())
+			mBuilder.addModifier(modifier);
+		for(CycParameter parameter : method.parameters()){
+			var jType = parameter.varType();
+			var psiType = asPsiType(jType);
+			if(psiType != null){
+				if(parameter.isVarargs() && psiType instanceof PsiArrayType)
+					psiType = ((PsiArrayType)psiType).getComponentType(); // wrapped in PsiEllipsesType for us
+				mBuilder.addParameter(parameter.varName(), psiType, parameter.isVarargs());
+			}else
+				mBuilder.addParameter(parameter.varName(), JvmClassUtils.name(parameter.varType()));
+		}
+		mBuilder.setMethodReturnType(asPsiType(method.returnType()));
+		return mBuilder;
 	}
 	
 	public static PsiType asPsiType(JvmType type){

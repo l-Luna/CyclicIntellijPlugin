@@ -9,6 +9,7 @@ import cyclic.intellij.psi.types.ArrayTypeImpl;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CycTypeRef extends CycAstElement{
 	
@@ -16,6 +17,7 @@ public class CycTypeRef extends CycAstElement{
 		super(node);
 	}
 	
+	@Nullable
 	public JvmType asType(){
 		if(getNode().findChildByType(Tokens.SQ_BRACES) != null)
 			return PsiUtils.childOfType(this, CycTypeRef.class)
@@ -26,6 +28,7 @@ public class CycTypeRef extends CycAstElement{
 				.map(CycRawTypeRef::type).orElse(null);
 	}
 	
+	@Nullable
 	public JvmClass asClass(){
 		return JvmClassUtils.asClass(asType());
 	}

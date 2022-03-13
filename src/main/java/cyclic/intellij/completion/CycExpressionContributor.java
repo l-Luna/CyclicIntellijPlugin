@@ -44,12 +44,10 @@ public class CycExpressionContributor extends CompletionContributor{
 				// add local variables
 				CycVarScope.scopeOf(parameters.getOriginalPosition()).ifPresent(scope -> {
 					for(CycVariable variable : scope.available()){
-						var decl = variable.declaration();
 						var builder =
 								create(variable.varName())
-										.withPsiElement(decl);
-						if(decl != null)
-							builder = builder.withIcon(decl.getIcon(0));
+										.withPsiElement(variable)
+										.withIcon(variable.getIcon(0));
 						result.addElement(withPriority(builder, 10));
 					}
 				});

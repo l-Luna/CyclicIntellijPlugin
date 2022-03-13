@@ -36,6 +36,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CycType extends CycDefinitionStubElement<CycType, StubCycType> implements CycModifiersHolder{
 	
@@ -153,11 +154,13 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 		
 		var stub = getStub();
 		if(stub != null){
-			var extList = stub.findChildStubByType(StubTypes.CYC_EXTENDS_LIST);
+			var extList = stub.extendsList();
 			if(extList != null){
 				var names = extList.elementFqNames();
 				if(names.size() > 0)
 					return ProjectTypeFinder.getByName(getProject(), names.get(0), this);
+				else
+					return null;
 			}
 		}
 		
@@ -167,6 +170,17 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 	
 	@NotNull
 	public List<JvmClass> getInterfaces(){
+		var stub = getStub();
+		if(stub != null){
+			var cl = (kind() == CycKind.INTERFACE) ? stub.extendsList() : stub.implementsList();
+			if(cl != null){
+				var names = cl.elementFqNames();
+				return names.stream()
+						.map(x -> ProjectTypeFinder.getByName(getProject(), x, this))
+						.collect(Collectors.toList());
+			}
+		}
+		
 		Optional<? extends CycClassList<?>> list;
 		if(kind() == CycKind.INTERFACE)
 			list = PsiUtils.childOfType(this, CycExtendsClause.class);
