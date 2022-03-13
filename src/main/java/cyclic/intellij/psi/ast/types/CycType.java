@@ -3,28 +3,28 @@ package cyclic.intellij.psi.ast.types;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.util.JvmMainMethodUtil;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.stubs.StubElement;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.EDT;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
+import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.Tokens;
-import cyclic.intellij.psi.ast.CycFileWrapper;
-import cyclic.intellij.psi.ast.CycMethod;
-import cyclic.intellij.psi.ast.CycPackageStatement;
-import cyclic.intellij.psi.ast.CycVariableDef;
-import cyclic.intellij.psi.stubs.StubCycType;
-import cyclic.intellij.psi.stubs.StubTypes;
+import cyclic.intellij.psi.ast.*;
+import cyclic.intellij.psi.stubs.*;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
+import cyclic.intellij.psi.types.JvmCyclicMethod;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.ProjectTypeFinder;
@@ -35,8 +35,10 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CycType extends CycDefinitionStubElement<CycType, StubCycType> implements CycModifiersHolder{
 	
@@ -98,8 +100,37 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 		return hasModifier("final");
 	}
 	
-	public @NotNull List<? extends CycMethod> methods(){
-		return PsiUtils.wrappedChildrenOfType(this, CycMethod.class);
+	@SuppressWarnings("unchecked")
+	public @NotNull List<? extends JvmMethod> declaredMethods(){
+		var stub = getStub();
+		if(stub != null){
+			ArrayList<JvmMethod> methods = stub.getChildrenStubs().stream()
+					.filter(StubCycMember.class::isInstance)
+					.flatMap(x -> (Stream<StubElement<?>>)x.getChildrenStubs().stream())
+					.filter(StubCycMethod.class::isInstance)
+					.map(StubCycMethod.class::cast)
+					.map(StubElement::getPsi)
+					.map(JvmCyclicMethod::of)
+					.collect(Collectors.toCollection(ArrayList::new));
+			var recComponents = stub.findChildStubByType(StubTypes.CYC_RECORD_COMPONENTS);
+			if(recComponents != null){
+				var comps = recComponents.components();
+				for(StubCycParameter comp : comps)
+					if(methods.stream().noneMatch(m -> m.getParameters().length == 0 && Objects.equals(m.getName(), comp.name())))
+						methods.add(AsPsiUtil.recordAccessorMethod(comp.getPsi()));
+			}
+			return methods;
+		}
+		
+		List<JvmMethod> methods
+				= PsiUtils.wrappedChildrenOfType(this, CycMethod.class).stream().map(JvmCyclicMethod::of).collect(Collectors.toList());
+		List<CycParameter> components = PsiUtils.childOfType(this, CycRecordComponents.class)
+				.map(CycRecordComponents::components)
+				.orElse(List.of());
+		for(CycParameter comp : components)
+			if(methods.stream().noneMatch(m -> m.getParameters().length == 0 && Objects.equals(m.getName(), comp.varName())))
+				methods.add(AsPsiUtil.recordAccessorMethod(comp));
+		return methods;
 	}
 	
 	public @NotNull List<? extends CycVariable> fields(){

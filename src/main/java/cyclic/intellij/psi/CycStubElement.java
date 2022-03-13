@@ -12,11 +12,22 @@ public class CycStubElement<Psi extends PsiElement, Stub extends StubElement<Psi
 		extends StubBasedPsiElementBase<Stub>
 		implements CycElement, StubBasedPsiElement<Stub>{
 	
+	private PsiElement navigationElement = null;
+	
 	public CycStubElement(@NotNull Stub stub, @NotNull IStubElementType<?, ?> nodeType){
 		super(stub, nodeType);
 	}
 	
 	public CycStubElement(@NotNull ASTNode node){
 		super(node);
+	}
+	
+	public CycStubElement<Psi, Stub> setNavigationElement(PsiElement navigationElement){
+		this.navigationElement = navigationElement;
+		return this;
+	}
+	
+	public PsiElement getNavigationElement(){
+		return navigationElement != null ? navigationElement : this;
 	}
 }

@@ -54,7 +54,7 @@ public class JvmCyclicClass implements JvmClass{
 	}
 	
 	public JvmMethod @NotNull [] getMethods(){
-		return underlying.methods().stream().map(JvmCyclicMethod::of).toArray(JvmMethod[]::new);
+		return underlying.declaredMethods().toArray(JvmMethod[]::new);
 	}
 	
 	public JvmField @NotNull [] getFields(){

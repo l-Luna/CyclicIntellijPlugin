@@ -1,6 +1,7 @@
 package cyclic.intellij.asJvm;
 
 import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
@@ -15,6 +16,8 @@ import cyclic.intellij.psi.ast.CycParameter;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
+import cyclic.intellij.psi.types.JvmCyclicMethod;
+import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +32,11 @@ public class AsPsiUtil{
 	public static PsiClass asPsiClass(CycType type){
 		var builder = new CycAsPsiClass(type);
 		
-		for(CycMethod method : type.methods()){
-			PsiMethod mBuilder = asPsiMethod(method);
-			builder.addMethod(mBuilder);
+		for(JvmMethod method : type.declaredMethods()){
+			if(method instanceof JvmCyclicMethod){
+				PsiMethod mBuilder = asPsiMethod(((JvmCyclicMethod)method).getUnderlying());
+				builder.addMethod(mBuilder);
+			}
 		}
 		
 		for(JvmClass inter : type.getInterfaces()){
@@ -70,6 +75,15 @@ public class AsPsiUtil{
 		}
 		mBuilder.setMethodReturnType(asPsiType(method.returnType()));
 		return mBuilder;
+	}
+	
+	public static PsiMethod recordAccessorMethod(CycVariable backing){
+		var builder = new LightMethodBuilder(backing.getManager(), CyclicLanguage.LANGUAGE, backing.varName());
+		builder.setNavigationElement(backing);
+		builder.addModifier("public");
+		builder.addModifier("final");
+		builder.setMethodReturnType(asPsiType(backing.varType()));
+		return builder;
 	}
 	
 	public static PsiType asPsiType(JvmType type){

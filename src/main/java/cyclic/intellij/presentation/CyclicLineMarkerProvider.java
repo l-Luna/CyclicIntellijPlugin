@@ -14,6 +14,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
@@ -23,17 +24,18 @@ import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.presentation.find.CMarkerTypes;
 import cyclic.intellij.psi.ast.CycCall;
 import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.ast.CycParameter;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.expressions.CycThisExpr;
 import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.types.CycRecordComponents;
 import cyclic.intellij.psi.ast.types.CycType;
+import cyclic.intellij.psi.utils.JvmClassUtils;
+import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CyclicLineMarkerProvider implements LineMarkerProvider{
 	
@@ -107,15 +109,15 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 				((LightMethodBuilder)method).setContainingClass(container);
 				
 				PsiMethod overridden = OverridingMethodsSearch.search(method).findFirst();
+				PsiElement name = cMethod.getNameIdentifier();
+				if(name != null)
+					name = name.getFirstChild();
+				if(name == null)
+					name = method;
 				if(overridden != null){
 					var abs = cMethod.hasModifier("abstract") || (container.isInterface() && cMethod.hasSemicolon());
 					final Icon icon = abs
 							? AllIcons.Gutter.ImplementedMethod : AllIcons.Gutter.OverridenMethod;
-					PsiElement name = cMethod.getNameIdentifier();
-					if(name != null)
-						name = name.getFirstChild();
-					if(name == null)
-						name = method;
 					MarkerType marker = CMarkerTypes.CYC_OVERRIDDEN_METHOD;
 					LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(name, name.getTextRange(),
 							icon, marker.getTooltip(),
@@ -126,6 +128,29 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 							abs ? JavaBundle.message("action.go.to.implementation.text") : JavaBundle.message("action.go.to.subclass.text"),
 							IdeActions.ACTION_GOTO_IMPLEMENTATION);
 					result.add(info);
+				}
+				
+				if(cMethod.parameters().size() == 0 && !PsiPrimitiveType.VOID.equals(cMethod.returnType())){
+					var components = PsiUtils
+							.childOfType(cMethod.containingType(), CycRecordComponents.class)
+							.map(CycRecordComponents::components);
+					if(components.isPresent()){
+						for(CycParameter parameter : components.get()){
+							if(Objects.equals(parameter.getName(), cMethod.getName())
+									&& JvmClassUtils.isAssignableTo(cMethod.returnType(), parameter.varType())){
+								LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(
+										name, name.getTextRange(),
+										AllIcons.Nodes.ReadAccess,
+										__ -> "Record accessor",
+										null,
+										GutterIconRenderer.Alignment.RIGHT,
+										() -> "Record accessor");
+								
+								result.add(info);
+								break;
+							}
+						}
+					}
 				}
 			}
 		}

@@ -20,7 +20,6 @@ import cyclic.intellij.psi.CycAstElement;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.types.CycType;
-import cyclic.intellij.psi.types.JvmCyclicMethod;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.MethodUtils;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -72,8 +71,8 @@ public class CycCall extends CycAstElement implements PsiReference{
 			var inType = PsiTreeUtil.getParentOfType(this, CycType.class);
 			if(inType != null)
 				candidates = (inMethod != null && inMethod.isStatic())
-						? inType.methods().stream().filter(CycMethod::isStatic).map(JvmCyclicMethod::of).collect(Collectors.toList())
-						: inType.methods().stream().map(JvmCyclicMethod::of).collect(Collectors.toList());
+						? inType.declaredMethods().stream().filter(x -> x.hasModifier(JvmModifier.STATIC)).collect(Collectors.toList())
+						: new ArrayList<>(inType.declaredMethods());
 			else
 				candidates = Collections.emptyList();
 		}
@@ -170,7 +169,8 @@ public class CycCall extends CycAstElement implements PsiReference{
 	
 	public @Nullable PsiElement resolve(){
 		var method = resolveMethod();
-		return method != null ? method.getSourceElement() : null;
+		PsiElement source = method != null ? method.getSourceElement() : null;
+		return source != null ? source.getNavigationElement() : null;
 	}
 	
 	public @NotNull @NlsSafe String getCanonicalText(){

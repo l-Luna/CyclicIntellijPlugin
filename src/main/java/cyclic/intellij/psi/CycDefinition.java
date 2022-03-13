@@ -77,7 +77,7 @@ public interface CycDefinition extends PsiElement, PsiReference, PsiNameIdentifi
 	}
 	
 	default boolean isReferenceTo(@NotNull PsiElement element){
-		return element.equals(this);
+		return element.getNavigationElement().equals(this);
 	}
 	
 	default boolean isSoft(){

@@ -77,4 +77,8 @@ public class JvmCyclicMethod implements JvmMethod{
 	public @Nullable PsiElement getSourceElement(){
 		return underlying;
 	}
+	
+	public CycMethod getUnderlying(){
+		return underlying;
+	}
 }
