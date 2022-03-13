@@ -103,7 +103,7 @@ public class CycCall extends CycAstElement implements PsiReference{
 						}
 						if(arg.isAssignableTo(checking))
 							continue;
-						if(arg.isConvertableTo(checking)){
+						if(arg.isConvertibleTo(checking)){
 							reach = 3;
 							continue;
 						}
@@ -130,7 +130,7 @@ public class CycCall extends CycAstElement implements PsiReference{
 					CycExpression arg = args.get(i);
 					if(arg.type() != null && arg.isAssignableTo(pTarget))
 						continue;
-					if(arg.isConvertableTo(pTarget)){
+					if(arg.isConvertibleTo(pTarget)){
 						reach = 1;
 						continue;
 					}

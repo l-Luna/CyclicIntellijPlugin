@@ -120,6 +120,8 @@
                    implementationClass="cyclic.intellij.presentation.annotators.InvalidReferenceInspection"/>
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.TypeCheckingAnnotator"/>
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.InvalidReturnAnnotator"/>
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>

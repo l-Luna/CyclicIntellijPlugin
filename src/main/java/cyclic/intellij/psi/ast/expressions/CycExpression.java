@@ -2,6 +2,7 @@ package cyclic.intellij.psi.ast.expressions;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import cyclic.intellij.psi.CycAstElement;
 import cyclic.intellij.psi.utils.JvmClassUtils;
@@ -17,16 +18,17 @@ public class CycExpression extends CycAstElement{
 	}
 	
 	public @Nullable JvmType type(){
-		return null;
+		return PsiPrimitiveType.NULL;
 	}
 	
 	public boolean isAssignableTo(JvmType type){
 		return JvmClassUtils.isAssignableTo(type(), type);
 	}
 	
-	public boolean isConvertableTo(JvmType type){
+	public boolean isConvertibleTo(JvmType type){
 		return JvmClassUtils.isConvertibleTo(type(), type);
 	}
+	
 	
 	
 	private static final Field COMPOSITE_ELEMENT_WRAPPER;

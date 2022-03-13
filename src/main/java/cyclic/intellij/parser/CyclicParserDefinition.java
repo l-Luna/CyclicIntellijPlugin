@@ -21,6 +21,7 @@ import cyclic.intellij.psi.ast.*;
 import cyclic.intellij.psi.ast.expressions.*;
 import cyclic.intellij.psi.ast.statements.CycBlock;
 import cyclic.intellij.psi.ast.statements.CycForeachLoop;
+import cyclic.intellij.psi.ast.statements.CycReturnStatement;
 import cyclic.intellij.psi.ast.statements.CycStatement;
 import cyclic.intellij.psi.ast.types.*;
 import cyclic.intellij.psi.stubs.CycFileStub;
@@ -127,6 +128,8 @@ public class CyclicParserDefinition implements ParserDefinition{
 		
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_foreachStatement))
 			return new CycForeachLoop(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_returnStatement))
+			return new CycReturnStatement(node);
 		return new CycAstElement(node);
 	}
 	

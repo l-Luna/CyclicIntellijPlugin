@@ -53,7 +53,9 @@ public class JvmClassUtils{
 	public static String name(JvmType type){
 		if(type instanceof JvmArrayType)
 			return name(((JvmArrayType)type).getComponentType()) + "[]";
-		if(type instanceof JvmPrimitiveType && !type.equals(PsiPrimitiveType.NULL))
+		if(type.equals(PsiPrimitiveType.NULL))
+			return "null";
+		if(type instanceof JvmPrimitiveType)
 			return ((JvmPrimitiveType)type).getKind().getName();
 		if(type instanceof JvmReferenceType)
 			return ((JvmReferenceType)type).getName();
