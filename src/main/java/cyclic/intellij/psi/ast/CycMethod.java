@@ -9,7 +9,10 @@ import com.intellij.psi.stubs.StubElement;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.Tokens;
+import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.common.CycParameter;
+import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.stubs.StubCycMethod;
 import cyclic.intellij.psi.stubs.StubTypes;
@@ -130,5 +133,18 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 	public @Nullable Icon getIcon(int flags){
 		// TODO: consider finality
 		return hasModifier("abstract") ? AllIcons.Nodes.AbstractMethod : AllIcons.Nodes.Method;
+	}
+	
+	public Optional<CycStatement> body(){
+		var body = getLastChild();
+		if(body != null){
+			if(body.getChildren().length > 1){
+				// must be an arrow function
+				return PsiUtils.childOfType(body, CycStatementWrapper.class)
+						.flatMap(CycStatementWrapper::inner);
+			}else
+				return PsiUtils.childOfType(body, CycBlock.class).map(CycStatement.class::cast);
+		}
+		return Optional.empty();
 	}
 }

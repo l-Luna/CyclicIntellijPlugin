@@ -148,6 +148,12 @@
                          groupName="Errors" displayName="Invalid supertype"
                          implementationClass="cyclic.intellij.inspections.InvalidSupertypeInspection"/>
 
+        <localInspection language="Cyclic"
+                         groupPath="Cyclic"
+                         enabledByDefault="true" level="WARNING"
+                         groupName="Unreachable code" displayName="Unreachable code"
+                         implementationClass="cyclic.intellij.inspections.UnreachableCodeInspection"/>
+
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
         </intentionAction>

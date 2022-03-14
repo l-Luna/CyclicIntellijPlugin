@@ -34,8 +34,9 @@ public class InvalidReturnAnnotator implements Annotator{
 			}
 		}
 		if(element instanceof CycMethod){
-			var body = element.getLastChild();
 			CycMethod method = (CycMethod)element;
+			var body = method.getLastChild();
+			// TODO: rework to use CycMethod::body
 			if(body != null){
 				if(body.getChildren().length > 1){
 					// must be an arrow function

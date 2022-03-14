@@ -1,27 +1,31 @@
 package cyclic.intellij.inspections;
 
+import com.intellij.codeInsight.daemon.impl.quickfix.DeleteElementFix;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.ast.CycMethod;
-import cyclic.intellij.psi.ast.expressions.CycThisExpr;
+import cyclic.intellij.psi.utils.Flow;
 import org.jetbrains.annotations.NotNull;
 
-public class ThisInStaticMethodInspection extends LocalInspectionTool{
+public class UnreachableCodeInspection extends LocalInspectionTool{
 	
 	public @NotNull PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly){
 		return new PsiElementVisitor(){
 			public void visitElement(@NotNull PsiElement element){
 				super.visitElement(element);
-				if(element instanceof CycThisExpr){
-					var container = PsiTreeUtil.getParentOfType(element, CycMethod.class);
-					if(container != null && container.isStatic() && element.getText().equals("this"))
-						holder.registerProblem(element,
-								"'this' can only be used in non-static contexts",
-								ProblemHighlightType.ERROR);
+				if(element instanceof CycMethod){
+					((CycMethod)element).body().ifPresent(body -> {
+						// a warning, not error
+						Flow.visitAfterMatching(body, Flow.EXITS, invalid ->
+								holder.registerProblem(
+										invalid.getParent(),
+										"Unreachable code",
+										ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+										new DeleteElementFix(invalid.getParent(), "Delete statement")));
+					});
 				}
 			}
 		};
