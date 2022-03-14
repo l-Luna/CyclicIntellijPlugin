@@ -1,4 +1,4 @@
-package cyclic.intellij.psi.ast;
+package cyclic.intellij.psi.ast.common;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
@@ -8,8 +8,10 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.psi.CycDefinitionStubElement;
+import cyclic.intellij.psi.ast.CycTypeRef;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
 import cyclic.intellij.psi.stubs.StubCycField;
 import cyclic.intellij.psi.stubs.StubTypes;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
@@ -22,7 +24,7 @@ import javax.swing.*;
 import java.util.Optional;
 
 public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, StubCycField>
-		implements CycVariable, CycModifiersHolder{
+		implements CycVariable, CycModifiersHolder, CycStatement{
 	
 	public CycVariableDef(@NotNull ASTNode node){
 		super(node);
@@ -62,7 +64,7 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 	public boolean isLocalVar(){
 		if(getStub() != null)
 			return false;
-		return PsiTreeUtil.getParentOfType(this, CycStatement.class) != null;
+		return PsiTreeUtil.getParentOfType(this, CycStatementWrapper.class) != null;
 	}
 	
 	public Optional<CycExpression> initializer(){

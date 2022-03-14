@@ -2,7 +2,7 @@ package cyclic.intellij.psi.ast.types;
 
 import com.intellij.lang.ASTNode;
 import cyclic.intellij.psi.CycStubElement;
-import cyclic.intellij.psi.ast.CycParameter;
+import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.stubs.StubCycRecordComponents;
 import cyclic.intellij.psi.stubs.StubTypes;
 import cyclic.intellij.psi.utils.PsiUtils;

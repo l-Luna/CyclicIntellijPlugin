@@ -1,6 +1,6 @@
 package cyclic.intellij.psi.stubs;
 
-import cyclic.intellij.psi.ast.CycVariableDef;
+import cyclic.intellij.psi.ast.common.CycVariableDef;
 import org.jetbrains.annotations.NotNull;
 
 public interface StubCycField extends StubWithCycModifiers<CycVariableDef>, StubAsCycVariable<CycVariableDef>{

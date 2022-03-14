@@ -22,12 +22,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.presentation.find.CMarkerTypes;
-import cyclic.intellij.psi.ast.CycCall;
 import cyclic.intellij.psi.ast.CycMethod;
-import cyclic.intellij.psi.ast.CycParameter;
+import cyclic.intellij.psi.ast.common.CycCall;
+import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.expressions.CycThisExpr;
-import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
 import cyclic.intellij.psi.ast.types.CycRecordComponents;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.utils.JvmClassUtils;
@@ -64,13 +64,13 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 	}
 	
 	public void collectSlowLineMarkers(@NotNull List<? extends PsiElement> elements, @NotNull Collection<? super LineMarkerInfo<?>> result){
-		Set<CycStatement> visited = new HashSet<>();
+		Set<CycStatementWrapper> visited = new HashSet<>();
 		
 		for(PsiElement element : elements){
 			ProgressManager.checkCanceled();
 			if(element instanceof CycCall){
 				CycCall call = (CycCall)element;
-				var statement = PsiTreeUtil.getParentOfType(call, CycStatement.class, true, CycMethod.class);
+				var statement = PsiTreeUtil.getParentOfType(call, CycStatementWrapper.class, true, CycMethod.class);
 				if(!visited.contains(statement) && isRecursiveCall(call)){
 					visited.add(statement);
 					ContainerUtil.addIfNotNull(result, RecursiveCallMarkerInfo.create(call));

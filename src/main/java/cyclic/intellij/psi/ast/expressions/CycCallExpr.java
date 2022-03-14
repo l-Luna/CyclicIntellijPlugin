@@ -5,7 +5,7 @@ import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.JvmType;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
 import cyclic.intellij.psi.Tokens;
-import cyclic.intellij.psi.ast.CycCall;
+import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

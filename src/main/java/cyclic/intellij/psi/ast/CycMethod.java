@@ -1,5 +1,6 @@
 package cyclic.intellij.psi.ast;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.JvmType;
@@ -8,14 +9,17 @@ import com.intellij.psi.stubs.StubElement;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.Tokens;
+import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.stubs.StubCycMethod;
 import cyclic.intellij.psi.stubs.StubTypes;
+import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -114,5 +118,17 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 			return stub.name();
 		
 		return super.getName();
+	}
+	
+	public boolean hasModifier(String modifier){
+		if(modifier.equals("abstract") && containingType().kind() == CycKind.INTERFACE)
+			if(hasSemicolon()) // note that a semicolon does not mean abstract in classes
+				return true;
+		return CycModifiersHolder.super.hasModifier(modifier);
+	}
+	
+	public @Nullable Icon getIcon(int flags){
+		// TODO: consider finality
+		return hasModifier("abstract") ? AllIcons.Nodes.AbstractMethod : AllIcons.Nodes.Method;
 	}
 }

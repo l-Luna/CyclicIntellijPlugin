@@ -1,4 +1,4 @@
-package cyclic.intellij.psi.ast;
+package cyclic.intellij.psi.ast.common;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
@@ -9,6 +9,7 @@ import com.intellij.util.PlatformIcons;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.Tokens;
+import cyclic.intellij.psi.ast.CycTypeRef;
 import cyclic.intellij.psi.ast.types.CycRecordComponents;
 import cyclic.intellij.psi.stubs.StubCycParameter;
 import cyclic.intellij.psi.stubs.StubTypes;

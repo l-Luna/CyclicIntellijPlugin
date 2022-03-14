@@ -6,7 +6,7 @@ import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPrimitiveType;
 import cyclic.intellij.psi.ast.CycVariableAssignment;
-import cyclic.intellij.psi.ast.CycVariableDef;
+import cyclic.intellij.psi.ast.common.CycVariableDef;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.PsiUtils;

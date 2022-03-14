@@ -116,11 +116,9 @@ public class PsiUtils{
 	
 	@NotNull
 	public static <X extends PsiElement> Optional<X> childOfType(@NotNull PsiElement parent, Class<X> filter, int index){
-		var c = childrenOfType(parent, filter);
-		if(c.size() > index)
-			return Optional.of(c.get(index));
-		else
-			return Optional.empty();
+		return streamChildrenOfType(parent, filter)
+				.skip(index)
+				.findFirst();
 	}
 	
 	@NotNull
@@ -130,10 +128,8 @@ public class PsiUtils{
 	
 	@NotNull
 	public static <X extends PsiElement> Optional<X> wrappedChildOfType(@NotNull PsiElement parent, Class<X> filter, int index){
-		var c = wrappedChildrenOfType(parent, filter);
-		if(c.size() > index)
-			return Optional.of(c.get(index));
-		else
-			return Optional.empty();
+		return streamWrappedChildrenOfType(parent, filter)
+				.skip(index)
+				.findFirst();
 	}
 }

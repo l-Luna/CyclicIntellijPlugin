@@ -9,9 +9,13 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
-import cyclic.intellij.psi.ast.*;
+import cyclic.intellij.psi.ast.CycIdPart;
+import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.ast.common.CycCall;
+import cyclic.intellij.psi.ast.common.CycParameter;
+import cyclic.intellij.psi.ast.common.CycVariableDef;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
-import cyclic.intellij.psi.ast.statements.CycForeachLoop;
+import cyclic.intellij.psi.ast.statements.CycForeachStatement;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +69,7 @@ public class NameAnnotator implements Annotator, DumbAware{
 						isFinal = true; // record components are a CycParameter
 					if(!(target instanceof CycParameter && ((CycParameter)target).isMethodParameter())
 							&& !(target instanceof CycVariableDef && ((CycVariableDef)target).isLocalVar())
-							&& !(target instanceof CycForeachLoop)) // TODO: better way of doing this lol
+							&& !(target instanceof CycForeachStatement)) // TODO: better way of doing this lol
 						isField = true;
 				}
 				if(isField && name != null){

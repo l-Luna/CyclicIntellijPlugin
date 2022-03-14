@@ -64,9 +64,6 @@ public class JvmCyclicMethod implements JvmMethod{
 	public boolean hasModifier(@NotNull JvmModifier modifier){
 		if(modifier == JvmModifier.PACKAGE_LOCAL)
 			return !(underlying.hasModifier("public") || underlying.hasModifier("protected") || underlying.hasModifier("private"));
-		if(modifier == JvmModifier.ABSTRACT && getContainingClass().getClassKind() == JvmClassKind.INTERFACE)
-			if(underlying.hasSemicolon()) // note that a semicolon does not mean abstract in classes
-				return true;
 		return underlying.hasModifier(modifier.name().toLowerCase(Locale.ROOT));
 	}
 	

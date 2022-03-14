@@ -6,6 +6,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.impl.rules.UsageType;
 import com.intellij.usages.impl.rules.UsageTypeProvider;
 import cyclic.intellij.psi.ast.*;
+import cyclic.intellij.psi.ast.common.CycParameter;
+import cyclic.intellij.psi.ast.common.CycVariableDef;
 import cyclic.intellij.psi.ast.expressions.*;
 import cyclic.intellij.psi.ast.types.CycExtendsClause;
 import cyclic.intellij.psi.ast.types.CycImplementsClause;

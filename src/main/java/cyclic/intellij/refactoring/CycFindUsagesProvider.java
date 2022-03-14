@@ -6,7 +6,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.parser.LexerAdapter;
 import cyclic.intellij.psi.Tokens;
-import cyclic.intellij.psi.ast.statements.CycForeachLoop;
+import cyclic.intellij.psi.ast.statements.CycForeachStatement;
 import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class CycFindUsagesProvider implements FindUsagesProvider{
 	
 	public boolean canFindUsagesFor(@NotNull PsiElement psiElement){
-		return psiElement instanceof CycForeachLoop;
+		return psiElement instanceof CycForeachStatement;
 	}
 	
 	public @Nullable @NonNls String getHelpId(@NotNull PsiElement psiElement){

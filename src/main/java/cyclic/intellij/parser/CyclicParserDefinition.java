@@ -18,11 +18,9 @@ import cyclic.intellij.psi.CycAstElement;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.*;
+import cyclic.intellij.psi.ast.common.*;
 import cyclic.intellij.psi.ast.expressions.*;
-import cyclic.intellij.psi.ast.statements.CycBlock;
-import cyclic.intellij.psi.ast.statements.CycForeachLoop;
-import cyclic.intellij.psi.ast.statements.CycReturnStatement;
-import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.statements.*;
 import cyclic.intellij.psi.ast.types.*;
 import cyclic.intellij.psi.stubs.CycFileStub;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
@@ -98,11 +96,13 @@ public class CyclicParserDefinition implements ParserDefinition{
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_function))
 			return new CycMethod(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_statement))
-			return new CycStatement(node);
+			return new CycStatementWrapper(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_value))
 			return createExpr(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_call))
 			return new CycCall(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_initialisation))
+			return new CycInitialisation(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_varAssignment))
 			return new CycVariableAssignment(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_objectExtends))
@@ -126,10 +126,34 @@ public class CyclicParserDefinition implements ParserDefinition{
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_binaryop))
 			return new CycBinaryOp(node);
 		
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_assertStatement))
+			return new CycAssertStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_ctorCall))
+			return new CycConstructorCallStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_doWhile))
+			return new CycDoWhileStatement(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_foreachStatement))
-			return new CycForeachLoop(node);
+			return new CycForeachStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_forStatement))
+			return new CycForStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_ifStatement))
+			return new CycIfStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_elseStatement))
+			return new CycElseElement(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_returnStatement))
 			return new CycReturnStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_switchStatement))
+			return new CycSwitchStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_throwStatement))
+			return new CycThrowStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_varAssignment))
+			return new CycVarAssignStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_varIncrement))
+			return new CycVarIncrementStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_whileStatement))
+			return new CycWhileStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_yieldStatement))
+			return new CycYieldStatement(node);
 		return new CycAstElement(node);
 	}
 	

@@ -2,11 +2,11 @@ package cyclic.intellij.psi.utils;
 
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.psi.ast.CycArgumentsList;
-import cyclic.intellij.psi.ast.CycCall;
+import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycBinaryExpr;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycParenthesisedExpr;
-import cyclic.intellij.psi.ast.statements.CycStatement;
+import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class MethodUtils{
 		var declaredArgs = PsiUtils.childOfType(call, CycArgumentsList.class)
 				.map(x -> PsiUtils.childrenOfType(x, CycExpression.class))
 				.orElse(List.of());
-		if(call.getParent() instanceof CycStatement)
+		if(call.getParent() instanceof CycStatementWrapper)
 			return declaredArgs;
 		
 		var args = new ArrayList<>(declaredArgs);

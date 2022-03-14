@@ -12,7 +12,7 @@ import com.intellij.psi.impl.light.LightPsiClassBuilder;
 import com.intellij.psi.search.GlobalSearchScope;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.psi.ast.CycMethod;
-import cyclic.intellij.psi.ast.CycParameter;
+import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;

@@ -14,12 +14,14 @@ import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 import static cyclic.intellij.psi.utils.JvmClassUtils.getByName;
 
 // Introduces the for-each variable into scope
-public class CycForeachLoop extends CycDefinitionAstElement implements CycVariable{
+public class CycForeachStatement extends CycDefinitionAstElement implements CycVariable, CycStatement{
 	
-	public CycForeachLoop(@NotNull ASTNode node){
+	public CycForeachStatement(@NotNull ASTNode node){
 		super(node);
 	}
 	
@@ -46,5 +48,13 @@ public class CycForeachLoop extends CycDefinitionAstElement implements CycVariab
 	
 	public @NotNull SearchScope getUseScope(){
 		return new LocalSearchScope(getContainingFile());
+	}
+	
+	public Optional<CycExpression> iterator(){
+		return PsiUtils.childOfType(this, CycExpression.class);
+	}
+	
+	public Optional<CycStatement> body(){
+		return PsiUtils.childOfType(this, CycStatement.class);
 	}
 }

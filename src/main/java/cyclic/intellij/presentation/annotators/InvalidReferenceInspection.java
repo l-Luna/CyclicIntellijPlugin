@@ -13,7 +13,7 @@ import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.util.PsiTreeUtil;
-import cyclic.intellij.psi.ast.CycCall;
+import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;

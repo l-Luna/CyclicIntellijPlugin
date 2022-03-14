@@ -1,4 +1,4 @@
-package cyclic.intellij.psi.ast;
+package cyclic.intellij.psi.ast.common;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmClass;
@@ -17,8 +17,11 @@ import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.psi.CycAstElement;
+import cyclic.intellij.psi.ast.CycIdPart;
+import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.statements.CycStatement;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.MethodUtils;
@@ -31,7 +34,7 @@ import java.util.stream.Collectors;
 
 import static cyclic.intellij.psi.utils.JvmClassUtils.getByName;
 
-public class CycCall extends CycAstElement implements PsiReference{
+public class CycCall extends CycAstElement implements PsiReference, CycStatement{
 	
 	public CycCall(@NotNull ASTNode node){
 		super(node);
@@ -66,16 +69,8 @@ public class CycCall extends CycAstElement implements PsiReference{
 			candidates = JvmClassUtils.findAllMethodsInHierarchy(JvmClassUtils.asClass(on.type()),
 					m -> m.hasModifier(JvmModifier.STATIC) == isStatic,
 					false);
-		}else{
-			var inMethod = PsiTreeUtil.getParentOfType(this, CycMethod.class);
-			var inType = PsiTreeUtil.getParentOfType(this, CycType.class);
-			if(inType != null)
-				candidates = (inMethod != null && inMethod.isStatic())
-						? inType.declaredMethods().stream().filter(x -> x.hasModifier(JvmModifier.STATIC)).collect(Collectors.toList())
-						: new ArrayList<>(inType.declaredMethods());
-			else
-				candidates = Collections.emptyList();
-		}
+		}else
+			candidates = getStandaloneCandidates(this);
 		
 		candidates:
 		for(JvmMethod x : candidates){
@@ -144,6 +139,20 @@ public class CycCall extends CycAstElement implements PsiReference{
 				.min(Comparator.comparingInt(x -> x.reach))
 				.map(x -> x.ref)
 				.orElse(null);
+	}
+	
+	@NotNull
+	public static List<JvmMethod> getStandaloneCandidates(PsiElement at){
+		List<JvmMethod> candidates;
+		var inMethod = PsiTreeUtil.getParentOfType(at, CycMethod.class);
+		var inType = PsiTreeUtil.getParentOfType(at, CycType.class);
+		if(inType != null)
+			candidates = (inMethod != null && inMethod.isStatic())
+					? inType.declaredMethods().stream().filter(x -> x.hasModifier(JvmModifier.STATIC)).collect(Collectors.toList())
+					: new ArrayList<>(inType.declaredMethods());
+		else
+			candidates = Collections.emptyList();
+		return candidates;
 	}
 	
 	@Nullable

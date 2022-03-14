@@ -2,7 +2,7 @@ package cyclic.intellij.psi.stubs.impl;
 
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
-import cyclic.intellij.psi.ast.CycParameter;
+import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.stubs.StubCycParameter;
 import cyclic.intellij.psi.stubs.StubTypes;
 import org.jetbrains.annotations.NotNull;
