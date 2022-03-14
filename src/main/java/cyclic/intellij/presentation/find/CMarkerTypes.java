@@ -6,6 +6,7 @@ import com.intellij.codeInsight.daemon.impl.MarkerType;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.actionSystem.IdeActions;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -128,8 +129,12 @@ public final class CMarkerTypes{
 			String ret = (String)OVERRIDE_METHOD_TOOLTIP.invoke(null, method);
 			OVERRIDE_METHOD_TOOLTIP.setAccessible(false);
 			return ret;
-		}catch(IllegalAccessException | InvocationTargetException e){
-			throw new RuntimeException(e);
+		}catch(IllegalAccessException ex){
+			throw new RuntimeException(ex);
+		}catch(InvocationTargetException ex){
+			if(ex.getCause() instanceof ProcessCanceledException)
+				throw (ProcessCanceledException)ex.getCause();
+			throw new RuntimeException(ex);
 		}
 	}
 	
@@ -138,7 +143,11 @@ public final class CMarkerTypes{
 			OVERRIDE_METHOD_NAVIGATE.setAccessible(true);
 			OVERRIDE_METHOD_NAVIGATE.invoke(null, e, method);
 			OVERRIDE_METHOD_NAVIGATE.setAccessible(false);
-		}catch(IllegalAccessException | InvocationTargetException ex){
+		}catch(IllegalAccessException ex){
+			throw new RuntimeException(ex);
+		}catch(InvocationTargetException ex){
+			if(ex.getCause() instanceof ProcessCanceledException)
+				throw (ProcessCanceledException)ex.getCause();
 			throw new RuntimeException(ex);
 		}
 	}
