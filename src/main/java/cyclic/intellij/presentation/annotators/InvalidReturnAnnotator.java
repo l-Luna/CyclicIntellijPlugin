@@ -8,7 +8,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.ast.CycMethod;
-import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.statements.CycReturnStatement;
 import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
@@ -35,35 +34,29 @@ public class InvalidReturnAnnotator implements Annotator{
 		}
 		if(element instanceof CycMethod){
 			CycMethod method = (CycMethod)element;
-			var body = method.getLastChild();
-			// TODO: rework to use CycMethod::body
-			if(body != null){
-				if(body.getChildren().length > 1){
+			method.body().ifPresent(body -> {
+				if(!method.hasModifier("abstract") && !Objects.equals(method.returnType(), PsiPrimitiveType.VOID))
+					if(!Flow.guaranteedToExit(body)){
+						holder.newAnnotation(HighlightSeverity.ERROR, "Missing return statement")
+								.range(body.getParent().getLastChild())
+								.create();
+					}
+			});
+			var mBody = method.getLastChild();
+			if(mBody != null){
+				if(mBody.getChildren().length > 1){
 					// must be an arrow function
 					var methodType = method.returnType();
-					PsiUtils.childOfType(body, CycExpression.class).ifPresentOrElse(value -> {
+					PsiUtils.childOfType(mBody, CycExpression.class).ifPresentOrElse(value -> {
 						var returnType = value.type();
 						checkReturn(holder, methodType, returnType);
 					}, () -> {
-						var statement = PsiUtils.childOfType(body, CycStatementWrapper.class)
+						var statement = PsiUtils.childOfType(mBody, CycStatementWrapper.class)
 								.flatMap(CycStatementWrapper::inner);
 						if(statement.isEmpty()){
 							if(!Objects.equals(methodType, PsiPrimitiveType.VOID))
 								holder.newAnnotation(HighlightSeverity.ERROR, "Expecting expression").create();
-						}else if(!method.hasModifier("abstract") && !Objects.equals(method.returnType(), PsiPrimitiveType.VOID))
-							if(!Flow.guaranteedToExit(statement.get()))
-								holder.newAnnotation(HighlightSeverity.ERROR, "Missing return statement")
-										.range(statement.get())
-										.create();
-					});
-				}else{
-					// must be a block function
-					PsiUtils.childOfType(body, CycBlock.class).ifPresent(block -> {
-						if(!method.hasModifier("abstract") && !Objects.equals(method.returnType(), PsiPrimitiveType.VOID))
-							if(!Flow.guaranteedToExit(block))
-								holder.newAnnotation(HighlightSeverity.ERROR, "Missing return statement")
-										.range(block.getLastChild())
-										.create();
+						}
 					});
 				}
 			}

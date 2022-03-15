@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static cyclic.intellij.psi.utils.JvmClassUtils.name;
 
-public class TypeCheckingAnnotator implements Annotator{
+public class InvalidTypeAnnotator implements Annotator{
 	
 	public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder){
 		// TODO: use the proper invalid type tooltip

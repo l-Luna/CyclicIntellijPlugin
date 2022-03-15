@@ -19,6 +19,7 @@ public class CycDefinitionStubElement<Psi extends PsiElement, Stub extends StubE
 		super(stub, nodeType);
 	}
 	
+	@NotNull
 	public String getName(){
 		return CycDefinition.super.getName();
 	}

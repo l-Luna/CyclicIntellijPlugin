@@ -41,8 +41,6 @@ public class CreateCyclicClassAction extends CreateTemplateInPackageAction<CycTy
 		Properties defaultProperties = FileTemplateManager.getInstance(project).getDefaultProperties();
 		Properties properties = new Properties(defaultProperties);
 		properties.setProperty(FileTemplate.ATTRIBUTE_NAME, className);
-		/*for(Map.Entry<String, String> entry : additionalProperties.entrySet())
-			properties.setProperty(entry.getKey(), entry.getValue());*/
 		
 		String fileName = className + ".cyc";
 		

@@ -117,11 +117,13 @@
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.InvalidElementAnnotator"/>
         <annotator language="Cyclic"
-                   implementationClass="cyclic.intellij.presentation.annotators.InvalidReferenceInspection"/>
+                   implementationClass="cyclic.intellij.presentation.annotators.InvalidReferenceAnnotator"/>
         <annotator language="Cyclic"
-                   implementationClass="cyclic.intellij.presentation.annotators.TypeCheckingAnnotator"/>
+                   implementationClass="cyclic.intellij.presentation.annotators.InvalidTypeAnnotator"/>
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.InvalidReturnAnnotator"/>
+        <annotator language="Cyclic"
+                   implementationClass="cyclic.intellij.presentation.annotators.InvalidTypeDefinitionAnnotator"/>
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>
@@ -129,24 +131,6 @@
         <internalFileTemplate name="Cyclic Annotation"/>
         <internalFileTemplate name="Cyclic Record"/>
         <internalFileTemplate name="Cyclic Single"/>
-
-        <localInspection language="Cyclic"
-                         groupPath="Cyclic"
-                         enabledByDefault="true" level="ERROR"
-                         groupName="Errors" displayName="Wrong type name for file name"
-                         implementationClass="cyclic.intellij.inspections.WrongFileNameForTypeNameInspection"/>
-
-        <localInspection language="Cyclic"
-                         groupPath="Cyclic"
-                         enabledByDefault="true" level="ERROR"
-                         groupName="Errors" displayName="'this' in static context"
-                         implementationClass="cyclic.intellij.inspections.ThisInStaticMethodInspection"/>
-
-        <localInspection language="Cyclic"
-                         groupPath="Cyclic"
-                         enabledByDefault="true" level="ERROR"
-                         groupName="Errors" displayName="Invalid supertype"
-                         implementationClass="cyclic.intellij.inspections.InvalidSupertypeInspection"/>
 
         <localInspection language="Cyclic"
                          groupPath="Cyclic"

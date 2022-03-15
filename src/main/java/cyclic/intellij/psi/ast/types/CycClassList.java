@@ -11,6 +11,7 @@ import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ public abstract class CycClassList<CL extends CycClassList<CL>> extends CycStubE
 		return PsiUtils
 				.streamChildrenOfType(this, CycTypeRef.class)
 				.map(CycTypeRef::asClass)
+				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 	}
 	
@@ -49,6 +51,7 @@ public abstract class CycClassList<CL extends CycClassList<CL>> extends CycStubE
 		return PsiUtils
 				.streamChildrenOfType(this, CycTypeRef.class)
 				.map(CycTypeRef::asClass)
+				.filter(Objects::nonNull)
 				.findFirst();
 	}
 }

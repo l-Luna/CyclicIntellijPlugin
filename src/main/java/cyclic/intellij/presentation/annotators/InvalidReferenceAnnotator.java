@@ -13,8 +13,10 @@ import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.util.PsiTreeUtil;
+import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.expressions.CycThisExpr;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.types.JvmCyclicField;
@@ -25,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class InvalidReferenceInspection implements Annotator{
+public class InvalidReferenceAnnotator implements Annotator{
 	
 	public static final Set<String> PRIMITIVE_TYPE_NAMES = Set.of(
 			"boolean", "byte", "short", "char", "int", "long", "float", "double", "var", "val", "void"
@@ -86,18 +88,21 @@ public class InvalidReferenceInspection implements Annotator{
 			var target = call.resolveMethod();
 			var name = call.getMethodName().getText();
 			if(target == null)
-				holder.newAnnotation(HighlightSeverity.ERROR,
-								"Cannot resolve method '" + name + "'")
+				holder.newAnnotation(HighlightSeverity.ERROR, "Cannot resolve method '" + name + "'")
 						.range(ref.getAbsoluteRange())
 						.create();
 			else{
 				var container = JvmCyclicClass.of(PsiTreeUtil.getParentOfType(element, CycType.class));
 				if(!Visibility.visibleFrom(target, container))
-					holder.newAnnotation(HighlightSeverity.ERROR,
-									"Method '" + name + "' is not visible here")
+					holder.newAnnotation(HighlightSeverity.ERROR, "Method '" + name + "' is not visible here")
 							.range(ref.getAbsoluteRange())
 							.create();
 			}
+		}
+		if(element instanceof CycThisExpr){
+			var container = PsiTreeUtil.getParentOfType(element, CycMethod.class);
+			if(container != null && container.isStatic() && element.textMatches("this"))
+				holder.newAnnotation(HighlightSeverity.ERROR, "'this' can only be used in non-static contexts").create();
 		}
 	}
 }

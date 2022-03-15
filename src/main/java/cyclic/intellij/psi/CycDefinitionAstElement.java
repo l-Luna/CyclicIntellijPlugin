@@ -10,6 +10,7 @@ public class CycDefinitionAstElement extends CycAstElement implements CycDefinit
 		super(node);
 	}
 	
+	@NotNull
 	public String getName(){
 		return CycDefinition.super.getName();
 	}
