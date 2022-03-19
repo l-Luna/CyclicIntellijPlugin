@@ -4,6 +4,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.lang.jvm.JvmField;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.project.DumbAware;
@@ -13,6 +14,7 @@ import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycCallExpr;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.statements.CycForeachStatement;
 import cyclic.intellij.psi.utils.CycVariable;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,9 +46,10 @@ public class InvalidElementAnnotator implements Annotator, DumbAware{
 				var target = ((CycIdExpr)element).resolveTarget();
 				// TODO: allow singles as values
 				if(target instanceof JvmClass){
-					holder.newAnnotation(HighlightSeverity.ERROR, "Expected an expression, not a type")
-							.range(ref.getAbsoluteRange())
-							.create();
+					if(!(((JvmClass)target).getClassKind() == JvmClassKind.ENUM && element.getParent() instanceof CycForeachStatement))
+						holder.newAnnotation(HighlightSeverity.ERROR, "Expected an expression, not a type")
+								.range(ref.getAbsoluteRange())
+								.create();
 				}
 			}
 		}

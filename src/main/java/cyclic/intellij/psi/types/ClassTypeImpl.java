@@ -8,6 +8,7 @@ import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmSubstitutor;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.lang.jvm.types.JvmTypeResolveResult;
+import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +32,11 @@ public class ClassTypeImpl implements JvmReferenceType{
 		if(jClass == null)
 			return null;
 		return CACHE.computeIfAbsent(jClass, ClassTypeImpl::new);
+	}
+	
+	@Nullable
+	public static ClassTypeImpl of(CycType type){
+		return of(JvmCyclicClass.of(type));
 	}
 	
 	public @NotNull String getName(){

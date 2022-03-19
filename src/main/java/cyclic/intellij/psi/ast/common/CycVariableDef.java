@@ -2,6 +2,7 @@ package cyclic.intellij.psi.ast.common;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
@@ -9,11 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.ast.CycTypeRef;
+import cyclic.intellij.psi.ast.CycTypeRefOrInferred;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.statements.CycStatement;
 import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
+import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.stubs.StubCycField;
 import cyclic.intellij.psi.stubs.StubTypes;
+import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.utils.CycModifiersHolder;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -41,23 +45,45 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 	public JvmType varType(){
 		var stub = getStub();
 		if(stub != null){
-			// don't bother with inferring, not allowed on fields
-			var type = PsiUtils.createTypeReferenceFromText(this, stub.typeText());
+			// val is allowed here for enum fields only
+			String text = stub.typeText();
+			CycType container = stub.getParentStubOfType(CycType.class);
+			if(text.equals("val") && container != null)
+				return ClassTypeImpl.of(container);
+			var type = PsiUtils.createTypeReferenceFromText(this, text);
 			return Optional.of((CycTypeRef)type)
 					.map(CycTypeRef::asType)
 					.orElse(PsiPrimitiveType.NULL);
 		}
 		
-		return PsiUtils.childOfType(this, CycTypeRef.class)
+		return PsiUtils.childOfType(this, CycTypeRefOrInferred.class)
+				.flatMap(CycTypeRefOrInferred::ref)
 				.map(CycTypeRef::asType)
 				// for var/val
-				.orElseGet(() -> !isLocalVar() ? PsiPrimitiveType.NULL :
-						PsiUtils.childOfType(this, CycExpression.class)
-						.map(CycExpression::type)
-						.orElse(PsiPrimitiveType.NULL));
+				.orElseGet(() -> {
+					if(!isLocalVar()){
+						if(PsiUtils.childOfType(this, CycTypeRefOrInferred.class).map(PsiElement::getText).orElse("").equals("val"))
+							return ClassTypeImpl.of(PsiTreeUtil.getParentOfType(this, CycType.class));
+						return PsiPrimitiveType.NULL;
+					}
+					return PsiUtils.childOfType(this, CycExpression.class)
+							.map(CycExpression::type)
+							.orElse(PsiPrimitiveType.NULL);
+				});
 	}
 	
 	public boolean hasModifier(String modifier){
+		if(modifier.equals("final") || modifier.equals("static")){
+			var stub = getStub();
+			if(stub != null){
+				if(stub.typeText().equals("val"))
+					return true;
+			}else{
+				var type = PsiUtils.childOfType(this, CycTypeRefOrInferred.class);
+				if(type.isPresent() && type.get().getText().equals("val"))
+					return true;
+			}
+		}
 		return CycModifiersHolder.super.hasModifier(modifier);
 	}
 	

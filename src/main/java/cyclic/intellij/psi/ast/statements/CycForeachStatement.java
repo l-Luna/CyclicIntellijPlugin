@@ -1,6 +1,8 @@
 package cyclic.intellij.psi.ast.statements;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.jvm.JvmClass;
+import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.search.LocalSearchScope;
@@ -9,7 +11,9 @@ import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinitionAstElement;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.CycTypeRef;
+import cyclic.intellij.psi.ast.CycTypeRefOrInferred;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
+import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -31,12 +35,24 @@ public class CycForeachStatement extends CycDefinitionAstElement implements CycV
 	
 	public JvmType varType(){
 		// TODO: once the compiler supports Iterables that aren't Objects, update to match
-		return PsiUtils.childOfType(this, CycTypeRef.class)
+		return PsiUtils.childOfType(this, CycTypeRefOrInferred.class)
+				.flatMap(CycTypeRefOrInferred::ref)
 				.map(CycTypeRef::asType)
 				// for var/val
 				.orElseGet(() -> {
-					var baseType = PsiUtils.childOfType(this, CycExpression.class).map(CycExpression::type).orElse(null);
-					return baseType instanceof JvmArrayType ? ((JvmArrayType)baseType).getComponentType() : getByName("java.lang.Object", getProject());
+					Optional<CycExpression> expression = PsiUtils.childOfType(this, CycExpression.class);
+					if(expression.isPresent()){
+						CycExpression expr = expression.get();
+						if(expr instanceof CycIdExpr){
+							var target = ((CycIdExpr)expr).resolveTarget();
+							if(target instanceof JvmClass && ((JvmClass)target).getClassKind() == JvmClassKind.ENUM)
+								return expr.type();
+						}
+						var baseType = expr.type();
+						if(baseType instanceof JvmArrayType)
+							return ((JvmArrayType)baseType).getComponentType();
+					}
+					return getByName("java.lang.Object", getProject());
 				});
 	}
 	
