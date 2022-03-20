@@ -12,6 +12,7 @@ import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
+import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
@@ -47,15 +48,17 @@ public class CycExpressionContributor extends CompletionContributor{
 			// but isn't
 			if(on == null){
 				// add local variables
-				CycVarScope.scopeOf(parameters.getOriginalPosition()).ifPresent(scope -> {
-					for(CycVariable variable : scope.available()){
-						var builder =
-								create(variable.varName())
-										.withPsiElement(variable)
-										.withIcon(variable.getIcon(0));
-						result.addElement(withPriority(builder, 10));
-					}
+				CycVarScope.scopeOf(prev).ifPresent(scope -> {
+					for(CycVariable variable : scope.available())
+						result.addElement(withPriority(getVariableElement(variable), 10));
 				});
+				// add applicable fields
+				CycType inside = PsiTreeUtil.getParentOfType(prev, CycType.class);
+				CycMethod inMethod = PsiTreeUtil.getParentOfType(prev, CycMethod.class);
+				if(inside != null)
+					inside.fields().stream()
+							.filter(x -> inMethod == null || !inMethod.isStatic() || x.hasModifier("static"))
+							.forEach(x -> result.addElement(withPriority(getVariableElement(x), 5)));
 				// add applicable methods
 				List<JvmMethod> candidates = CycCall.getStandaloneCandidates(innerFakeExpr);
 				for(JvmMethod candidate : candidates){
@@ -101,6 +104,13 @@ public class CycExpressionContributor extends CompletionContributor{
 				}
 			}
 		}
+	}
+	
+	@NotNull
+	private static LookupElement getVariableElement(CycVariable variable){
+		return create(variable.varName())
+				.withPsiElement(variable)
+				.withIcon(variable.getIcon(0));
 	}
 	
 	@Nullable

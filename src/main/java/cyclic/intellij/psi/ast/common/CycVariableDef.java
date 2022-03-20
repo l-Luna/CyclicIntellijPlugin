@@ -73,14 +73,14 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 	}
 	
 	public boolean hasModifier(String modifier){
-		if(modifier.equals("final") || modifier.equals("static")){
-			var stub = getStub();
+		if(modifier.equals("final") || modifier.equals("static") || modifier.equals("public")){
+			var stub = getStub(); // only fields have stubs
 			if(stub != null){
 				if(stub.typeText().equals("val"))
 					return true;
 			}else{
 				var type = PsiUtils.childOfType(this, CycTypeRefOrInferred.class);
-				if(type.isPresent() && type.get().getText().equals("val"))
+				if(!isLocalVar() && type.isPresent() && type.get().getText().equals("val"))
 					return true;
 			}
 		}

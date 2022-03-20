@@ -13,8 +13,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.ast.CycIdPart;
+import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
+import cyclic.intellij.psi.types.JvmCyclicField;
 import cyclic.intellij.psi.utils.CycVarScope;
 import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.ProjectTypeFinder;
@@ -61,9 +63,11 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 					return byName.get();
 			}
 			CycType inside = PsiTreeUtil.getParentOfType(this, CycType.class);
+			CycMethod inMethod = PsiTreeUtil.getParentOfType(this, CycMethod.class);
 			if(inside != null){
 				var field = inside.fields().stream()
 						.filter(x -> x.varName().equals(id))
+						.filter(x -> inMethod == null || !inMethod.isStatic() || x.hasModifier("static"))
 						.findFirst()
 						.orElse(null);
 				if(field != null)
@@ -139,6 +143,8 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 			return ((JvmClass)res).getSourceElement();
 		if(res instanceof PsiElement)
 			return (PsiElement)res;
+		if(res instanceof JvmCyclicField)
+			return ((JvmCyclicField)res).getSourceElement();
 		return null;
 	}
 	
