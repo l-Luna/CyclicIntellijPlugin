@@ -94,16 +94,18 @@
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
+        <nameSuggestionProvider implementation="cyclic.intellij.refactoring.CycNameSuggestionProvider"/>
+
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
         <fileIconPatcher implementation="cyclic.intellij.presentation.CyclicFileIconPatcher"/>
         <createFromTemplateHandler implementation="cyclic.intellij.CyclicTemplates"/>
         <runConfigurationProducer implementation="cyclic.intellij.run.CyclicRunConfigProducer"/>
-        <projectViewNodeDecorator implementation="cyclic.intellij.coverage.CyclicCoverageNodeDecorator"/>
         <lang.formatter language="Cyclic" implementationClass="cyclic.intellij.formatter.CyclicFormattingModelBuilder"/>
 
         <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
         <javaCoverageEngineExtension implementation="cyclic.intellij.coverage.CyclicCoverageExtension"/>
+        <projectViewNodeDecorator implementation="cyclic.intellij.coverage.CyclicCoverageNodeDecorator"/>
 
         <gotoClassContributor implementation="cyclic.intellij.presentation.find.CyclicGoToClassContributor"/>
         <directClassInheritorsSearch implementation="cyclic.intellij.presentation.find.CyclicDirectInheritorsSearcher"/>
