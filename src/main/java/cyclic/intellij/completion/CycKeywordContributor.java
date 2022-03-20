@@ -2,6 +2,7 @@ package cyclic.intellij.completion;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.psi.PsiComment;
 import com.intellij.util.ProcessingContext;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
@@ -53,6 +54,8 @@ public class CycKeywordContributor extends CompletionContributor{
 		protected void addCompletions(@NotNull CompletionParameters parameters,
 		                              @NotNull ProcessingContext context,
 		                              @NotNull CompletionResultSet result){
+			if(parameters.getOriginalPosition() instanceof PsiComment)
+				return;
 			for(String keyword : KEYWORDS)
 				result.addElement(LookupElementBuilder.create(keyword).bold());
 		}
