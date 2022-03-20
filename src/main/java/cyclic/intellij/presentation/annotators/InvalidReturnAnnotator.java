@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.ast.expressions.CycCallExpr;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.statements.CycReturnStatement;
 import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
@@ -49,6 +50,8 @@ public class InvalidReturnAnnotator implements Annotator{
 					var methodType = method.returnType();
 					PsiUtils.childOfType(mBody, CycExpression.class).ifPresentOrElse(value -> {
 						var returnType = value.type();
+						if(value instanceof CycCallExpr && PsiPrimitiveType.VOID.equals(returnType) && returnType.equals(methodType))
+							return; // void v() -> k(); is fine
 						checkReturn(holder, methodType, returnType);
 					}, () -> {
 						var statement = PsiUtils.childOfType(mBody, CycStatementWrapper.class)
