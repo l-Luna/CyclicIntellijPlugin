@@ -3,7 +3,10 @@ package cyclic.intellij.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
+import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.types.CycMember;
@@ -54,7 +57,8 @@ public class CycKeywordContributor extends CompletionContributor{
 		protected void addCompletions(@NotNull CompletionParameters parameters,
 		                              @NotNull ProcessingContext context,
 		                              @NotNull CompletionResultSet result){
-			if(parameters.getOriginalPosition() instanceof PsiComment)
+			PsiElement prev = parameters.getOriginalPosition();
+			if(prev instanceof PsiComment || PsiTreeUtil.getParentOfType(prev, CycIdPart.class) != null)
 				return;
 			for(String keyword : KEYWORDS)
 				result.addElement(LookupElementBuilder.create(keyword).bold());
