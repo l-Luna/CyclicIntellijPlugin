@@ -16,6 +16,7 @@ import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.CycVarScope;
@@ -38,13 +39,12 @@ public class CycExpressionContributor extends CompletionContributor{
 		var prev = parameters.getOriginalPosition();
 		var fakePrev = parameters.getPosition();
 		
-		var innerFakeExpr = PsiTreeUtil.getParentOfType(fakePrev, CycExpression.class);
-		var innerExpr = PsiTreeUtil.getParentOfType(prev, CycExpression.class);
+		var fakeWrapper = PsiTreeUtil.getParentOfType(fakePrev, CycExpression.class, CycStatementWrapper.class);
 		
-		// an expression could be here
-		if(innerFakeExpr instanceof CycIdExpr){
-			var on = ((CycIdExpr)innerFakeExpr).on();
-			var container = JvmCyclicClass.of(PsiTreeUtil.getParentOfType(innerFakeExpr, CycType.class));
+		// an expression or statement
+		if(fakeWrapper != null){
+			var on = fakeWrapper instanceof CycIdExpr ? ((CycIdExpr)fakeWrapper).on() : null;
+			var container = JvmCyclicClass.of(PsiTreeUtil.getParentOfType(fakeWrapper, CycType.class));
 			// but isn't
 			if(on == null){
 				// add local variables
@@ -60,7 +60,7 @@ public class CycExpressionContributor extends CompletionContributor{
 							.filter(x -> inMethod == null || !inMethod.isStatic() || x.hasModifier("static"))
 							.forEach(x -> result.addElement(withPriority(getVariableElement(x), 5)));
 				// add applicable methods
-				List<JvmMethod> candidates = CycCall.getStandaloneCandidates(innerFakeExpr);
+				List<JvmMethod> candidates = CycCall.getStandaloneCandidates(fakePrev);
 				for(JvmMethod candidate : candidates){
 					LookupElement element = getMethodElement(container, candidate);
 					if(element == null)
