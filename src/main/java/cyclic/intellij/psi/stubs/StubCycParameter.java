@@ -24,7 +24,7 @@ public interface StubCycParameter extends StubAsCycVariable<CycParameter>{
 	}
 	
 	default boolean hasModifier(String modifier){
-		if(!modifier.equals("final"))
+		if(!(modifier.equals("private") || modifier.equals("final")))
 			return false;
 		// method parameter finality is not externally visible
 		return isRecordComponent();

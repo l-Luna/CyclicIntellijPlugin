@@ -162,13 +162,13 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 	}
 	
 	public PsiElement handleElementRename(@NotNull String name) throws IncorrectOperationException{
-		PsiUtils.childOfType(this, CycIdPart.class).ifPresent(id -> id.replace(PsiUtils.createIdFromText(this, name)));
+		PsiUtils.childOfType(this, CycIdPart.class).ifPresent(id -> id.replace(PsiUtils.createIdPartFromText(this, name)));
 		return this;
 	}
 	
 	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException{
 		if(element instanceof PsiNamedElement){
-			PsiUtils.childOfType(this, CycIdPart.class).ifPresent(id -> id.replace(PsiUtils.createIdFromText(this, ((PsiNamedElement)element).getName())));
+			PsiUtils.childOfType(this, CycIdPart.class).ifPresent(id -> id.replace(PsiUtils.createIdPartFromText(this, ((PsiNamedElement)element).getName())));
 			return this;
 		}
 		throw new IncorrectOperationException("Can't bind an ID expression to something that has no name!");
@@ -180,6 +180,8 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 			return ((JvmClass)res).getSourceElement() == element;
 		if(res instanceof PsiElement)
 			return res == element;
+		if(res instanceof JvmField)
+			return ((JvmField)res).getSourceElement() == element;
 		return false;
 	}
 	

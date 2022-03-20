@@ -108,7 +108,7 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 	}
 	
 	public @NotNull SearchScope getUseScope(){
-		return isLocalVar() ? new LocalSearchScope(getContainingFile()) : super.getUseScope();
+		return (isLocalVar() || hasModifier("private")) ? new LocalSearchScope(getContainingFile()) : super.getUseScope();
 	}
 	
 	public @Nullable Icon getIcon(int flags){

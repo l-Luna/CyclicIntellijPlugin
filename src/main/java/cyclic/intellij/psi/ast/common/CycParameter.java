@@ -55,9 +55,11 @@ public class CycParameter extends CycDefinitionStubElement<CycParameter, StubCyc
 		if(stub != null)
 			return stub.hasModifier(modifier);
 		
-		if(!modifier.equals("final"))
-			return false;
-		return getNode().findChildByType(Tokens.getFor(CyclicLangLexer.FINAL)) != null;
+		if(modifier.equals("final"))
+			return getNode().findChildByType(Tokens.getFor(CyclicLangLexer.FINAL)) != null;
+		if(modifier.equals("private"))
+			return getParent() instanceof CycRecordComponents;
+		return false;
 	}
 	
 	@NotNull

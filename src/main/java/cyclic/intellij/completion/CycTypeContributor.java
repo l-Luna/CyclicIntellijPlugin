@@ -8,7 +8,6 @@ import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.CycElement;
-import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.CycRawTypeRef;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
@@ -20,7 +19,7 @@ public class CycTypeContributor extends CompletionContributor{
 	
 	public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result){
 		PsiElement prev = parameters.getOriginalPosition();
-		if(prev instanceof PsiComment || PsiTreeUtil.getParentOfType(prev, CycIdPart.class) != null)
+		if(prev instanceof PsiComment)
 			return;
 		
 		var innerFakeExpr = PsiTreeUtil.getParentOfType(parameters.getPosition(), CycExpression.class);

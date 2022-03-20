@@ -5,6 +5,8 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.search.LocalSearchScope;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.StubElement;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinitionStubElement;
@@ -146,5 +148,11 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 				return PsiUtils.childOfType(body, CycBlock.class).map(CycStatement.class::cast);
 		}
 		return Optional.empty();
+	}
+	
+	public @NotNull SearchScope getUseScope(){
+		if(hasModifier("private"))
+			return new LocalSearchScope(getContainingFile());
+		return super.getUseScope();
 	}
 }
