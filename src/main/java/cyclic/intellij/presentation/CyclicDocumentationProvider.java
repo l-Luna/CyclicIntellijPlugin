@@ -7,8 +7,10 @@ import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.editor.richcopy.HtmlSyntaxInfoUtil;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.parser.CyclicSyntaxHighlighter;
+import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.CycTypeRef;
+import cyclic.intellij.psi.ast.CycTypeRefOrInferred;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.utils.CycVariable;
@@ -82,7 +84,11 @@ public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 			var current = new StringBuilder(DocumentationMarkup.DEFINITION_START);
 			
 			appendModifiers(current, variable::hasModifier);
-			appendType(current, PsiUtils.childOfType(element, CycTypeRef.class).orElse(null), variable::varType);
+			appendType(current,
+					PsiUtils.childOfType(element, CycTypeRefOrInferred.class)
+					.map(CycElement.class::cast)
+					.or(() -> PsiUtils.childOfType(element, CycTypeRef.class))
+					.orElse(null), variable::varType);
 			current.append(" ");
 			appendId(current, variable.varName());
 			
@@ -148,7 +154,11 @@ public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 			var current = new StringBuilder(element.getContainingFile().getName() + "\n");
 			
 			appendModifiers(current, variable::hasModifier);
-			appendType(current, PsiUtils.childOfType(element, CycTypeRef.class).orElse(null), variable::varType);
+			appendType(current,
+					PsiUtils.childOfType(element, CycTypeRefOrInferred.class)
+							.map(CycElement.class::cast)
+							.or(() -> PsiUtils.childOfType(element, CycTypeRef.class))
+							.orElse(null), variable::varType);
 			current.append(" ");
 			appendId(current, variable.varName());
 			
@@ -166,21 +176,21 @@ public class CyclicDocumentationProvider extends AbstractDocumentationProvider{
 		HtmlSyntaxInfoUtil.appendStyledSpan(builder, CyclicSyntaxHighlighter.ID, append, 1);
 	}
 	
-	protected static void appendType(StringBuilder builder, @Nullable CycTypeRef type){
-		appendType(builder, type, () -> null);
+	protected static void appendType(StringBuilder builder, @Nullable CycElement typeName){
+		appendType(builder, typeName, () -> null);
 	}
 	
-	protected static void appendType(StringBuilder builder, @Nullable CycTypeRef type, Supplier<JvmType> actualType){
+	protected static void appendType(StringBuilder builder, @Nullable CycElement typeName, Supplier<JvmType> actualType){
 		// TODO: better highlighting for type names
-		if(type == null)
+		if(typeName == null)
 			return;
-		var text = type.getText();
+		var text = typeName.getText();
 		if(INFERRED_TYPES.contains(text)){
 			var actual = actualType.get();
 			if(actual != null)
 				text = JvmClassUtils.name(actual);
 		}
-		if(PRIMITIVE_NAMES.contains(text))
+		if(PRIMITIVE_NAMES.contains(text) || INFERRED_TYPES.contains(text))
 			appendKeyword(builder, text);
 		else
 			appendId(builder, text);
