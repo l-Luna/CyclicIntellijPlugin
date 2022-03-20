@@ -16,8 +16,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.inspections.fixes.AddImportFix;
-import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.CycFile;
+import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.CycId;
 import cyclic.intellij.psi.ast.CycImportStatement;
 import cyclic.intellij.psi.ast.CycPackageStatement;
@@ -159,10 +159,10 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		return fillCompletion(id, isWrongClause);
 	}
 	
-	public static Object @NotNull [] fillCompletion(CycElement at, Predicate<JvmClass> isWrongClause){
+	public static Object @NotNull [] fillCompletion(PsiElement at, Predicate<JvmClass> isWrongClause){
 		List<LookupElementBuilder> list = new ArrayList<>();
 		var container = PsiTreeUtil.getParentOfType(at, CycType.class);
-		for(JvmClass aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), at)){
+		for(JvmClass aClass : ProjectTypeFinder.allVisibleAt(at.getProject(), PsiTreeUtil.getParentOfType(at, CycFileWrapper.class))){
 			if(!Visibility.visibleFrom(aClass, JvmCyclicClass.of(container)))
 				continue;
 			boolean wrongClause = isWrongClause.test(aClass);

@@ -7,7 +7,6 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.ast.CycRawTypeRef;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
@@ -30,10 +29,9 @@ public class CycTypeContributor extends CompletionContributor{
 		// ID token -> IdPart -> Id -> CycRawTypeRef
 		if(!(prev.getParent().getParent().getParent() instanceof CycRawTypeRef) && PsiTreeUtil.getParentOfType(prev, CycType.class) != null){
 			var elem = prev.getParent();
-			if(elem instanceof CycElement)
-				for(Object type : CycTypeReference.fillCompletion((CycElement)elem, x -> false))
-					if(type instanceof LookupElement)
-						result.addElement((LookupElement)type);
+			for(Object type : CycTypeReference.fillCompletion(elem, x -> false))
+				if(type instanceof LookupElement)
+					result.addElement((LookupElement)type);
 		}
 	}
 }

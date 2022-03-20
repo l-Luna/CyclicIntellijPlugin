@@ -33,10 +33,12 @@ public class ProjectTypeFinder{
 		return null;
 	}
 	
-	public static List<JvmClass> allVisibleAt(Project in, CycElement at){
+	public static List<JvmClass> allVisibleAt(Project in, CycFileWrapper wrapper){
+		if(wrapper == null)
+			return List.of();
 		var types = findAll(in, x -> true, null);
 		addTypesFromPackage(in, types, "java.lang");
-		for(CycImportStatement imp : at.getContainer().map(CycFileWrapper::getImports).orElse(Collections.emptyList())){
+		for(CycImportStatement imp : wrapper.getImports()){
 			if(!imp.isStatic())
 				if(imp.isWildcard())
 					addTypesFromPackage(in, types, imp.getImportName());
