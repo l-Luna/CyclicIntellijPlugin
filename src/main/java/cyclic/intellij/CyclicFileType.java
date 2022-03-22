@@ -1,6 +1,7 @@
 package cyclic.intellij;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import com.intellij.openapi.util.NlsContexts;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,8 +20,8 @@ public class CyclicFileType extends LanguageFileType{
 		return "Cyclic File";
 	}
 	
-	public @NotNull String getDescription(){
-		return "Cyclic file";
+	public @NlsContexts.Label @NotNull String getDescription(){
+		return CyclicBundle.message("fileType.desc");
 	}
 	
 	public @NotNull String getDefaultExtension(){

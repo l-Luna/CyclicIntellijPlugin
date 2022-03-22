@@ -5,6 +5,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPrimitiveType;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.CycVariableAssignment;
 import cyclic.intellij.psi.ast.common.CycVariableDef;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
@@ -28,7 +29,7 @@ public class InvalidTypeAnnotator implements Annotator{
 				var rType = right.get().type();
 				if(rType != null && lType != null && rType != PsiPrimitiveType.NULL && !JvmClassUtils.isConvertibleTo(rType, lType))
 					holder.newAnnotation(HighlightSeverity.ERROR,
-									"Incompatible types: '" + name(rType) + "' is not assignable to '" + name(lType) + "'")
+									CyclicBundle.message("annotator.invalid.assign.type", name(rType), name(lType)))
 							.range(right.get())
 							.create();
 			}
@@ -40,7 +41,7 @@ public class InvalidTypeAnnotator implements Annotator{
 				var lType = ((CycVariableDef)element).varType();
 				if(rType != null && lType != null && rType != PsiPrimitiveType.NULL && !JvmClassUtils.isConvertibleTo(rType, lType))
 					holder.newAnnotation(HighlightSeverity.ERROR,
-									"Incompatible types: '" + name(rType) + "' is not assignable to '" + name(lType) + "'")
+									CyclicBundle.message("annotator.invalid.assign.type", name(rType), name(lType)))
 							.range(right)
 							.create();
 			});

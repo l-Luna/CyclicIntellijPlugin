@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.ast.CycImportList;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -23,11 +24,11 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement{
 	}
 	
 	public @IntentionName @NotNull String getText(){
-		return "Add import for '" + fqName + "'";
+		return CyclicBundle.message("intention.text.addImport", fqName);
 	}
 	
 	public @IntentionFamilyName @NotNull String getFamilyName(){
-		return "Add missing import";
+		return CyclicBundle.message("intention.familyName.addImport");
 	}
 	
 	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement){

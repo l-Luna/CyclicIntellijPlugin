@@ -11,6 +11,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiPrimitiveType;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.psi.ast.common.CycVariableDef;
 import cyclic.intellij.psi.ast.expressions.CycCastExpr;
@@ -79,7 +80,7 @@ public class CyclicImplicitTypeInlayProvider implements InlayHintsProvider<NoSet
 	@Nls(capitalization = Nls.Capitalization.Sentence)
 	@NotNull
 	public String getName(){
-		return "Implicit Cyclic variable types";
+		return CyclicBundle.message("inlay.name.implicitTypes");
 	}
 	
 	@Nullable

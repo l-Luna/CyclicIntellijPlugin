@@ -83,7 +83,7 @@ public class CycNameSuggestionProvider implements NameSuggestionProvider{
 		
 		ContainerUtil.removeDuplicates(adjusted);
 		result.addAll(adjusted);
-		// I don't care about frequency of acceptance
+		// don't care about which suggestions are accepted
 		return null;
 	}
 	

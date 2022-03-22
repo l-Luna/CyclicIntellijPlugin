@@ -14,6 +14,7 @@ import com.intellij.psi.*;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.ast.types.CycType;
@@ -27,7 +28,7 @@ import java.util.Properties;
 public class CreateCyclicClassAction extends CreateTemplateInPackageAction<CycType>{
 	
 	protected CreateCyclicClassAction(){
-		super("", "Create new Cyclic class", new LayeredIcon(PlatformIcons.CLASS_ICON, CyclicIcons.CYCLIC_DECORATION), JavaModuleSourceRootTypes.SOURCES);
+		super("", CyclicBundle.message("create.class"), new LayeredIcon(PlatformIcons.CLASS_ICON, CyclicIcons.CYCLIC_DECORATION), JavaModuleSourceRootTypes.SOURCES);
 	}
 	
 	protected @Nullable PsiElement getNavigationElement(@NotNull CycType createdElement){
@@ -64,14 +65,13 @@ public class CreateCyclicClassAction extends CreateTemplateInPackageAction<CycTy
 	}
 	
 	protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder){
-		builder
-				.setTitle("New Cyclic Class")
-				.addKind("Class", PlatformIcons.CLASS_ICON, "Cyclic Class")
-				.addKind("Interface", PlatformIcons.INTERFACE_ICON, "Cyclic Interface")
-				.addKind("Record", PlatformIcons.RECORD_ICON, "Cyclic Record")
-				.addKind("Enum", PlatformIcons.ENUM_ICON, "Cyclic Enum")
-				.addKind("Annotation", PlatformIcons.ANNOTATION_TYPE_ICON, "Cyclic Annotation")
-				.addKind("Single", AllIcons.Nodes.Static, "Cyclic Single");
+		builder.setTitle(CyclicBundle.message("new.class"))
+				.addKind(CyclicBundle.message("kind.class"), PlatformIcons.CLASS_ICON, "Cyclic Class")
+				.addKind(CyclicBundle.message("kind.interface"), PlatformIcons.INTERFACE_ICON, "Cyclic Interface")
+				.addKind(CyclicBundle.message("kind.record"), PlatformIcons.RECORD_ICON, "Cyclic Record")
+				.addKind(CyclicBundle.message("kind.enum"), PlatformIcons.ENUM_ICON, "Cyclic Enum")
+				.addKind(CyclicBundle.message("kind.annotation"), PlatformIcons.ANNOTATION_TYPE_ICON, "Cyclic Annotation")
+				.addKind(CyclicBundle.message("kind.single"), AllIcons.Nodes.Static, "Cyclic Single");
 	}
 	
 	@SuppressWarnings("UnstableApiUsage")

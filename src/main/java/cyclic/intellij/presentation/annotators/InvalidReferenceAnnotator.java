@@ -13,6 +13,7 @@ import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.util.PsiTreeUtil;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
@@ -66,7 +67,7 @@ public class InvalidReferenceAnnotator implements Annotator{
 				var container = PsiTreeUtil.getParentOfType(element, CycType.class);
 				JvmMember elem = target instanceof CycVariable ? JvmCyclicField.of((CycVariable)target) : (JvmMember)target;
 				if(!Visibility.visibleFrom(elem, JvmCyclicClass.of(container)))
-					holder.newAnnotation(HighlightSeverity.ERROR, "Member '" + elem.getName() + "' is not visible here")
+					holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invisible.member", elem.getName()))
 							.range(ref.getAbsoluteRange())
 							.create();
 			}else{
@@ -78,7 +79,7 @@ public class InvalidReferenceAnnotator implements Annotator{
 					if(on != null && on.type() instanceof JvmArrayType)
 						return;
 				}
-				holder.newAnnotation(HighlightSeverity.ERROR, "Cannot resolve type, variable, or field '" + expr.id() + "'")
+				holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.reference.variable", expr.id()))
 						.range(ref.getAbsoluteRange())
 						.create();
 			}
@@ -88,13 +89,13 @@ public class InvalidReferenceAnnotator implements Annotator{
 			var target = call.resolveMethod();
 			var name = call.getMethodName().getText();
 			if(target == null)
-				holder.newAnnotation(HighlightSeverity.ERROR, "Cannot resolve method '" + name + "'")
+				holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.reference.method", name))
 						.range(ref.getAbsoluteRange())
 						.create();
 			else{
 				var container = JvmCyclicClass.of(PsiTreeUtil.getParentOfType(element, CycType.class));
 				if(!Visibility.visibleFrom(target, container))
-					holder.newAnnotation(HighlightSeverity.ERROR, "Method '" + name + "' is not visible here")
+					holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invisible.method", name))
 							.range(ref.getAbsoluteRange())
 							.create();
 			}
@@ -102,7 +103,7 @@ public class InvalidReferenceAnnotator implements Annotator{
 		if(element instanceof CycThisExpr){
 			var container = PsiTreeUtil.getParentOfType(element, CycMethod.class);
 			if(container != null && container.isStatic() && element.textMatches("this"))
-				holder.newAnnotation(HighlightSeverity.ERROR, "'this' can only be used in non-static contexts").create();
+				holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.reference.staticThis")).create();
 		}
 	}
 }

@@ -11,6 +11,7 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.model.facet.WorkspaceSdk;
 
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class CyclicCompileTask implements CompileTask{
 			}
 			if(foundCyclic.get() && roots.size() > 1){
 				context.addMessage(CompilerMessageCategory.ERROR,
-						"Cannot compile Cyclic module with multiple roots",
+						CyclicBundle.message("compiler.error.roots"),
 						null, -1, -1);
 				return false;
 			}
@@ -69,7 +70,7 @@ public class CyclicCompileTask implements CompileTask{
 			String compilerPath = WorkspaceSdk.getFor(project).compilerPath;
 			if(compilerPath == null || compilerPath.isBlank()){
 				context.addMessage(CompilerMessageCategory.ERROR,
-						"Cyclic compiler must be configured for Cyclic project",
+						CyclicBundle.message("compiler.error.missing.cyclic"),
 						null, -1, -1);
 				return false;
 			}
@@ -79,7 +80,7 @@ public class CyclicCompileTask implements CompileTask{
 			var sdkType = sdk.getSdkType();
 			if(!(sdkType instanceof JavaSdkType)){
 				context.addMessage(CompilerMessageCategory.ERROR,
-						"No Java compiler enabled for project",
+						CyclicBundle.message("compiler.error.missing.java"),
 						null, -1, -1);
 				return false;
 			}
@@ -99,13 +100,13 @@ public class CyclicCompileTask implements CompileTask{
 			
 			if(projectFile.get() != null){
 				context.addMessage(CompilerMessageCategory.INFORMATION,
-						"Found Cyclic project file",
+						CyclicBundle.message("compiler.notice.foundProject"),
 						null, -1, -1);
 				appendParam(cmdLine, "-p");
 				appendParam(cmdLine, toSystemDependentName(projectFile.get().getPath()));
 			}else{
 				context.addMessage(CompilerMessageCategory.INFORMATION,
-						"Using module source and output directories",
+						CyclicBundle.message("compiler.notice.moduleRoots"),
 						null, -1, -1);
 				appendParam(cmdLine, toSystemDependentName(roots.get(0).getPath()));
 				appendParam(cmdLine, toSystemDependentName(context.getModuleOutputDirectory(module).getPath()));
@@ -119,16 +120,16 @@ public class CyclicCompileTask implements CompileTask{
 				
 				if(code != 0){
 					context.addMessage(CompilerMessageCategory.ERROR,
-							"Errors during Cyclic compilation: " + log,
+							CyclicBundle.message("compiler.error.generic", log),
 							null, -1, -1);
 					return false;
 				}else if(!log.isBlank())
 					context.addMessage(CompilerMessageCategory.WARNING,
-							"Warning during Cyclic compilation: " + log,
+							CyclicBundle.message("compiler.warning.generic", log),
 							null, -1, -1);
 			}catch(IOException | InterruptedException e){
 				context.addMessage(CompilerMessageCategory.ERROR,
-						"Error running compiler: " + e,
+						CyclicBundle.message("compiler.error.process", e),
 						null, -1, -1);
 			}
 		}

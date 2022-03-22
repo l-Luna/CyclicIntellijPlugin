@@ -14,7 +14,6 @@ public class CyclicSourcesFinder{
 	
 	public static @Nullable PsiFile findSourceFile(String relPath, Project project){
 		// Like "java/lang/Thread.java"
-		// also completely generic for JVM languages?
 		var path = FileUtil.toSystemIndependentName(relPath);
 		if(path.startsWith("java/") || path.startsWith("jdk/") || path.startsWith("sun/"))
 			return null;

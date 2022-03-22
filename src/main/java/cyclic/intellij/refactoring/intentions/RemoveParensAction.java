@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycParenthesisedExpr;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -22,10 +23,10 @@ public class RemoveParensAction extends AbstractExprAction{
 	}
 	
 	public @IntentionName @NotNull String getText(){
-		return "Remove parentheses";
+		return CyclicBundle.message("intention.text.parens.remove");
 	}
 	
 	public @NotNull @IntentionFamilyName String getFamilyName(){
-		return "Refactor";
+		return CyclicBundle.message("intention.familyName.refactor");
 	}
 }

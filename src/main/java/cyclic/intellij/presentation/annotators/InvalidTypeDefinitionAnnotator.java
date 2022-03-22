@@ -7,6 +7,7 @@ import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.PsiElement;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.inspections.fixes.ChangeSupertypeKindFix;
 import cyclic.intellij.inspections.fixes.RenameFileToTypeFix;
 import cyclic.intellij.inspections.fixes.RenameTypeToFileFix;
@@ -31,14 +32,14 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 					String typeName = type.getName();
 					if(!typeName.equals(type.getContainingFile().getName()))
 						holder.newAnnotation(HighlightSeverity.ERROR,
-										"Cyclic type '" + typeName + "' should be declared in file '" + typeName + ".cyc'")
+										CyclicBundle.message("annotator.invalid.type.name", typeName, typeName))
 								.withFix(new RenameFileToTypeFix(type, typeName))
 								.withFix(new RenameTypeToFileFix(type, type.getContainingFile().getName()))
 								.range(type.getNameIdentifier())
 								.create();
 				}else{
 					holder.newAnnotation(HighlightSeverity.ERROR,
-									"Cyclic type must have name '" + type.getContainingFile().getName() + "'")
+									CyclicBundle.message("annotator.missing.type.name", type.getContainingFile().getName()))
 							.create();
 				}
 			}
@@ -52,14 +53,14 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 							var extType = supertype.asType();
 							if(extType != null){
 								if(!(extType instanceof JvmReferenceType)){
-									holder.newAnnotation(HighlightSeverity.ERROR, "Expecting a class, not primitive or array")
+									holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.refClassOnly"))
 											.range(supertype)
 											.create();
 								}else{
 									var extClass = supertype.asClass();
 									if(extClass != null){
 										if(encountered[0]){
-											holder.newAnnotation(HighlightSeverity.ERROR, "Classes cannot extend multiple classes")
+											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.oneOnly"))
 													.range(supertype)
 													.create();
 										}
@@ -68,20 +69,20 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 										if(type.kind() == CycKind.INTERFACE && !(
 												extClass.getClassKind() == JvmClassKind.INTERFACE ||
 												extClass.getClassKind() == JvmClassKind.ANNOTATION)){
-											holder.newAnnotation(HighlightSeverity.ERROR, "Expecting an interface, not a class")
+											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.interfaceOnly"))
 													.range(supertype)
 													.create();
 										}else if(type.kind() != CycKind.INTERFACE && (
 												extClass.getClassKind() == JvmClassKind.INTERFACE ||
 												extClass.getClassKind() == JvmClassKind.ANNOTATION)){
-											holder.newAnnotation(HighlightSeverity.ERROR, "Expecting a class, not an interface")
+											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.classOnly"))
 													.withFix(new ChangeSupertypeKindFix(supertype, false))
 													.range(supertype)
 													.create();
 										}
 										// TODO: check sealed types
 										if(extClass.hasModifier(JvmModifier.FINAL))
-											holder.newAnnotation(HighlightSeverity.ERROR, "Cannot extend final type")
+											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.extFinal"))
 													.range(supertype)
 													.create();
 									}
@@ -98,25 +99,25 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 							var implType = supertype.asType();
 							if(implType != null){
 								if(!(implType instanceof JvmReferenceType)){
-									holder.newAnnotation(HighlightSeverity.ERROR, "Expecting an interface, not primitive or array")
+									holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.refInterfaceOnly"))
 											.range(supertype)
 											.create();
 								}else{
 									var implClass = supertype.asClass();
 									if(implClass != null){
 										if(type.kind() == CycKind.INTERFACE){
-											holder.newAnnotation(HighlightSeverity.ERROR, "Interfaces cannot extend types")
+											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.interfaceImpl"))
 													.range(supertype)
 													.create();
 										}else if(implClass.getClassKind() != JvmClassKind.INTERFACE
 												&& implClass.getClassKind() != JvmClassKind.ANNOTATION){
-											holder.newAnnotation(HighlightSeverity.ERROR, "Expecting a class, not an interface")
+											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.interfaceOnly"))
 													.withFix(new ChangeSupertypeKindFix(supertype, true))
 													.range(supertype)
 													.create();
 										}
 										if(implClass.hasModifier(JvmModifier.FINAL))
-											holder.newAnnotation(HighlightSeverity.ERROR, "Cannot implement final type")
+											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.implFinal"))
 													.range(supertype)
 													.create();
 									}

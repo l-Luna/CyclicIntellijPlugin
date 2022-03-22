@@ -9,6 +9,7 @@ import com.intellij.lang.jvm.JvmField;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiElement;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.CycTypeRef;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycCallExpr;
@@ -24,7 +25,8 @@ public class InvalidElementAnnotator implements Annotator, DumbAware{
 		if(element instanceof CycExpression
 			|| element instanceof CycTypeRef)
 			if(element.getTextLength() == 0)
-				holder.newAnnotation(HighlightSeverity.ERROR, "Missing " + (element instanceof CycTypeRef ? "type" : "expression"))
+				holder.newAnnotation(HighlightSeverity.ERROR,
+								CyclicBundle.message("annotator.missing.element", element instanceof CycTypeRef ? 0 : 1))
 						.range(element.getTextRange())
 						.create();
 		if(element instanceof CycIdExpr){
@@ -47,7 +49,7 @@ public class InvalidElementAnnotator implements Annotator, DumbAware{
 				// TODO: allow singles as values
 				if(target instanceof JvmClass){
 					if(!(((JvmClass)target).getClassKind() == JvmClassKind.ENUM && element.getParent() instanceof CycForeachStatement))
-						holder.newAnnotation(HighlightSeverity.ERROR, "Expected an expression, not a type")
+						holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.element.exprNotType"))
 								.range(ref.getAbsoluteRange())
 								.create();
 				}

@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,10 +27,10 @@ public class RenameFileToTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
 	}
 	
 	public @IntentionName @NotNull String getText(){
-		return "Rename file to '" + newName + ".cyc'";
+		return CyclicBundle.message("intention.text.renameFileToType", newName);
 	}
 	
 	public @IntentionFamilyName @NotNull String getFamilyName(){
-		return "Rename file to match type";
+		return CyclicBundle.message("intention.familyName.renameFileToType");
 	}
 }

@@ -7,6 +7,7 @@ import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.util.PsiTreeUtil;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.expressions.CycCallExpr;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
@@ -38,7 +39,7 @@ public class InvalidReturnAnnotator implements Annotator{
 			method.body().ifPresent(body -> {
 				if(!method.hasModifier("abstract") && !Objects.equals(method.returnType(), PsiPrimitiveType.VOID))
 					if(!Flow.guaranteedToExit(body)){
-						holder.newAnnotation(HighlightSeverity.ERROR, "Missing return statement")
+						holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.missing.return"))
 								.range(body.getParent().getLastChild())
 								.create();
 					}
@@ -58,7 +59,7 @@ public class InvalidReturnAnnotator implements Annotator{
 								.flatMap(CycStatementWrapper::inner);
 						if(statement.isEmpty()){
 							if(!Objects.equals(methodType, PsiPrimitiveType.VOID))
-								holder.newAnnotation(HighlightSeverity.ERROR, "Expecting expression").create();
+								holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.missing.expression")).create();
 						}
 					});
 				}
@@ -74,8 +75,8 @@ public class InvalidReturnAnnotator implements Annotator{
 				holder.newAnnotation(
 						HighlightSeverity.ERROR,
 						returnsFromVoid
-								? "Cannot return a value from a method with a void return type"
-								: "Incompatible types: '" + name(returnType) + "' is not assignable to '" + name(methodType) + "'")
+								? CyclicBundle.message("annotator.invalid.return.valueFromVoid")
+								: CyclicBundle.message("annotator.invalid.return.type", name(returnType), name(methodType)))
 						.create();
 			}
 		}

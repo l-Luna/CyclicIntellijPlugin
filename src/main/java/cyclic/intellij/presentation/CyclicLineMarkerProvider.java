@@ -20,6 +20,7 @@ import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.asJvm.AsPsiUtil;
 import cyclic.intellij.presentation.find.CMarkerTypes;
 import cyclic.intellij.psi.ast.CycMethod;
@@ -141,10 +142,10 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 								LineMarkerInfo<PsiElement> info = new LineMarkerInfo<>(
 										name, name.getTextRange(),
 										AllIcons.Nodes.ReadAccess,
-										__ -> "Record accessor",
+										__ -> CyclicBundle.message("gutterIcon.text.recordAccessor"),
 										null,
 										GutterIconRenderer.Alignment.RIGHT,
-										() -> "Record accessor");
+										CyclicBundle.messagePointer("gutterIcon.text.recordAccessor"));
 								
 								result.add(info);
 								break;

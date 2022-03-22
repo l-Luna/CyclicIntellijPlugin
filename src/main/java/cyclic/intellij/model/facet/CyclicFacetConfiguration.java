@@ -11,6 +11,7 @@ import com.intellij.openapi.util.NlsContexts.ConfigurableName;
 import com.intellij.openapi.util.Version;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.OptionTag;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.model.sdks.CyclicSdks;
 import cyclic.intellij.model.sdks.VersionConverter;
 import org.jetbrains.annotations.NotNull;
@@ -71,9 +72,9 @@ public class CyclicFacetConfiguration implements FacetConfiguration, PersistentS
 				compilerPaths = new ComboBox<>(shownPaths.toArray(String[]::new));
 				
 				panel = new JPanel(new VerticalFlowLayout());
-				panel.add(new JLabel("Cyclic Version:"));
+				panel.add(new JLabel(CyclicBundle.message("label.cyclic.version")));
 				panel.add(this.versions);
-				panel.add(new JLabel("Cyclic Compiler path (workspace-specific):"));
+				panel.add(new JLabel(CyclicBundle.message("label.workspace.compiler.path")));
 				panel.add(this.compilerPaths);
 			}
 			
@@ -96,7 +97,7 @@ public class CyclicFacetConfiguration implements FacetConfiguration, PersistentS
 		}
 		
 		public @ConfigurableName String getDisplayName(){
-			return "Configure Cyclic Facet";
+			return CyclicBundle.message("configurable.name.cyclic.facet");
 		}
 	}
 }

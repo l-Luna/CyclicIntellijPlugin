@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.NlsContexts.ConfigurableName;
 import com.intellij.openapi.util.io.FileUtil;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.model.sdks.CyclicSdk;
 import cyclic.intellij.model.sdks.SdkUtils;
 import org.jetbrains.annotations.Nullable;
@@ -25,11 +26,11 @@ public class CyclicSdkConfigurable implements Configurable{
 	
 	public CyclicSdkConfigurable(CyclicSdk sdk){
 		this.sdk = sdk;
-		compilerJarLabel = new JLabel("Compiler JAR path:");
+		compilerJarLabel = new JLabel(CyclicBundle.message("label.compiler.path"));
 		compilerJarPath = new TextFieldWithBrowseButton();
 		compilerJarPath.addBrowseFolderListener(
-				"Select Cyclic Compiler",
-				"Specifies the JAR file used to compile Cyclic files",
+				CyclicBundle.message("fileSelect.compiler.name"),
+				CyclicBundle.message("fileSelect.compiler.desc"),
 				null,
 				createSingleFileDescriptor().withFileFilter(x -> x.getName().endsWith(".jar")));
 		
@@ -41,7 +42,7 @@ public class CyclicSdkConfigurable implements Configurable{
 	}
 	
 	public @ConfigurableName String getDisplayName(){
-		return "Configure Cyclic Compiler";
+		return CyclicBundle.message("configurable.name.cyclic.compiler");
 	}
 	
 	public @Nullable JComponent createComponent(){

@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.CycTypeRef;
 import cyclic.intellij.psi.ast.types.CycExtendsClause;
 import cyclic.intellij.psi.ast.types.CycImplementsClause;
@@ -64,10 +65,10 @@ public class ChangeSupertypeKindFix extends LocalQuickFixAndIntentionActionOnPsi
 	}
 	
 	public @IntentionName @NotNull String getText(){
-		return "Change to '" + (toExtends ? "extends" : "implements") + "'";
+		return CyclicBundle.message("intention.text.changeSupertypeKind", toExtends ? 0 : 1);
 	}
 	
 	public @IntentionFamilyName @NotNull String getFamilyName(){
-		return "Swap 'extends' and 'implements'";
+		return CyclicBundle.message("intention.familyName.changeSupertypeKind");
 	}
 }

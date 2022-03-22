@@ -19,6 +19,7 @@ public class RenameCycTypeProcessor extends RenamePsiElementProcessor{
 	
 	public void renameElement(@NotNull PsiElement element, @NotNull String newName, UsageInfo @NotNull [] usages, @Nullable RefactoringElementListener listener) throws IncorrectOperationException{
 		// pass along the new fully qualified name instead
+		// TODO: consider imports
 		CycType type = (CycType)element;
 		type.handleElementRename(newName);
 		String fqNewName = type.fullyQualifiedName();

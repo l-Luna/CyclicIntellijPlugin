@@ -17,7 +17,12 @@ public class CyclicTemplates extends DefaultCreateFromTemplateHandler{
 		return template.isTemplateOfType(CyclicFileType.FILE_TYPE);
 	}
 	
-	public @NotNull PsiElement createFromTemplate(@NotNull Project project, @NotNull PsiDirectory directory, String fileName, @NotNull FileTemplate template, @NotNull String templateText, @NotNull Map<String, Object> props) throws IncorrectOperationException{
+	public @NotNull PsiElement createFromTemplate(@NotNull Project project,
+	                                              @NotNull PsiDirectory directory,
+	                                              String fileName,
+	                                              @NotNull FileTemplate template,
+	                                              @NotNull String templateText,
+	                                              @NotNull Map<String, Object> props) throws IncorrectOperationException{
 		fileName += ".cyc";
 		return super.createFromTemplate(project, directory, fileName, template, templateText, props);
 	}

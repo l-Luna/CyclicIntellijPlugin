@@ -7,6 +7,7 @@ import com.intellij.util.Function;
 import com.intellij.util.ui.CollectionItemEditor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.table.TableModelEditor;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.model.sdks.CyclicSdk;
 import cyclic.intellij.model.sdks.CyclicSdks;
 import org.jetbrains.annotations.NonNls;
@@ -22,7 +23,7 @@ public class CyclicLanguageConfiguration implements ConfigurableWithId{
 	private TableModelEditor<CyclicSdk> configs;
 	
 	private static final ColumnInfo<?, ?>[] SDK_COLUMNS = {
-			new ColumnInfo<CyclicSdk, String>("Name"){
+			new ColumnInfo<CyclicSdk, String>(CyclicBundle.message("configure.compiler.name")){
 				public @Nullable String valueOf(CyclicSdk sdk){
 					return sdk.name;
 				}
@@ -31,7 +32,7 @@ public class CyclicLanguageConfiguration implements ConfigurableWithId{
 					return false;
 				}
 			},
-			new ColumnInfo<CyclicSdk, String>("Path"){
+			new ColumnInfo<CyclicSdk, String>(CyclicBundle.message("configure.compiler.path")){
 				public @Nullable String valueOf(CyclicSdk sdk){
 					return sdk.path;
 				}
@@ -40,7 +41,7 @@ public class CyclicLanguageConfiguration implements ConfigurableWithId{
 					return false;
 				}
 			},
-			new ColumnInfo<CyclicSdk, String>("Version"){
+			new ColumnInfo<CyclicSdk, String>(CyclicBundle.message("configure.compiler.version")){
 				public @Nullable String valueOf(CyclicSdk sdk){
 					return sdk.version.toString();
 				}
@@ -52,7 +53,7 @@ public class CyclicLanguageConfiguration implements ConfigurableWithId{
 	};
 	
 	public @NlsContexts.ConfigurableName String getDisplayName(){
-		return "Cyclic";
+		return CyclicBundle.message("configurable.name.cyclic.language");
 	}
 	
 	public @Nullable JComponent createComponent(){
@@ -90,7 +91,7 @@ public class CyclicLanguageConfiguration implements ConfigurableWithId{
 					sdks.compilers,
 					SDK_COLUMNS,
 					itemEditor,
-					"No Cyclic compilers configured");
+					CyclicBundle.message("configure.compilers.empty"));
 			
 			panel.add(configs.createComponent());
 		}
