@@ -63,7 +63,7 @@ public class JvmClassUtils{
 	}
 	
 	@Nullable
-	public static JvmClass asClass(JvmType type){
+	public static JvmClass asClass(@Nullable JvmType type){
 		if(type instanceof JvmReferenceType){
 			var res = ((JvmReferenceType)type).resolve();
 			return res instanceof JvmClass ? (JvmClass)res : null;

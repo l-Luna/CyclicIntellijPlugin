@@ -109,6 +109,7 @@
 
         <gotoClassContributor implementation="cyclic.intellij.presentation.find.CyclicGoToClassContributor"/>
         <directClassInheritorsSearch implementation="cyclic.intellij.presentation.find.CyclicDirectInheritorsSearcher"/>
+        <gotoDeclarationHandler implementation="cyclic.intellij.presentation.find.CyclicGotoVarTypeHandler"/>
 
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.NameAnnotator"/>
