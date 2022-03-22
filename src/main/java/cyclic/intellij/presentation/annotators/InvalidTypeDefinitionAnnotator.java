@@ -4,6 +4,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.lang.jvm.JvmClassKind;
+import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.PsiElement;
@@ -16,6 +17,8 @@ import cyclic.intellij.psi.ast.types.CycExtendsClause;
 import cyclic.intellij.psi.ast.types.CycImplementsClause;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.CycKind;
+import cyclic.intellij.psi.types.JvmCyclicClass;
+import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +46,7 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 							.create();
 				}
 			}
-			// check supertypes
+			// check superclass(es)
 			boolean[] encountered = {false};
 			PsiUtils.childOfType(type, CycExtendsClause.class)
 					.map(x -> PsiUtils.childrenOfType(x, CycTypeRef.class))
@@ -59,7 +62,7 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 								}else{
 									var extClass = supertype.asClass();
 									if(extClass != null){
-										if(encountered[0]){
+										if(encountered[0] && type.kind() != CycKind.INTERFACE){
 											holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.supertype.oneOnly"))
 													.range(supertype)
 													.create();
@@ -91,6 +94,7 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 						}
 					});
 			
+			// and implemented interfaces
 			PsiUtils.childOfType(type, CycImplementsClause.class)
 					.map(x -> PsiUtils.childrenOfType(x, CycTypeRef.class))
 					.orElse(List.of())
@@ -125,6 +129,23 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 							}
 						}
 					});
+			
+			// and missing abstract methods
+			if(type.kind() != CycKind.INTERFACE && !type.hasModifier("abstract")){
+				var missing = JvmClassUtils.findUnimplementedMethodsFrom(JvmCyclicClass.of(type), true);
+				if(!missing.isEmpty()){
+					JvmMethod first = missing.get(0);
+					PsiElement identifier = type.getNameIdentifier();
+					holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message(
+									"annotator.invalid.supertype.mustImplement",
+									type.name(),
+									JvmClassUtils.summary(first),
+									first.getContainingClass().getName()))
+							// TODO: stop at opening brace
+							.range(identifier != null ? identifier : type)
+							.create();
+				}
+			}
 		}
 	}
 }

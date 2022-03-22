@@ -2,6 +2,8 @@ package cyclic.intellij.psi.utils;
 
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmMethod;
+import com.intellij.lang.jvm.JvmModifier;
+import com.intellij.lang.jvm.JvmParameter;
 import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmPrimitiveType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
@@ -17,8 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.intellij.lang.jvm.types.JvmPrimitiveTypeKind.*;
 
@@ -201,6 +206,20 @@ public class JvmClassUtils{
 		return found;
 	}
 	
+	public static List<JvmMethod> findUnimplementedMethodsFrom(JvmClass jClass, boolean stopAtFirst){
+		// find all methods to be implemented
+		var abstracts = findAllMethodsInHierarchy(jClass, x -> x.hasModifier(JvmModifier.ABSTRACT), true);
+		// check which ones have been implemented
+		List<JvmMethod> unimplemented = new ArrayList<>();
+		for(JvmMethod toImplement : abstracts)
+			if(findMethodInHierarchy(jClass, x -> overrides(x, toImplement) && !x.hasModifier(JvmModifier.ABSTRACT), false) == null){
+				unimplemented.add(toImplement);
+				if(stopAtFirst)
+					break;
+			}
+		return unimplemented;
+	}
+	
 	public static @Nullable JvmType highest(@Nullable JvmType left, @Nullable JvmType right){
 		if(left == null || right == null)
 			return null;
@@ -209,5 +228,34 @@ public class JvmClassUtils{
 		if(isConvertibleTo(right, left))
 			return left;
 		return null;
+	}
+	
+	public static boolean overrides(JvmMethod subMethod, JvmMethod superMethod){
+		if(subMethod == superMethod)
+			return false;
+		if(subMethod == null || superMethod == null)
+			return false;
+		if(subMethod.hasModifier(JvmModifier.STATIC) || superMethod.hasModifier(JvmModifier.STATIC))
+			return false;
+		if(subMethod.hasModifier(JvmModifier.PRIVATE) || superMethod.hasModifier(JvmModifier.PRIVATE))
+			return false;
+		if(!Objects.equals(subMethod.getName(), superMethod.getName()))
+			return false;
+		if(!Arrays.equals(subMethod.getParameters(), superMethod.getParameters()))
+			return false;
+		return isAssignableTo(subMethod.getReturnType(), superMethod.getReturnType());
+	}
+	
+	public static String summary(JvmMethod method){
+		StringBuilder builder = new StringBuilder();
+		var ret = method.getReturnType();
+		builder.append(ret == null ? "new" : name(ret));
+		builder.append(" ");
+		builder.append(method.getName());
+		builder.append(Arrays.stream(method.getParameters())
+				.map(JvmParameter::getType)
+				.map(JvmClassUtils::name)
+				.collect(Collectors.joining(", ", "(", ")")));
+		return builder.toString();
 	}
 }

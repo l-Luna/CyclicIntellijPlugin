@@ -20,6 +20,7 @@ import cyclic.intellij.psi.stubs.StubCycMethod;
 import cyclic.intellij.psi.stubs.StubTypes;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
+import cyclic.intellij.psi.types.JvmCyclicMethod;
 import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,18 +91,7 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 	}
 	
 	public boolean overrides(JvmMethod other){
-		if(getName().equals(other.getName()) && returnType() != null
-				&& JvmClassUtils.isAssignableTo(returnType(), other.getReturnType())
-				&& other.getParameters().length == parameters().size()){
-			List<CycParameter> parameters = parameters();
-			for(int i = 0; i < parameters.size(); i++){
-				var type = parameters.get(i).varType();
-				if(type == null || !type.equals(other.getParameters()[i].getType()))
-					return false;
-			}
-			return true;
-		}
-		return false;
+		return JvmClassUtils.overrides(JvmCyclicMethod.of(this), other);
 	}
 	
 	public @Nullable JvmMethod overriddenMethod(){
