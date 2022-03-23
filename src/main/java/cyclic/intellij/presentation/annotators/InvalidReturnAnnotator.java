@@ -69,7 +69,9 @@ public class InvalidReturnAnnotator implements Annotator{
 	
 	private void checkReturn(@NotNull AnnotationHolder holder, JvmType methodType, JvmType returnType){
 		if(!Objects.equals(methodType, PsiPrimitiveType.NULL)){
-			boolean returnsFromVoid = Objects.equals(methodType, PsiPrimitiveType.VOID) && returnType != null;
+			if(Objects.equals(methodType, PsiPrimitiveType.VOID) && returnType == null)
+				return;
+			boolean returnsFromVoid = Objects.equals(methodType, PsiPrimitiveType.VOID);
 			if(returnsFromVoid || !JvmClassUtils.isConvertibleTo(returnType, methodType)){
 				// TODO: use the proper invalid type tooltip
 				holder.newAnnotation(

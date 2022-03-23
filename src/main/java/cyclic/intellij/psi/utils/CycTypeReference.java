@@ -135,7 +135,16 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		
 		var project = id.getProject();
 		List<JvmClass> candidates = ProjectTypeFinder.findAll(project, x -> x.getName().equals(shortName), null);
-		candidates.addAll(Arrays.asList(PsiShortNamesCache.getInstance(project).getClassesByName(shortName, GlobalSearchScope.everythingScope(project))));
+		candidates.addAll(Arrays.asList(PsiShortNamesCache.getInstance(project)
+				.getClassesByName(shortName, GlobalSearchScope.everythingScope(project))));
+		
+		var container = JvmCyclicClass.of(PsiTreeUtil.getParentOfType(id, CycType.class));
+		if(container != null)
+			for(int i = candidates.size() - 1; i >= 0; i--){
+				JvmClass candidate = candidates.get(i);
+				if(!Visibility.visibleFrom(candidate, container))
+					candidates.remove(candidate);
+			}
 		
 		return candidates.stream()
 				.map(x -> new AddImportFix(x.getQualifiedName(), id))

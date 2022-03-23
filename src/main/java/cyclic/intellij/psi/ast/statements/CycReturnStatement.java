@@ -2,7 +2,6 @@ package cyclic.intellij.psi.ast.statements;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
-import com.intellij.psi.PsiPrimitiveType;
 import cyclic.intellij.psi.CycAstElement;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -23,6 +22,6 @@ public class CycReturnStatement extends CycAstElement implements CycStatement{
 	
 	@Nullable("Null means no expression")
 	public JvmType returnType(){
-		return returns().map(CycExpression::type).orElse(PsiPrimitiveType.VOID);
+		return returns().map(CycExpression::type).orElse(null);
 	}
 }

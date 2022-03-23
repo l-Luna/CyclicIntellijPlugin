@@ -1,8 +1,12 @@
 package cyclic.intellij.psi.utils;
 
+import com.intellij.lang.jvm.JvmMethod;
+import com.intellij.lang.jvm.JvmParameter;
+import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.impl.PsiFileFactoryImpl;
 import com.intellij.psi.tree.IElementType;
 import cyclic.intellij.CyclicLanguage;
@@ -13,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -67,6 +72,11 @@ public class PsiUtils{
 	@NotNull
 	public static PsiElement createTypeReferenceFromText(@NotNull PsiElement context, String text){
 		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_type));
+	}
+	
+	@NotNull
+	public static PsiElement createMemberDefinitionFromText(@NotNull PsiElement context, String text){
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_member));
 	}
 	
 	@NotNull
@@ -131,5 +141,37 @@ public class PsiUtils{
 		return streamWrappedChildrenOfType(parent, filter)
 				.skip(index)
 				.findFirst();
+	}
+	
+	public static PsiElement generateMethodPrototype(JvmMethod from, PsiElement context){
+		/* type name(params){ return (null | 0 | false)?; } */
+		StringBuilder template = new StringBuilder();
+		JvmType type = from.getReturnType();
+		template.append(JvmClassUtils.name(type));
+		template.append(" ");
+		template.append(from.getName());
+		template.append("(");
+		JvmParameter @NotNull [] parameters = from.getParameters();
+		for(int i = 0; i < parameters.length; i++){
+			JvmParameter parameter = parameters[i];
+			if(i != 0)
+				template.append(", ");
+			template.append(JvmClassUtils.name(parameter.getType()));
+			template.append(" ");
+			template.append(parameter.getName());
+		}
+		template.append(")");
+		template.append("{\n\t");
+		if(Objects.equals(type, PsiPrimitiveType.VOID))
+			;
+		else if(Objects.equals(type, PsiPrimitiveType.BOOLEAN))
+			template.append("return false;");
+		else if(type instanceof PsiPrimitiveType && !Objects.equals(type, PsiPrimitiveType.NULL))
+			template.append("return 0;");
+		else
+			template.append("return null;");
+		template.append("\n}");
+		
+		return createMemberDefinitionFromText(context, template.toString());
 	}
 }

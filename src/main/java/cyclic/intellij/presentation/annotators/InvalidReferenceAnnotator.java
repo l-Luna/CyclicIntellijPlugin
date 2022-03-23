@@ -14,6 +14,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.CyclicBundle;
+import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
@@ -26,6 +27,7 @@ import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.Visibility;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.Set;
 
 public class InvalidReferenceAnnotator implements Annotator{
@@ -53,8 +55,12 @@ public class InvalidReferenceAnnotator implements Annotator{
 				}
 			}else{
 				var container = PsiTreeUtil.getParentOfType(element, CycType.class);
+				if(container == null){
+					CycFileWrapper wrapper = PsiTreeUtil.getParentOfType(element, CycFileWrapper.class);
+					container = Optional.ofNullable(wrapper).flatMap(CycFileWrapper::getTypeDef).orElse(null);
+				}
 				if(!Visibility.visibleFrom(target, JvmCyclicClass.of(container))){
-					holder.newAnnotation(HighlightSeverity.ERROR, "Type '" + target.getName() + "' is not visible here")
+					holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invisible.type", target.getName()))
 							.range(ref.getAbsoluteRange())
 							.create();
 				}

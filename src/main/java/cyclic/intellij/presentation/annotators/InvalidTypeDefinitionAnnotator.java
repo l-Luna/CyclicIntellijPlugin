@@ -132,7 +132,7 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 			
 			// and missing abstract methods
 			if(type.kind() != CycKind.INTERFACE && !type.hasModifier("abstract")){
-				var missing = JvmClassUtils.findUnimplementedMethodsFrom(JvmCyclicClass.of(type), true);
+				var missing = JvmClassUtils.findUnimplementedMethodsFrom(JvmCyclicClass.of(type), true, true);
 				if(!missing.isEmpty()){
 					JvmMethod first = missing.get(0);
 					PsiElement identifier = type.getNameIdentifier();

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-import static cyclic.intellij.psi.utils.JvmClassUtils.getByName;
+import static cyclic.intellij.psi.utils.JvmClassUtils.typeByName;
 
 // Introduces the for-each variable into scope
 public class CycForeachStatement extends CycDefinitionAstElement implements CycVariable, CycStatement{
@@ -52,7 +52,7 @@ public class CycForeachStatement extends CycDefinitionAstElement implements CycV
 						if(baseType instanceof JvmArrayType)
 							return ((JvmArrayType)baseType).getComponentType();
 					}
-					return getByName("java.lang.Object", getProject());
+					return typeByName("java.lang.Object", getProject());
 				});
 	}
 	

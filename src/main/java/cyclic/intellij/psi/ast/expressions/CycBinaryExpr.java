@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
-import static cyclic.intellij.psi.utils.JvmClassUtils.getByName;
+import static cyclic.intellij.psi.utils.JvmClassUtils.typeByName;
 
 public class CycBinaryExpr extends CycExpression{
 	
@@ -49,13 +49,13 @@ public class CycBinaryExpr extends CycExpression{
 				if(lType instanceof JvmReferenceType){
 					var resolve = ((JvmReferenceType)lType).resolve();
 					if(resolve instanceof JvmClass && Objects.equals(((JvmClass)resolve).getQualifiedName(), "java.lang.String"))
-						return getByName("java.lang.String", getProject());
+						return typeByName("java.lang.String", getProject());
 				}
 				var rType = right().map(CycExpression::type).orElse(null);
 				if(rType instanceof JvmReferenceType){
 					var resolve = ((JvmReferenceType)rType).resolve();
 					if(resolve instanceof JvmClass && Objects.equals(((JvmClass)resolve).getQualifiedName(), "java.lang.String"))
-						return getByName("java.lang.String", getProject());
+						return typeByName("java.lang.String", getProject());
 				}
 				// otherwise fall-through
 			case "-":

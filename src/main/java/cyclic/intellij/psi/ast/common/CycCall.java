@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cyclic.intellij.psi.utils.JvmClassUtils.getByName;
+import static cyclic.intellij.psi.utils.JvmClassUtils.typeByName;
 
 public class CycCall extends CycAstElement implements PsiReference, CycStatement{
 	
@@ -119,7 +119,7 @@ public class CycCall extends CycAstElement implements PsiReference, CycStatement
 							var bounds = res.getExtendsList();
 							pTarget = bounds != null && bounds.getReferencedTypes().length > 0
 									? bounds.getReferencedTypes()[0]
-									: getByName("java.lang.Object", getProject());
+									: typeByName("java.lang.Object", getProject());
 						}
 					}
 					CycExpression arg = args.get(i);

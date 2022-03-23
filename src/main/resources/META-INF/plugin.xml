@@ -87,6 +87,9 @@
         <codeInsight.gotoSuper language="Cyclic"
                                implementationClass="cyclic.intellij.presentation.find.CyclicGoToSuperHandler"/>
 
+        <codeInsight.overrideMethod language="Cyclic"
+                                    implementationClass="cyclic.intellij.refactoring.generation.CyclicOverrideMethodsHandler"/>
+
         <java.elementFinder implementation="cyclic.intellij.asJvm.CyclicPsiElementProvider"/>
         <jvm.elementProvider implementation="cyclic.intellij.asJvm.CyclicJvmElementProvider"/>
 

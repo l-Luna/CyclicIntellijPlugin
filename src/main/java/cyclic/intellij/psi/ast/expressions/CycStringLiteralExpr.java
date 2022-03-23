@@ -5,7 +5,7 @@ import com.intellij.lang.jvm.types.JvmType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static cyclic.intellij.psi.utils.JvmClassUtils.getByName;
+import static cyclic.intellij.psi.utils.JvmClassUtils.typeByName;
 
 public class CycStringLiteralExpr extends CycExpression{
 	
@@ -14,6 +14,6 @@ public class CycStringLiteralExpr extends CycExpression{
 	}
 	
 	public @Nullable JvmType type(){
-		return getByName("java.lang.String", getProject());
+		return typeByName("java.lang.String", getProject());
 	}
 }

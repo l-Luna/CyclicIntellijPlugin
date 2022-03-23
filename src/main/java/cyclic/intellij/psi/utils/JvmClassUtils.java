@@ -36,17 +36,17 @@ public class JvmClassUtils{
 		String name = jClass.getName(), qName = jClass.getQualifiedName();
 		if(name == null || qName == null)
 			return "";
-		return qName.substring(0, qName.length() - 1 - name.length());
+		return qName.substring(0, Math.max(0, qName.length() - 1 - name.length()));
 	}
 	
 	@Nullable
-	public static JvmType getByName(String name, Project in){
-		return ClassTypeImpl.of(JavaPsiFacade.getInstance(in).findClass(name, GlobalSearchScope.everythingScope(in)));
+	public static JvmType typeByName(String name, Project in){
+		return ClassTypeImpl.of(classByName(name, in));
 	}
 	
 	@Nullable
-	public static JvmClass asClass(CycType type){
-		return JvmCyclicClass.of(type);
+	public static JvmClass classByName(String name, Project in){
+		return JavaPsiFacade.getInstance(in).findClass(name, GlobalSearchScope.everythingScope(in));
 	}
 	
 	@Nullable
@@ -56,9 +56,11 @@ public class JvmClassUtils{
 	
 	@NotNull
 	public static String name(JvmType type){
+		if(type == null)
+			return "<nothing>";
 		if(type instanceof JvmArrayType)
 			return name(((JvmArrayType)type).getComponentType()) + "[]";
-		if(type.equals(PsiPrimitiveType.NULL))
+		if(Objects.equals(type, PsiPrimitiveType.NULL))
 			return "null";
 		if(type instanceof JvmPrimitiveType)
 			return ((JvmPrimitiveType)type).getKind().getName();
@@ -168,7 +170,7 @@ public class JvmClassUtils{
 		return false;
 	}
 	
-	public static @Nullable JvmMethod findMethodInHierarchy(JvmClass jClass, Predicate<JvmMethod> filter, boolean strict){
+	public static @Nullable JvmMethod findMethodInHierarchy(@Nullable JvmClass jClass, Predicate<JvmMethod> filter, boolean strict){
 		if(jClass == null)
 			return null;
 		if(!strict)
@@ -190,7 +192,7 @@ public class JvmClassUtils{
 	}
 	
 	@NotNull
-	public static List<JvmMethod> findAllMethodsInHierarchy(JvmClass jClass, Predicate<JvmMethod> filter, boolean strict){
+	public static List<JvmMethod> findAllMethodsInHierarchy(@Nullable JvmClass jClass, Predicate<JvmMethod> filter, boolean strict){
 		if(jClass == null)
 			return List.of();
 		var found = new ArrayList<JvmMethod>();
@@ -206,9 +208,15 @@ public class JvmClassUtils{
 		return found;
 	}
 	
-	public static List<JvmMethod> findUnimplementedMethodsFrom(JvmClass jClass, boolean stopAtFirst){
+	public static List<JvmMethod> findUnimplementedMethodsFrom(@Nullable JvmClass jClass, boolean stopAtFirst, boolean onlyAbstract){
+		if(jClass == null)
+			return List.of();
 		// find all methods to be implemented
-		var abstracts = findAllMethodsInHierarchy(jClass, x -> x.hasModifier(JvmModifier.ABSTRACT), true);
+		var abstracts = findAllMethodsInHierarchy(jClass,
+				onlyAbstract
+						? x -> x.hasModifier(JvmModifier.ABSTRACT) && x.getReturnType() != null
+						: x -> !x.hasModifier(JvmModifier.FINAL) && x.getReturnType() != null,
+				true);
 		// check which ones have been implemented
 		List<JvmMethod> unimplemented = new ArrayList<>();
 		for(JvmMethod toImplement : abstracts)

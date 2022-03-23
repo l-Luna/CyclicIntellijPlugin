@@ -6,6 +6,7 @@ import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.lang.jvm.util.JvmMainMethodUtil;
 import com.intellij.openapi.project.DumbService;
+import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.stubs.IStubElementType;
@@ -29,10 +30,7 @@ import cyclic.intellij.psi.stubs.*;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.types.JvmCyclicMethod;
-import cyclic.intellij.psi.utils.CycModifiersHolder;
-import cyclic.intellij.psi.utils.CycVariable;
-import cyclic.intellij.psi.utils.ProjectTypeFinder;
-import cyclic.intellij.psi.utils.PsiUtils;
+import cyclic.intellij.psi.utils.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -186,6 +184,12 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 	public JvmClass getSuperType(){
 		if(kind() == CycKind.INTERFACE)
 			return null;
+		if(kind() == CycKind.RECORD)
+			return JvmClassUtils.classByName(CommonClassNames.JAVA_LANG_RECORD, getProject());
+		if(kind() == CycKind.ENUM)
+			return JvmClassUtils.classByName(CommonClassNames.JAVA_LANG_ENUM, getProject());
+		
+		var object = JvmClassUtils.classByName(CommonClassNames.JAVA_LANG_OBJECT, getProject());
 		
 		var stub = getStub();
 		if(stub != null){
@@ -195,12 +199,12 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 				if(names.size() > 0)
 					return ProjectTypeFinder.getByName(getProject(), names.get(0), this);
 				else
-					return null;
+					return object;
 			}
 		}
 		
 		var exts = PsiUtils.childOfType(this, CycExtendsClause.class);
-		return exts.flatMap(CycClassList::first).orElse(null);
+		return exts.flatMap(CycClassList::first).orElse(object);
 	}
 	
 	@NotNull

@@ -31,6 +31,8 @@ public class CyclicFormattingModelBuilder implements FormattingModelBuilder{
 				.around(Tokens.RULE_BIN_OP)
 					.spaceIf(common.SPACE_AROUND_ASSIGNMENT_OPERATORS)
 				.around(Tokens.getRuleFor(CyclicLangParser.RULE_imports))
+					.blankLines(1)
+				.between(Tokens.getRuleFor(CyclicLangParser.RULE_member), Tokens.getRuleFor(CyclicLangParser.RULE_member))
 					.blankLines(1);
 	}
 	
