@@ -28,7 +28,7 @@ public class ClassTypeImpl implements JvmReferenceType{
 	}
 	
 	@Nullable
-	public static ClassTypeImpl of(JvmClass jClass){
+	public static ClassTypeImpl of(@Nullable JvmClass jClass){
 		if(jClass == null)
 			return null;
 		return CACHE.computeIfAbsent(jClass, ClassTypeImpl::new);

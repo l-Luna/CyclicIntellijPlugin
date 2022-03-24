@@ -107,7 +107,7 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 		var stub = getStub();
 		if(stub != null){
 			ArrayList<JvmMethod> methods = stub.getChildrenStubs().stream()
-					.filter(StubCycMember.class::isInstance)
+					.filter(StubCycMemberWrapper.class::isInstance)
 					.flatMap(x -> (Stream<StubElement<?>>)x.getChildrenStubs().stream())
 					.filter(StubCycMethod.class::isInstance)
 					.map(StubCycMethod.class::cast)
@@ -148,8 +148,8 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 		return super.setName(name);
 	}
 	
-	public List<CycMember> getMembers(){
-		return PsiUtils.childrenOfType(this, CycMember.class);
+	public List<CycMemberWrapper> getMembers(){
+		return PsiUtils.childrenOfType(this, CycMemberWrapper.class);
 	}
 	
 	public @NotNull String name(){

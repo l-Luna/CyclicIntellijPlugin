@@ -5,6 +5,7 @@ import com.intellij.codeInsight.generation.MemberChooserObject;
 import com.intellij.codeInsight.generation.PsiElementMemberChooserObject;
 import com.intellij.ide.util.MemberChooser;
 import com.intellij.lang.jvm.JvmMethod;
+import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.CyclicBundle;
@@ -13,17 +14,27 @@ import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 
 import java.util.List;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 public class CycOverrideImplementMemberChooser{
 	
 	public static MemberChooser<JvmMethodMember> create(CycType type){
 		List<JvmMethod> choices = JvmClassUtils.findUnimplementedMethodsFrom(JvmCyclicClass.of(type), false, false);
-		JvmMethodMember[] members = choices.stream()
+		List<JvmMethodMember> members = choices.stream()
 				.map(x -> new JvmMethodMember(x, x.getSourceElement()))
-				.toArray(JvmMethodMember[]::new);
+				.collect(Collectors.toList());
 		
-		MemberChooser<JvmMethodMember> chooser = new MemberChooser<>(members, false, true, type.getProject());
+		MemberChooser<JvmMethodMember> chooser
+				= new MemberChooser<>(members.toArray(JvmMethodMember.BUILDER), false, true, type.getProject());
 		chooser.setTitle(CyclicBundle.message("chooser.title.overrideImplement"));
+		
+		JvmMethodMember[] selected = members.stream()
+				.filter(x -> x.method.hasModifier(JvmModifier.ABSTRACT))
+				.toArray(JvmMethodMember.BUILDER);
+		if(selected.length > 0)
+			chooser.selectElements(selected);
+		
 		return chooser;
 	}
 	
@@ -48,8 +59,10 @@ public class CycOverrideImplementMemberChooser{
 	
 	public static class JvmMethodMember extends PsiElementMemberChooserObject implements ClassMemberWithElement{
 		
-		JvmMethod method;
-		PsiElement source;
+		public static final IntFunction<JvmMethodMember[]> BUILDER = JvmMethodMember[]::new;
+		
+		public JvmMethod method;
+		private PsiElement source;
 		
 		public JvmMethodMember(JvmMethod method, PsiElement source){
 			super(source, JvmClassUtils.summary(method), source.getIcon(0));

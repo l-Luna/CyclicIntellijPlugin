@@ -9,7 +9,7 @@ import com.intellij.util.ProcessingContext;
 import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
-import cyclic.intellij.psi.ast.types.CycMember;
+import cyclic.intellij.psi.ast.types.CycMemberWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +36,7 @@ public class CycKeywordContributor extends CompletionContributor{
 				not(psiElement().inside(CycType.class)),
 				new KeywordsCompletionProvider(HEADER_KEYWORDS));
 		extend(CompletionType.BASIC,
-				and(psiElement().inside(CycType.class), not(psiElement().inside(CycMember.class))),
+				and(psiElement().inside(CycType.class), not(psiElement().inside(CycMemberWrapper.class))),
 				new KeywordsCompletionProvider(CLAUSE_KEYWORDS));
 		extend(CompletionType.BASIC,
 				psiElement().inside(CycExpression.class),

@@ -9,8 +9,8 @@ import com.intellij.lang.jvm.types.JvmPrimitiveType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.search.GlobalSearchScope;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
@@ -40,12 +40,12 @@ public class JvmClassUtils{
 	}
 	
 	@Nullable
-	public static JvmType typeByName(String name, Project in){
+	public static JvmType typeByName(@NotNull String name, @NotNull Project in){
 		return ClassTypeImpl.of(classByName(name, in));
 	}
 	
 	@Nullable
-	public static JvmClass classByName(String name, Project in){
+	public static JvmClass classByName(@NotNull String name, @NotNull Project in){
 		return JavaPsiFacade.getInstance(in).findClass(name, GlobalSearchScope.everythingScope(in));
 	}
 	
@@ -211,6 +211,8 @@ public class JvmClassUtils{
 	public static List<JvmMethod> findUnimplementedMethodsFrom(@Nullable JvmClass jClass, boolean stopAtFirst, boolean onlyAbstract){
 		if(jClass == null)
 			return List.of();
+		PsiElement source = jClass.getSourceElement();
+		assert source != null;
 		// find all methods to be implemented
 		var abstracts = findAllMethodsInHierarchy(jClass,
 				onlyAbstract
@@ -220,7 +222,7 @@ public class JvmClassUtils{
 		// check which ones have been implemented
 		List<JvmMethod> unimplemented = new ArrayList<>();
 		for(JvmMethod toImplement : abstracts)
-			if(findMethodInHierarchy(jClass, x -> overrides(x, toImplement) && !x.hasModifier(JvmModifier.ABSTRACT), false) == null){
+			if(findMethodInHierarchy(jClass, x -> overrides(x, toImplement, source.getProject()) && !x.hasModifier(JvmModifier.ABSTRACT), false) == null){
 				unimplemented.add(toImplement);
 				if(stopAtFirst)
 					break;
@@ -238,7 +240,7 @@ public class JvmClassUtils{
 		return null;
 	}
 	
-	public static boolean overrides(JvmMethod subMethod, JvmMethod superMethod){
+	public static boolean overrides(JvmMethod subMethod, JvmMethod superMethod, Project project){
 		if(subMethod == superMethod)
 			return false;
 		if(subMethod == null || superMethod == null)
@@ -249,12 +251,17 @@ public class JvmClassUtils{
 			return false;
 		if(!Objects.equals(subMethod.getName(), superMethod.getName()))
 			return false;
-		if(!Arrays.equals(subMethod.getParameters(), superMethod.getParameters()))
+		JvmParameter[] subParams = subMethod.getParameters();
+		JvmParameter[] superParams = superMethod.getParameters();
+		if(subParams.length != superParams.length)
 			return false;
-		return isAssignableTo(subMethod.getReturnType(), superMethod.getReturnType());
+		for(int i = 0; i < subParams.length; i++)
+			if(!Objects.equals(eraseGenerics(subParams[i].getType(), project), eraseGenerics(superParams[i].getType(), project)))
+				return false;
+		return isAssignableTo(eraseGenerics(subMethod.getReturnType(), project), eraseGenerics(superMethod.getReturnType(), project));
 	}
 	
-	public static String summary(JvmMethod method){
+	public static String summary(@NotNull JvmMethod method){
 		StringBuilder builder = new StringBuilder();
 		var ret = method.getReturnType();
 		builder.append(ret == null ? "new" : name(ret));
@@ -265,5 +272,19 @@ public class JvmClassUtils{
 				.map(JvmClassUtils::name)
 				.collect(Collectors.joining(", ", "(", ")")));
 		return builder.toString();
+	}
+	
+	@Nullable
+	public static JvmType eraseGenerics(@Nullable JvmType type, @NotNull Project project){
+		if(type instanceof PsiClassReferenceType){
+			var res = ((PsiClassReferenceType)type).resolve();
+			if(res instanceof PsiTypeParameter){
+				var bounds = res.getExtendsList();
+				type = bounds != null && bounds.getReferencedTypes().length > 0
+						? bounds.getReferencedTypes()[0]
+						: typeByName(CommonClassNames.JAVA_LANG_OBJECT, project);
+			}
+		}
+		return type;
 	}
 }

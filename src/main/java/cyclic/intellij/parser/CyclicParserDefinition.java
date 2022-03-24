@@ -90,7 +90,7 @@ public class CyclicParserDefinition implements ParserDefinition{
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_typeOrInferred))
 			return new CycTypeRefOrInferred(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_member))
-			return new CycMember(node);
+			return new CycMemberWrapper(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_modifiers))
 			return new CycModifierList(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_modifier))

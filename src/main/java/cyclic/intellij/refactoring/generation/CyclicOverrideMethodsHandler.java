@@ -27,7 +27,10 @@ public class CyclicOverrideMethodsHandler implements ContextAwareActionHandler, 
 	public boolean isValidFor(Editor editor, PsiFile file){
 		if(!(file instanceof CycFile))
 			return false;
-		return contextClass(editor, file) != null;
+		var container = contextClass(editor, file);
+		if(container == null)
+			return false;
+		return !JvmClassUtils.findUnimplementedMethodsFrom(JvmCyclicClass.of(container), /*quick check*/ true, false).isEmpty();
 	}
 	
 	public void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file){
@@ -45,7 +48,7 @@ public class CyclicOverrideMethodsHandler implements ContextAwareActionHandler, 
 	
 	private static void generatePrototypes(List<JvmMethodMember> toOverride, CycType type){
 		for(JvmMethodMember member : toOverride){
-			var prototype = PsiUtils.generateMethodPrototype(member.method, type);
+			var prototype = PsiUtils.generateMethodPrototype(member.method, type, type.getProject());
 			var members = type.getMembers();
 			var at = members.size() > 0 ? members.get(0) : type.getLastChild().getPrevSibling();
 			type.addAfter(prototype, at);
@@ -53,12 +56,7 @@ public class CyclicOverrideMethodsHandler implements ContextAwareActionHandler, 
 	}
 	
 	public boolean isAvailableForQuickList(@NotNull Editor editor, @NotNull PsiFile file, @NotNull DataContext dataContext){
-		if(!(file instanceof CycFile))
-			return false;
-		var container = contextClass(editor, file);
-		if(container == null)
-			return false;
-		return !JvmClassUtils.findUnimplementedMethodsFrom(JvmCyclicClass.of(container), /*quick check*/ true, false).isEmpty();
+		return isValidFor(editor, file);
 	}
 	
 	public boolean startInWriteAction(){

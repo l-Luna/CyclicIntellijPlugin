@@ -28,7 +28,7 @@ import java.util.function.Function;
 public interface StubTypes{
 	
 	IStubElementType<StubCycType, CycType> CYC_TYPE = new CycTypeStubElementType();
-	IStubElementType<StubCycMember, CycMember> CYC_MEMBER = new CycMemberStubElementType();
+	IStubElementType<StubCycMemberWrapper, CycMemberWrapper> CYC_MEMBER = new CycMemberStubElementType();
 	IStubElementType<StubCycRecordComponents, CycRecordComponents> CYC_RECORD_COMPONENTS = new CycRecordComponentsStubElementType();
 	IStubElementType<StubCycParameter, CycParameter> CYC_PARAMETER = new CycParameterStubElementType();
 	IStubElementType<StubCycModifierList, CycModifierList> CYC_MODIFIER_LIST = new CycModifierListStubElementType();
@@ -136,31 +136,31 @@ public interface StubTypes{
 		}
 	}
 	
-	class CycMemberStubElementType extends IStubElementType<StubCycMember, CycMember>{
+	class CycMemberStubElementType extends IStubElementType<StubCycMemberWrapper, CycMemberWrapper>{
 		
 		public CycMemberStubElementType(){
 			super("CYC_MEMBER", CyclicLanguage.LANGUAGE);
 		}
 		
-		public CycMember createPsi(@NotNull StubCycMember stub){
-			return new CycMember(stub);
+		public CycMemberWrapper createPsi(@NotNull StubCycMemberWrapper stub){
+			return new CycMemberWrapper(stub);
 		}
 		
-		public @NotNull StubCycMember createStub(@NotNull CycMember psi, StubElement<? extends PsiElement> parent){
-			return new StubImplCycMember(parent);
+		public @NotNull StubCycMemberWrapper createStub(@NotNull CycMemberWrapper psi, StubElement<? extends PsiElement> parent){
+			return new StubImplCycMemberWrapper(parent);
 		}
 		
 		public @NotNull String getExternalId(){
 			return "cyclic." + this;
 		}
 		
-		public void serialize(@NotNull StubCycMember stub, @NotNull StubOutputStream dataStream){}
+		public void serialize(@NotNull StubCycMemberWrapper stub, @NotNull StubOutputStream dataStream){}
 		
-		public @NotNull StubCycMember deserialize(@NotNull StubInputStream dataStream, StubElement parent){
-			return new StubImplCycMember(parent);
+		public @NotNull StubCycMemberWrapper deserialize(@NotNull StubInputStream dataStream, StubElement parent){
+			return new StubImplCycMemberWrapper(parent);
 		}
 		
-		public void indexStub(@NotNull StubCycMember stub, @NotNull IndexSink sink){}
+		public void indexStub(@NotNull StubCycMemberWrapper stub, @NotNull IndexSink sink){}
 	}
 	
 	class CycRecordComponentsStubElementType extends IStubElementType<StubCycRecordComponents, CycRecordComponents>{

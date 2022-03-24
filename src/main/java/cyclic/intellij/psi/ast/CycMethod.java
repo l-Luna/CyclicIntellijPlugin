@@ -91,7 +91,7 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 	}
 	
 	public boolean overrides(JvmMethod other){
-		return JvmClassUtils.overrides(JvmCyclicMethod.of(this), other);
+		return JvmClassUtils.overrides(JvmCyclicMethod.of(this), other, getProject());
 	}
 	
 	public @Nullable JvmMethod overriddenMethod(){

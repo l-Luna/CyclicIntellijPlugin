@@ -23,6 +23,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static cyclic.intellij.psi.utils.JvmClassUtils.eraseGenerics;
+import static cyclic.intellij.psi.utils.JvmClassUtils.name;
+
 public class PsiUtils{
 	
 	@NotNull
@@ -143,33 +146,33 @@ public class PsiUtils{
 				.findFirst();
 	}
 	
-	public static PsiElement generateMethodPrototype(JvmMethod from, PsiElement context){
-		/* type name(params){ return (null | 0 | false)?; } */
+	public static PsiElement generateMethodPrototype(JvmMethod from, PsiElement context, @NotNull Project project){
+		/* type name(params){ return (null | 0 | false); } */
 		StringBuilder template = new StringBuilder();
-		JvmType type = from.getReturnType();
-		template.append(JvmClassUtils.name(type));
+		JvmType type = eraseGenerics(from.getReturnType(), project);
+		template.append(name(type));
 		template.append(" ");
 		template.append(from.getName());
 		template.append("(");
-		JvmParameter @NotNull [] parameters = from.getParameters();
+		JvmParameter[] parameters = from.getParameters();
 		for(int i = 0; i < parameters.length; i++){
 			JvmParameter parameter = parameters[i];
 			if(i != 0)
 				template.append(", ");
-			template.append(JvmClassUtils.name(parameter.getType()));
+			template.append(name(eraseGenerics(parameter.getType(), project)));
 			template.append(" ");
 			template.append(parameter.getName());
 		}
 		template.append(")");
 		template.append("{\n\t");
-		if(Objects.equals(type, PsiPrimitiveType.VOID))
-			;
-		else if(Objects.equals(type, PsiPrimitiveType.BOOLEAN))
-			template.append("return false;");
-		else if(type instanceof PsiPrimitiveType && !Objects.equals(type, PsiPrimitiveType.NULL))
-			template.append("return 0;");
-		else
-			template.append("return null;");
+		if(!Objects.equals(type, PsiPrimitiveType.VOID)){
+			if(Objects.equals(type, PsiPrimitiveType.BOOLEAN))
+				template.append("return false;");
+			else if(type instanceof PsiPrimitiveType && !Objects.equals(type, PsiPrimitiveType.NULL))
+				template.append("return 0;");
+			else
+				template.append("return null;");
+		}
 		template.append("\n}");
 		
 		return createMemberDefinitionFromText(context, template.toString());

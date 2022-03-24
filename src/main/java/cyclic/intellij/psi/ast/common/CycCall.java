@@ -12,8 +12,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiTypeParameter;
-import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.psi.CycAstElement;
@@ -31,8 +29,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static cyclic.intellij.psi.utils.JvmClassUtils.typeByName;
 
 public class CycCall extends CycAstElement implements PsiReference, CycStatement{
 	
@@ -113,15 +109,7 @@ public class CycCall extends CycAstElement implements PsiReference, CycStatement
 					JvmType pTarget = parameters.get(i);
 					// erase generics
 					// I'd put a to-do for generics, but this'll be rewritten anyways
-					if(pTarget instanceof PsiClassReferenceType){
-						var res = ((PsiClassReferenceType)pTarget).resolve();
-						if(res instanceof PsiTypeParameter){
-							var bounds = res.getExtendsList();
-							pTarget = bounds != null && bounds.getReferencedTypes().length > 0
-									? bounds.getReferencedTypes()[0]
-									: typeByName("java.lang.Object", getProject());
-						}
-					}
+					pTarget = JvmClassUtils.eraseGenerics(pTarget, getProject());
 					CycExpression arg = args.get(i);
 					if(arg.type() != null && arg.isAssignableTo(pTarget))
 						continue;
