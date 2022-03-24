@@ -138,6 +138,7 @@
         <internalFileTemplate name="Cyclic Record"/>
         <internalFileTemplate name="Cyclic Single"/>
 
+        <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Generic"/>
         <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Declaration"/>
         <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Statement"/>
         <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Expression"/>

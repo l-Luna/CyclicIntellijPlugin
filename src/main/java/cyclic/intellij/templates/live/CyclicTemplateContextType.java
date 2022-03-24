@@ -99,7 +99,8 @@ public abstract class CyclicTemplateContextType extends TemplateContextType{
 		}
 		
 		protected boolean isInContext(@NotNull PsiElement e){
-			return PsiTreeUtil.getParentOfType(e, CycStatementWrapper.class, false) != null;
+			CycStatementWrapper stat = PsiTreeUtil.getParentOfType(e, CycStatementWrapper.class, false);
+			return stat != null && stat.getTextOffset() == e.getTextOffset();
 		}
 	}
 	
