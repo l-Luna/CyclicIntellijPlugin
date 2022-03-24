@@ -1,0 +1,59 @@
+<templateSet group="Cyclic">
+  <template name="sout" value="System.out.println($END$);" description="Prints a string to System.out" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="CYCLIC_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="psvm" value="public static void main(String[] args){&#10;  $END$&#10;}" description="main() method declaration" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="CYCLIC_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="psf" value="public static final " description="public static final" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="CYCLIC_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="main" value="public static void main(String[] args){&#10;  $END$&#10;}" description="main() method declaration" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="CYCLIC_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="psfi" value="public static final int " description="public static final int" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="CYCLIC_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="psfs" value="public static final String " description="public static final String" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="CYCLIC_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="prsf" value="private static final " description="private static final" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="CYCLIC_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="serr" value="System.err.println($END$);" description="Prints a string to System.err" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="CYCLIC_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="soutf" value="System.out.printf(&quot;$END$&quot;);" description="Prints a formatted string to System.out" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="CYCLIC_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="soutv" value="System.out.println(&quot;$EXPR_COPY$ = &quot; + $EXPR$);" description="Prints a value to System.out" toReformat="true" toShortenFQNames="true">
+    <variable name="EXPR" expression="variableOfType(&quot;&quot;)" defaultValue="&quot;expr&quot;" alwaysStopAt="true" />
+    <variable name="EXPR_COPY" expression="escapeString(EXPR)" defaultValue="" alwaysStopAt="false" />
+    <context>
+      <option name="CYCLIC_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="thr" value="throw new " description="throw new" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="CYCLIC_STATEMENT" value="true" />
+    </context>
+  </template>
+</templateSet>

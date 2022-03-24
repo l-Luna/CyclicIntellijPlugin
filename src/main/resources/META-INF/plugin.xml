@@ -143,6 +143,7 @@
         <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Statement"/>
         <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Expression"/>
         <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Comment"/>
+        <defaultLiveTemplates file="/liveTemplates/Cyclic.xml"/>
 
         <localInspection language="Cyclic"
                          groupPath="Cyclic"
