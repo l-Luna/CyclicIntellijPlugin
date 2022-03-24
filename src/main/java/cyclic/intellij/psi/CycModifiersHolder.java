@@ -1,10 +1,10 @@
-package cyclic.intellij.psi.utils;
+package cyclic.intellij.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.StubElement;
-import cyclic.intellij.psi.CycStubElement;
 import cyclic.intellij.psi.ast.CycModifierList;
 import cyclic.intellij.psi.stubs.StubWithCycModifiers;
+import cyclic.intellij.psi.utils.PsiUtils;
 
 import java.util.List;
 import java.util.Optional;

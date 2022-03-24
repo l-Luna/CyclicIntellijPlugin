@@ -9,6 +9,7 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.StubElement;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
+import cyclic.intellij.psi.CycCodeHolder;
 import cyclic.intellij.psi.CycDefinitionStubElement;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.common.CycBlock;
@@ -21,7 +22,8 @@ import cyclic.intellij.psi.stubs.StubTypes;
 import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.types.JvmCyclicMethod;
-import cyclic.intellij.psi.utils.*;
+import cyclic.intellij.psi.utils.JvmClassUtils;
+import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod> implements CycModifiersHolder, CycVarScope{
+public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod> implements CycCodeHolder{
 	
 	public CycMethod(@NotNull ASTNode node){
 		super(node);
@@ -82,14 +84,6 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 		return returns().map(CycTypeRef::asType).orElse(PsiPrimitiveType.NULL);
 	}
 	
-	public List<? extends CycVariable> available(){
-		return parameters();
-	}
-	
-	public boolean isVarargs(){
-		return parameters().stream().anyMatch(CycParameter::isVarargs);
-	}
-	
 	public boolean overrides(JvmMethod other){
 		return JvmClassUtils.overrides(JvmCyclicMethod.of(this), other, getProject());
 	}
@@ -119,7 +113,7 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 		if(modifier.equals("abstract") && containingType().kind() == CycKind.INTERFACE)
 			if(hasSemicolon()) // note that a semicolon does not mean abstract in classes
 				return true;
-		return CycModifiersHolder.super.hasModifier(modifier);
+		return CycCodeHolder.super.hasModifier(modifier);
 	}
 	
 	public @Nullable Icon getIcon(int flags){
@@ -138,6 +132,10 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 				return PsiUtils.childOfType(body, CycBlock.class).map(CycStatement.class::cast);
 		}
 		return Optional.empty();
+	}
+	
+	public JvmMethod toJvm(){
+		return JvmCyclicMethod.of(this);
 	}
 	
 	public @NotNull SearchScope getUseScope(){

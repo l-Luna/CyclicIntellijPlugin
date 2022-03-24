@@ -1,4 +1,4 @@
-package cyclic.intellij.psi.utils;
+package cyclic.intellij.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;

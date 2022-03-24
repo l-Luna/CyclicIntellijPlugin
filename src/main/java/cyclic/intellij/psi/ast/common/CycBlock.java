@@ -2,10 +2,10 @@ package cyclic.intellij.psi.ast.common;
 
 import com.intellij.lang.ASTNode;
 import cyclic.intellij.psi.CycAstElement;
+import cyclic.intellij.psi.CycVarScope;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.statements.CycStatement;
 import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
-import cyclic.intellij.psi.utils.CycVarScope;
-import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 

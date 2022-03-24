@@ -9,12 +9,12 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinitionAstElement;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.CycTypeRef;
 import cyclic.intellij.psi.ast.CycTypeRefOrInferred;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
-import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 

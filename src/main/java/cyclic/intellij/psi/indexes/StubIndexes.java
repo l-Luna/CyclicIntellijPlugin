@@ -1,10 +1,10 @@
 package cyclic.intellij.psi.indexes;
 
 import com.intellij.psi.stubs.StubIndexKey;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.types.CycClassList;
 import cyclic.intellij.psi.ast.types.CycType;
-import cyclic.intellij.psi.utils.CycVariable;
 
 public final class StubIndexes{
 	

@@ -10,13 +10,13 @@ import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.CyclicBundle;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.CycTypeRef;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycCallExpr;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.statements.CycForeachStatement;
-import cyclic.intellij.psi.utils.CycVariable;
 import org.jetbrains.annotations.NotNull;
 
 public class InvalidElementAnnotator implements Annotator, DumbAware{

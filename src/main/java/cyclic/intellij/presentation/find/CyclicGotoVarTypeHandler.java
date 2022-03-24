@@ -7,9 +7,9 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.CyclicLanguage;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.Tokens;
 import cyclic.intellij.psi.ast.CycTypeRefOrInferred;
-import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import org.jetbrains.annotations.Nullable;
 

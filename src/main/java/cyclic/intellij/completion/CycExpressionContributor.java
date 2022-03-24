@@ -12,15 +12,15 @@ import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
-import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.CycCodeHolder;
+import cyclic.intellij.psi.CycVarScope;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
-import cyclic.intellij.psi.utils.CycVarScope;
-import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.Visibility;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class CycExpressionContributor extends CompletionContributor{
 				});
 				// add applicable fields
 				CycType inside = PsiTreeUtil.getParentOfType(prev, CycType.class);
-				CycMethod inMethod = PsiTreeUtil.getParentOfType(prev, CycMethod.class);
+				CycCodeHolder inMethod = PsiTreeUtil.getParentOfType(prev, CycCodeHolder.class);
 				if(inside != null)
 					inside.fields().stream()
 							.filter(x -> inMethod == null || !inMethod.isStatic() || x.hasModifier("static"))

@@ -17,6 +17,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.inspections.fixes.AddImportFix;
 import cyclic.intellij.psi.CycFile;
+import cyclic.intellij.psi.CycIdHolder;
 import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.CycId;
 import cyclic.intellij.psi.ast.CycImportStatement;

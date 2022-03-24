@@ -14,8 +14,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.CyclicBundle;
+import cyclic.intellij.psi.CycCodeHolder;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.CycFileWrapper;
-import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.expressions.CycThisExpr;
@@ -23,7 +24,6 @@ import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.types.JvmCyclicField;
 import cyclic.intellij.psi.utils.CycTypeReference;
-import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.Visibility;
 import org.jetbrains.annotations.NotNull;
 
@@ -107,7 +107,7 @@ public class InvalidReferenceAnnotator implements Annotator{
 			}
 		}
 		if(element instanceof CycThisExpr){
-			var container = PsiTreeUtil.getParentOfType(element, CycMethod.class);
+			var container = PsiTreeUtil.getParentOfType(element, CycCodeHolder.class);
 			if(container != null && container.isStatic() && element.textMatches("this"))
 				holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.reference.staticThis")).create();
 		}

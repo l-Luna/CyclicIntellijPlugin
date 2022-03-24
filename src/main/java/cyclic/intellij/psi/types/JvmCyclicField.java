@@ -8,8 +8,8 @@ import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.CycElement;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.types.CycType;
-import cyclic.intellij.psi.utils.CycVariable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

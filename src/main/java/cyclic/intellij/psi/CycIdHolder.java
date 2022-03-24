@@ -1,8 +1,8 @@
-package cyclic.intellij.psi.utils;
+package cyclic.intellij.psi;
 
 import com.intellij.extapi.psi.ASTDelegatePsiElement;
-import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.ast.CycId;
+import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

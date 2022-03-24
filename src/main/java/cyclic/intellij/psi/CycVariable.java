@@ -1,4 +1,4 @@
-package cyclic.intellij.psi.utils;
+package cyclic.intellij.psi;
 
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiElement;

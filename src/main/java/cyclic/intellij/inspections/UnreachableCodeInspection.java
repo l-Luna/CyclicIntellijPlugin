@@ -7,7 +7,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import cyclic.intellij.CyclicBundle;
-import cyclic.intellij.psi.ast.CycMethod;
+import cyclic.intellij.psi.CycCodeHolder;
 import cyclic.intellij.psi.utils.Flow;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,8 +17,8 @@ public class UnreachableCodeInspection extends LocalInspectionTool{
 		return new PsiElementVisitor(){
 			public void visitElement(@NotNull PsiElement element){
 				super.visitElement(element);
-				if(element instanceof CycMethod){
-					((CycMethod)element).body().ifPresent(body -> {
+				if(element instanceof CycCodeHolder){
+					((CycCodeHolder)element).body().ifPresent(body -> {
 						// a warning, not error
 						Flow.visitAfterMatching(body, Flow.EXITS, invalid ->
 								holder.registerProblem(

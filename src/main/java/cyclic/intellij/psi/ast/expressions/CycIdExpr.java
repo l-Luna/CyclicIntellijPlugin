@@ -11,14 +11,14 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.psi.CycCodeHolder;
 import cyclic.intellij.psi.CycFile;
+import cyclic.intellij.psi.CycVarScope;
+import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.CycIdPart;
-import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
 import cyclic.intellij.psi.types.JvmCyclicField;
-import cyclic.intellij.psi.utils.CycVarScope;
-import cyclic.intellij.psi.utils.CycVariable;
 import cyclic.intellij.psi.utils.ProjectTypeFinder;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +63,7 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 					return byName.get();
 			}
 			CycType inside = PsiTreeUtil.getParentOfType(this, CycType.class);
-			CycMethod inMethod = PsiTreeUtil.getParentOfType(this, CycMethod.class);
+			var inMethod = PsiTreeUtil.getParentOfType(this, CycCodeHolder.class);
 			if(inside != null){
 				var field = inside.fields().stream()
 						.filter(x -> x.varName().equals(id))
