@@ -101,7 +101,7 @@
 
         <usageTypeProvider implementation="cyclic.intellij.refactoring.CycUsageTypeProvider"/>
         <fileIconPatcher implementation="cyclic.intellij.presentation.CyclicFileIconPatcher"/>
-        <createFromTemplateHandler implementation="cyclic.intellij.CyclicTemplates"/>
+        <createFromTemplateHandler implementation="cyclic.intellij.templates.CyclicInternalTemplateHandler"/>
         <runConfigurationProducer implementation="cyclic.intellij.run.CyclicRunConfigProducer"/>
         <lang.formatter language="Cyclic" implementationClass="cyclic.intellij.formatter.CyclicFormattingModelBuilder"/>
 
@@ -137,6 +137,11 @@
         <internalFileTemplate name="Cyclic Annotation"/>
         <internalFileTemplate name="Cyclic Record"/>
         <internalFileTemplate name="Cyclic Single"/>
+
+        <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Declaration"/>
+        <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Statement"/>
+        <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Expression"/>
+        <liveTemplateContext implementation="cyclic.intellij.templates.live.CyclicTemplateContextType$Comment"/>
 
         <localInspection language="Cyclic"
                          groupPath="Cyclic"

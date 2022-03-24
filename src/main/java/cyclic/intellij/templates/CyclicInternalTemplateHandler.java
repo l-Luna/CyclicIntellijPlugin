@@ -1,4 +1,4 @@
-package cyclic.intellij;
+package cyclic.intellij.templates;
 
 import com.intellij.ide.fileTemplates.DefaultCreateFromTemplateHandler;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -6,11 +6,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.CyclicFileType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class CyclicTemplates extends DefaultCreateFromTemplateHandler{
+public class CyclicInternalTemplateHandler extends DefaultCreateFromTemplateHandler{
 	
 	@Override
 	public boolean handlesTemplate(@NotNull FileTemplate template){
