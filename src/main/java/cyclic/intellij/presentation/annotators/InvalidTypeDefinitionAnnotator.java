@@ -10,6 +10,7 @@ import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.inspections.fixes.ChangeSupertypeKindFix;
+import cyclic.intellij.inspections.fixes.ImplementMethodsFix;
 import cyclic.intellij.inspections.fixes.RenameFileToTypeFix;
 import cyclic.intellij.inspections.fixes.RenameTypeToFileFix;
 import cyclic.intellij.psi.ast.CycTypeRef;
@@ -143,6 +144,7 @@ public class InvalidTypeDefinitionAnnotator implements Annotator{
 									first.getContainingClass().getName()))
 							// TODO: stop at opening brace
 							.range(identifier != null ? identifier : type)
+							.withFix(new ImplementMethodsFix(type))
 							.create();
 				}
 			}

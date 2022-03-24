@@ -42,17 +42,24 @@ public class CyclicOverrideMethodsHandler implements ContextAwareActionHandler, 
 			return;
 		}
 		
+		selectAndOverrideMethods(project, file, container);
+	}
+	
+	public static void selectAndOverrideMethods(@NotNull Project project, @NotNull PsiFile file, CycType container){
 		List<JvmMethodMember> toOverride = CycOverrideImplementMemberChooser.select(container);
 		WriteCommandAction.writeCommandAction(project, file).run(() -> generatePrototypes(toOverride, container));
 	}
 	
 	private static void generatePrototypes(List<JvmMethodMember> toOverride, CycType type){
+		var members = type.getMembers();
+		boolean hasMembers = members.size() > 0;
 		for(JvmMethodMember member : toOverride){
 			var prototype = PsiUtils.generateMethodPrototype(member.method, type, type.getProject());
-			var members = type.getMembers();
-			var at = members.size() > 0 ? members.get(0) : type.getLastChild().getPrevSibling();
+			var at = hasMembers ? members.get(0) : type.getLastChild().getPrevSibling();
 			type.addAfter(prototype, at);
 		}
+		if(!hasMembers)
+			type.addBefore(PsiUtils.createWhitespace(type, "\n"), type.getLastChild());
 	}
 	
 	public boolean isAvailableForQuickList(@NotNull Editor editor, @NotNull PsiFile file, @NotNull DataContext dataContext){
