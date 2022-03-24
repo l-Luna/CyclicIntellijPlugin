@@ -216,8 +216,8 @@ public class JvmClassUtils{
 		// find all methods to be implemented
 		var abstracts = findAllMethodsInHierarchy(jClass,
 				onlyAbstract
-						? x -> x.hasModifier(JvmModifier.ABSTRACT) && x.getReturnType() != null
-						: x -> !x.hasModifier(JvmModifier.FINAL) && x.getReturnType() != null,
+						? x -> x.hasModifier(JvmModifier.ABSTRACT) && !x.hasModifier(JvmModifier.STATIC) && x.getReturnType() != null
+						: x -> !x.hasModifier(JvmModifier.FINAL) && !x.hasModifier(JvmModifier.STATIC) && x.getReturnType() != null,
 				true);
 		// check which ones have been implemented
 		List<JvmMethod> unimplemented = new ArrayList<>();
