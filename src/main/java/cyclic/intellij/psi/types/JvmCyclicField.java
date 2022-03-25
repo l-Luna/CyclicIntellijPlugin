@@ -36,7 +36,7 @@ public class JvmCyclicField implements JvmField{
 	
 	public @Nullable JvmClass getContainingClass(){
 		if(underlying instanceof CycElement)
-			return JvmCyclicClass.of(PsiTreeUtil.getParentOfType((CycElement)underlying, CycType.class));
+			return JvmCyclicClass.of(PsiTreeUtil.getParentOfType(underlying, CycType.class));
 		return null;
 	}
 	

@@ -4,7 +4,6 @@ import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmMethod;
-import com.intellij.lang.jvm.util.JvmMainMethodUtil;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiElement;
@@ -175,7 +174,7 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 		}
 		if(!DumbService.isDumb(getProject())
 				&& !EDT.isCurrentThreadEdt() // TODO: can this can be refactored to not require slow operations?
-				&& JvmMainMethodUtil.hasMainMethodInHierarchy(JvmCyclicClass.of(this)))
+				&& JvmClassUtils.hasMainMethod(JvmCyclicClass.of(this)))
 			result = new LayeredIcon(result, AllIcons.Nodes.RunnableMark);
 		return new LayeredIcon(result, CyclicIcons.CYCLIC_DECORATION);
 	}

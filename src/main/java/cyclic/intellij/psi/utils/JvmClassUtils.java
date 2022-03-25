@@ -78,15 +78,6 @@ public class JvmClassUtils{
 		return null;
 	}
 	
-	@NotNull
-	public static List<JvmMethod> getMethods(@Nullable JvmType type){
-		var clss = asClass(type);
-		if(clss == null)
-			return List.of();
-		// TODO: array #clone
-		return List.of(clss.getMethods());
-	}
-	
 	public static boolean isAssignableTo(@Nullable JvmType value, @Nullable JvmType to){
 		if(value == null || to == null)
 			return to == value;
@@ -286,5 +277,24 @@ public class JvmClassUtils{
 			}
 		}
 		return type;
+	}
+	
+	public static boolean isMainMethod(@NotNull JvmMethod method){
+		if(method.getName().equals("main"))
+			if(method.getParameters().length == 1)
+				if(method.getParameters()[0].getType() instanceof JvmArrayType){
+					JvmArrayType array = (JvmArrayType)method.getParameters()[0].getType();
+					if(array.getComponentType() instanceof JvmReferenceType){
+						JvmClass first = asClass(array.getComponentType());
+						return first != null
+								&& first.getQualifiedName() != null
+								&& first.getQualifiedName().equals(CommonClassNames.JAVA_LANG_STRING);
+					}
+				}
+		return false;
+	}
+	
+	public static boolean hasMainMethod(@NotNull JvmClass clazz){
+		return Arrays.stream(clazz.getMethods()).anyMatch(JvmClassUtils::isMainMethod);
 	}
 }
