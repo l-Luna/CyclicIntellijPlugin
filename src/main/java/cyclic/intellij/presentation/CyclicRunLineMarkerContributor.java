@@ -20,6 +20,7 @@ import static com.intellij.lang.jvm.source.JvmDeclarationSearch.getElementsByIde
 public class CyclicRunLineMarkerContributor extends RunLineMarkerContributor{
 	
 	public @Nullable Info getInfo(@NotNull PsiElement element){
+		element = element.getParent(); // apply to the ID token, not IdPart
 		if(element instanceof CycElement){
 			for(JvmElement declaration : getElementsByIdentifier(element)){
 				if((declaration instanceof JvmMethod && JvmClassUtils.isMainMethod((JvmMethod)declaration))
@@ -28,7 +29,7 @@ public class CyclicRunLineMarkerContributor extends RunLineMarkerContributor{
 					return new Info(
 							AllIcons.RunConfigurations.TestState.Run,
 							actions,
-							x -> StringUtil.join(ContainerUtil.mapNotNull(actions, action -> getText(action, x)), "\n")
+							x -> StringUtil.join(ContainerUtil.mapNotNull(actions, action -> getText(action, x.getParent())), "\n")
 					);
 				}
 			}

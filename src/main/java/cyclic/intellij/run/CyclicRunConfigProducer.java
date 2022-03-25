@@ -10,7 +10,6 @@ import com.intellij.lang.jvm.util.JvmMainMethodUtil;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
@@ -28,12 +27,12 @@ public class CyclicRunConfigProducer extends JavaRunConfigurationProducerBase<Ap
 			return false;
 		
 		var elem = loc.getPsiElement();
-		CycType target = null;
+		CycType target;
 		if(elem instanceof CycFile)
 			target = ((CycFile)elem).wrapper().flatMap(CycFileWrapper::getTypeDef).orElse(null);
-		if(elem instanceof CycType)
+		else if(elem instanceof CycType)
 			target = (CycType)elem;
-		if(elem instanceof CycElement)
+		else
 			target = PsiTreeUtil.getParentOfType(elem, CycType.class);
 		
 		target = filterMainClass(target);
