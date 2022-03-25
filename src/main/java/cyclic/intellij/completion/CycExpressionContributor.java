@@ -107,14 +107,14 @@ public class CycExpressionContributor extends CompletionContributor{
 	}
 	
 	@NotNull
-	private static LookupElement getVariableElement(CycVariable variable){
+	public static LookupElement getVariableElement(CycVariable variable){
 		return create(variable.varName())
 				.withPsiElement(variable)
 				.withIcon(variable.getIcon(0));
 	}
 	
 	@Nullable
-	private static LookupElement getMethodElement(JvmCyclicClass container, JvmMethod method){
+	public static LookupElement getMethodElement(JvmCyclicClass container, JvmMethod method){
 		if(method.isConstructor())
 			return null;
 		if(!Visibility.visibleFrom(method, container))
