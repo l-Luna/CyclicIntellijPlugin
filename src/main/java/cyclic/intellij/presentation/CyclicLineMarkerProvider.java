@@ -173,6 +173,7 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 	private static final class RecursiveCallMarkerInfo extends LineMarkerInfo<PsiElement>{
 		private static RecursiveCallMarkerInfo create(@NotNull CycCall call){
 			PsiElement name = call.getMethodName();
+			name = name != null ? name.getFirstChild() : null;
 			if(name != null)
 				return new RecursiveCallMarkerInfo(name);
 			return null;
