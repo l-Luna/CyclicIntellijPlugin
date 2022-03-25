@@ -16,6 +16,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.JBColor;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.inspections.fixes.AddImportFix;
+import cyclic.intellij.psi.CycClassReference;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.CycIdHolder;
 import cyclic.intellij.psi.ast.CycFileWrapper;
@@ -36,7 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
+public class CycTypeReference implements PsiReference, LocalQuickFixProvider, CycClassReference{
 	
 	CycId id;
 	CycIdHolder from;
@@ -60,6 +61,10 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider{
 		var p = id.getProject();
 		var name = id.getText();
 		return ProjectTypeFinder.getByName(p, name, from);
+	}
+	
+	public boolean isQualified(){
+		return id.getChildren().length > 1;
 	}
 	
 	public @Nullable PsiElement resolve(){

@@ -26,7 +26,7 @@ public class CyclicVariableOfTypeMacro extends Macro{
 		return "cycVariable(Type)";
 	}
 	
-	public String getDefaultValue() {
+	public String getDefaultValue(){
 		return "a";
 	}
 	

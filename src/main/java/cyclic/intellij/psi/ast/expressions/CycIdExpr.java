@@ -11,10 +11,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import cyclic.intellij.psi.CycCodeHolder;
-import cyclic.intellij.psi.CycFile;
-import cyclic.intellij.psi.CycVarScope;
-import cyclic.intellij.psi.CycVariable;
+import cyclic.intellij.psi.*;
 import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.ClassTypeImpl;
@@ -27,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 @SuppressWarnings("UnstableApiUsage")
-public class CycIdExpr extends CycExpression implements PsiReference{
+public class CycIdExpr extends CycExpression implements PsiReference, CycClassReference{
 	
 	public CycIdExpr(@NotNull ASTNode node){
 		super(node);
@@ -187,5 +184,16 @@ public class CycIdExpr extends CycExpression implements PsiReference{
 	
 	public boolean isSoft(){
 		return false;
+	}
+	
+	public @Nullable JvmClass resolveClass(){
+		var ref = resolveTarget();
+		if(ref instanceof JvmClass)
+			return (JvmClass)ref;
+		return null;
+	}
+	
+	public boolean isQualified(){
+		return on() != null;
 	}
 }

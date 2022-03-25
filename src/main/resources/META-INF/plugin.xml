@@ -152,6 +152,12 @@
                          groupName="Unreachable code" displayName="Unreachable code"
                          implementationClass="cyclic.intellij.inspections.UnreachableCodeInspection"/>
 
+        <localInspection language="Cyclic"
+                         groupPath="Cyclic"
+                         enabledByDefault="true" level="WARNING"
+                         groupName="Unused import" displayName="Unused import"
+                         implementationClass="cyclic.intellij.inspections.UnusedCycImportInspection"/>
+
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
         </intentionAction>
