@@ -75,9 +75,6 @@
         <runLineMarkerContributor language="Cyclic"
                                   implementationClass="cyclic.intellij.presentation.CyclicRunLineMarkerContributor"/>
 
-        <jvm.declarationSearcher language="Cyclic"
-                                 implementationClass="cyclic.intellij.asJvm.CyclicJvmDeclarationSearcher"/>
-
         <compiler.task execute="BEFORE"
                        implementation="cyclic.intellij.run.CyclicCompileTask"/>
 
@@ -91,7 +88,6 @@
                                     implementationClass="cyclic.intellij.refactoring.generation.CyclicOverrideMethodsHandler"/>
 
         <java.elementFinder implementation="cyclic.intellij.asJvm.CyclicPsiElementProvider"/>
-        <jvm.elementProvider implementation="cyclic.intellij.asJvm.CyclicJvmElementProvider"/>
 
         <frameworkSupport implementation="cyclic.intellij.model.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>
