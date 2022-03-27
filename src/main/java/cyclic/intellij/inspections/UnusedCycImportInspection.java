@@ -16,7 +16,9 @@ import cyclic.intellij.psi.ast.CycImportStatement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UnusedCycImportInspection extends LocalInspectionTool{
@@ -25,19 +27,17 @@ public class UnusedCycImportInspection extends LocalInspectionTool{
 		Set<CycImportStatement> visitedImports = new HashSet<>();
 		Set<CycImportStatement> allImports = new HashSet<>();
 		new ImportsUsedElementVisitor(allImports, visitedImports).visitFile(file);
+		List<ProblemDescriptor> problems = new ArrayList<>();
 		for(CycImportStatement anImport : allImports){
-			if(!visitedImports.contains(anImport)){
-				return new ProblemDescriptor[]{
-						manager.createProblemDescriptor(
-								anImport,
-								CyclicBundle.message("inspection.text.unusedImport"),
-								new DeleteElementFix(anImport, CyclicBundle.message("inspection.fix.text.deleteImport")),
-								ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-								isOnTheFly)
-				};
-			}
+			if(!visitedImports.contains(anImport))
+				problems.add(manager.createProblemDescriptor(
+						anImport,
+						CyclicBundle.message("inspection.text.unusedImport"),
+						new DeleteElementFix(anImport, CyclicBundle.message("inspection.fix.text.deleteImport")),
+						ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+						isOnTheFly));
 		}
-		return null;
+		return problems.toArray(ProblemDescriptor.EMPTY_ARRAY);
 	}
 	
 	public boolean runForWholeFile(){
