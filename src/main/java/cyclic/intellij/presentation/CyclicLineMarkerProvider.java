@@ -21,7 +21,7 @@ import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import cyclic.intellij.CyclicBundle;
-import cyclic.intellij.asJvm.AsPsiUtil;
+import cyclic.intellij.asJava.AsPsiUtil;
 import cyclic.intellij.presentation.find.CMarkerTypes;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycCall;

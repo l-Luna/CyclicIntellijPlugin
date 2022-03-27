@@ -87,7 +87,7 @@
         <codeInsight.overrideMethod language="Cyclic"
                                     implementationClass="cyclic.intellij.refactoring.generation.CyclicOverrideMethodsHandler"/>
 
-        <java.elementFinder implementation="cyclic.intellij.asJvm.CyclicPsiElementProvider"/>
+        <java.elementFinder implementation="cyclic.intellij.asJava.CyclicPsiElementProvider"/>
 
         <frameworkSupport implementation="cyclic.intellij.model.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>

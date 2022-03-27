@@ -9,7 +9,7 @@ import com.intellij.psi.PsiClassOwner;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.CyclicLanguage;
-import cyclic.intellij.asJvm.AsPsiUtil;
+import cyclic.intellij.asJava.AsPsiUtil;
 import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.CycImportStatement;
 import cyclic.intellij.psi.ast.CycPackageStatement;

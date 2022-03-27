@@ -11,7 +11,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.light.LightMethodBuilder;
-import cyclic.intellij.asJvm.AsPsiUtil;
+import cyclic.intellij.asJava.AsPsiUtil;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;

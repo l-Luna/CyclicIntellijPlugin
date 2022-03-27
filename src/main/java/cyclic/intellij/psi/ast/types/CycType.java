@@ -16,7 +16,7 @@ import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.EDT;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.asJvm.AsPsiUtil;
+import cyclic.intellij.asJava.AsPsiUtil;
 import cyclic.intellij.psi.*;
 import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.CycMethod;

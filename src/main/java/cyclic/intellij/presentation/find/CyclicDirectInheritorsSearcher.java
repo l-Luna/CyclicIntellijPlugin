@@ -12,7 +12,7 @@ import com.intellij.psi.search.searches.DirectClassInheritorsSearch.SearchParame
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
-import cyclic.intellij.asJvm.AsPsiUtil;
+import cyclic.intellij.asJava.AsPsiUtil;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.ProjectTypeFinder;

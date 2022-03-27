@@ -1,4 +1,4 @@
-package cyclic.intellij.asJvm;
+package cyclic.intellij.asJava;
 
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmMethod;
@@ -140,7 +140,35 @@ public class AsPsiUtil{
 		}
 		
 		public @NotNull ClassResolveResult resolveGenerics(){
-			return ClassResolveResult.EMPTY;
+			return new ClassResolveResult(){
+				public PsiClass getElement(){
+					return resolve();
+				}
+				
+				public @NotNull PsiSubstitutor getSubstitutor(){
+					return PsiSubstitutor.EMPTY;
+				}
+				
+				public boolean isPackagePrefixPackageReference(){
+					return false;
+				}
+				
+				public boolean isAccessible(){
+					return true; // TODO: check accessibility from java
+				}
+				
+				public boolean isStaticsScopeCorrect(){
+					return false;
+				}
+				
+				public PsiElement getCurrentFileResolveScope(){
+					return null;
+				}
+				
+				public boolean isValidResult(){
+					return false;
+				}
+			};
 		}
 		
 		public @NotNull PsiClassType rawType(){
