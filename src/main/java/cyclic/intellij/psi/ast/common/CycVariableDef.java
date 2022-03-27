@@ -61,7 +61,7 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 				.map(CycTypeRef::asType)
 				// for var/val
 				.orElseGet(() -> {
-					if(!isLocalVar()){
+					if(!isLocal()){
 						if(PsiUtils.childOfType(this, CycTypeRefOrInferred.class).map(PsiElement::getText).orElse("").equals("val"))
 							return ClassTypeImpl.of(PsiTreeUtil.getParentOfType(this, CycType.class));
 						return PsiPrimitiveType.NULL;
@@ -80,14 +80,14 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 					return true;
 			}else{
 				var type = PsiUtils.childOfType(this, CycTypeRefOrInferred.class);
-				if(!isLocalVar() && type.isPresent() && type.get().getText().equals("val"))
+				if(!isLocal() && type.isPresent() && type.get().getText().equals("val"))
 					return true;
 			}
 		}
 		return CycModifiersHolder.super.hasModifier(modifier);
 	}
 	
-	public boolean isLocalVar(){
+	public boolean isLocal(){
 		if(getStub() != null)
 			return false;
 		return PsiTreeUtil.getParentOfType(this, CycStatementWrapper.class) != null;
@@ -108,11 +108,11 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 	}
 	
 	public @NotNull SearchScope getUseScope(){
-		return (isLocalVar() || hasModifier("private")) ? new LocalSearchScope(getContainingFile()) : super.getUseScope();
+		return (isLocal() || hasModifier("private")) ? new LocalSearchScope(getContainingFile()) : super.getUseScope();
 	}
 	
 	public @Nullable Icon getIcon(int flags){
-		if(isLocalVar())
+		if(isLocal())
 			return PlatformIcons.VARIABLE_ICON;
 		else
 			return PlatformIcons.FIELD_ICON;

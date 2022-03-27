@@ -99,4 +99,8 @@ public class CycParameter extends CycDefinitionStubElement<CycParameter, StubCyc
 		
 		return getNode().findChildByType(Tokens.getFor(CyclicLangLexer.ELIPSES)) != null;
 	}
+	
+	public boolean isLocal(){
+		return isMethodParameter();
+	}
 }

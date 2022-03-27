@@ -23,7 +23,7 @@ public class CyclicJvmDeclarationSearcher implements JvmDeclarationSearcher{
 			return Collections.singleton(JvmCyclicClass.of((CycType)element));
 		if(element instanceof CycMethod)
 			return Collections.singleton(JvmCyclicMethod.of((CycMethod)element));
-		if(element instanceof CycVariableDef && !((CycVariableDef)element).isLocalVar())
+		if(element instanceof CycVariableDef && !((CycVariableDef)element).isLocal())
 			return Collections.singleton(JvmCyclicField.of((CycVariableDef)element));
 		if(element instanceof CycParameter)
 			return Collections.singleton(JvmCyclicParameter.of((CycParameter)element));

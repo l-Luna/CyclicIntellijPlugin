@@ -37,7 +37,7 @@ public class CyclicImplicitTypeInlayProvider implements InlayHintsProvider<NoSet
 					var id = def.getIdentifyingElement();
 					
 					var init = def.initializer();
-					if(!def.isLocalVar() || init.isEmpty() || !def.hasInferredType() || id == null)
+					if(!def.isLocal() || init.isEmpty() || !def.hasInferredType() || id == null)
 						return true;
 					var expr = init.get();
 					if(expr instanceof CycInitialisationExpr || expr instanceof CycLiteralExpr || expr instanceof CycCastExpr)

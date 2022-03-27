@@ -45,7 +45,7 @@ public class CycUsageTypeProvider implements UsageTypeProvider{
 			if(parent instanceof CycPermitsClause)
 				return CLASS_PERMITS_LIST;
 			if(parent instanceof CycVariableDef)
-				return ((CycVariableDef)parent).isLocalVar() ? CLASS_LOCAL_VAR_DECLARATION : CLASS_FIELD_DECLARATION;
+				return ((CycVariableDef)parent).isLocal() ? CLASS_LOCAL_VAR_DECLARATION : CLASS_FIELD_DECLARATION;
 			if(parent instanceof CycParameter)
 				return ((CycParameter)parent).isMethodParameter() ? CLASS_METHOD_PARAMETER_DECLARATION : CLASS_FIELD_DECLARATION;
 			if(parent instanceof CycMethod)

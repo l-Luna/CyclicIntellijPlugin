@@ -10,4 +10,6 @@ public interface CycVariable extends PsiElement{
 	JvmType varType();
 	
 	boolean hasModifier(String modifier);
+	
+	boolean isLocal();
 }

@@ -62,6 +62,10 @@ public class CycForeachStatement extends CycDefinitionAstElement implements CycV
 		return getNode().findChildByType(Tokens.getFor(CyclicLangLexer.FINAL)) != null;
 	}
 	
+	public boolean isLocal(){
+		return true;
+	}
+	
 	public @NotNull SearchScope getUseScope(){
 		return new LocalSearchScope(getContainingFile());
 	}

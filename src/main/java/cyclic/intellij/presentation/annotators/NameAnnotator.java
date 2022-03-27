@@ -58,7 +58,7 @@ public class NameAnnotator implements Annotator, DumbAware{
 				}
 			}
 			if(element instanceof CycIdExpr
-					|| (element instanceof CycVariableDef && !((CycVariableDef)element).isLocalVar())
+					|| (element instanceof CycVariableDef && !((CycVariableDef)element).isLocal())
 					|| (element instanceof CycParameter && !((CycParameter)element).isMethodParameter())){
 				var target = element instanceof CycIdExpr ? ((CycIdExpr)element).resolveTarget() : element;
 				var name = PsiUtils.childOfType(element, CycIdPart.class).orElse(null);
@@ -78,7 +78,7 @@ public class NameAnnotator implements Annotator, DumbAware{
 					if(variable.hasModifier("final") || (target instanceof CycParameter && !((CycParameter)target).isMethodParameter()))
 						isFinal = true; // record components are a CycParameter
 					if(!(target instanceof CycParameter && ((CycParameter)target).isMethodParameter())
-							&& !(target instanceof CycVariableDef && ((CycVariableDef)target).isLocalVar())
+							&& !(target instanceof CycVariableDef && ((CycVariableDef)target).isLocal())
 							&& !(target instanceof CycForeachStatement)) // TODO: better way of doing this lol
 						isField = true;
 				}
