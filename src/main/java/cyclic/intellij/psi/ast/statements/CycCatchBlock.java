@@ -3,12 +3,13 @@ package cyclic.intellij.psi.ast.statements;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.PsiType;
+import com.intellij.psi.search.LocalSearchScope;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.util.PlatformIcons;
 import cyclic.intellij.psi.CycDefinitionAstElement;
 import cyclic.intellij.psi.CycVarScope;
 import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.CycTypeRef;
-import cyclic.intellij.psi.ast.CycTypeRefOrInferred;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +37,7 @@ public class CycCatchBlock extends CycDefinitionAstElement implements CycVariabl
 	}
 	
 	public JvmType varType(){
-		return PsiUtils.childOfType(this, CycTypeRefOrInferred.class)
-				.flatMap(CycTypeRefOrInferred::ref)
+		return PsiUtils.childOfType(this, CycTypeRef.class)
 				.map(CycTypeRef::asType)
 				.orElse(PsiType.NULL);
 	}
@@ -58,5 +58,9 @@ public class CycCatchBlock extends CycDefinitionAstElement implements CycVariabl
 	
 	public @Nullable Icon getIcon(int flags){
 		return PlatformIcons.VARIABLE_ICON;
+	}
+	
+	public @NotNull SearchScope getUseScope(){
+		return new LocalSearchScope(getContainingFile());
 	}
 }

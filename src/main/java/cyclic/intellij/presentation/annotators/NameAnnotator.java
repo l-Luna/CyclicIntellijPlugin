@@ -17,7 +17,6 @@ import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.ast.common.CycVariableDef;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
-import cyclic.intellij.psi.ast.statements.CycForeachStatement;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,9 +76,7 @@ public class NameAnnotator implements Annotator, DumbAware{
 						isStatic = true;
 					if(variable.hasModifier("final") || (target instanceof CycParameter && !((CycParameter)target).isMethodParameter()))
 						isFinal = true; // record components are a CycParameter
-					if(!(target instanceof CycParameter && ((CycParameter)target).isMethodParameter())
-							&& !(target instanceof CycVariableDef && ((CycVariableDef)target).isLocal())
-							&& !(target instanceof CycForeachStatement)) // TODO: better way of doing this lol
+					if(!variable.isLocal())
 						isField = true;
 				}
 				if(isField && name != null){

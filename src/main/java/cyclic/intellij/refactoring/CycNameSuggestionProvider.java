@@ -50,6 +50,7 @@ public class CycNameSuggestionProvider implements NameSuggestionProvider{
 		
 		if(target instanceof CycVariable){
 			CycVariable variable = (CycVariable)target;
+			// TODO: use variable names directly or otherwise avoid slow operations on EDT
 			var typeName = NameUtilCore.nameToWords(JvmClassUtils.name(variable.varType()).replace("[", "").replace("]", ""));
 			collected.add(joinCamelCase(typeName));
 			collected.add(joinSnakeCase(typeName));
