@@ -5,7 +5,6 @@ import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.lang.jvm.JvmClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
@@ -20,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static cyclic.intellij.psi.ast.CycImportStatement.followToImport;
 
 public class UnusedCycImportInspection extends LocalInspectionTool{
 	
@@ -74,14 +75,6 @@ public class UnusedCycImportInspection extends LocalInspectionTool{
 				}
 			}
 			super.visitElement(element);
-		}
-		
-		@Nullable
-		private CycImportStatement followToImport(JvmClass type, Set<CycImportStatement> list){
-			for(CycImportStatement statement : list)
-				if(statement.importsType(type))
-					return statement;
-			return null;
 		}
 	}
 }

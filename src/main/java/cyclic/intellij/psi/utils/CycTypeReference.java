@@ -67,6 +67,20 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider, Cy
 		return id.getChildren().length > 1;
 	}
 	
+	public @Nullable CycFile containingCyclicFile(){
+		var file = id.getContainingFile();
+		return file instanceof CycFile ? (CycFile)file : null;
+	}
+	
+	public void shortenReference(){
+		var cClass = resolveClass();
+		if(cClass != null){
+			var name = cClass.getName();
+			if(name != null)
+				id.replace(PsiUtils.createIdFromText(id.getParent(), name));
+		}
+	}
+	
 	public @Nullable PsiElement resolve(){
 		var cClass = resolveClass();
 		return cClass != null ? cClass.getSourceElement() : null;

@@ -10,4 +10,9 @@ public interface CycClassReference extends PsiReference{
 	JvmClass resolveClass();
 	
 	boolean isQualified();
+	
+	@Nullable
+	CycFile containingCyclicFile();
+	
+	void shortenReference();
 }

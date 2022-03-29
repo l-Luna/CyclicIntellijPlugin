@@ -154,6 +154,12 @@
                          groupName="Unused import" displayName="Unused import"
                          implementationClass="cyclic.intellij.inspections.UnusedCycImportInspection"/>
 
+        <localInspection language="Cyclic"
+                         groupPath="Cyclic"
+                         enabledByDefault="true" level="WARNING"
+                         groupName="Unnecessary qualification" displayName="Unnecessary qualification"
+                         implementationClass="cyclic.intellij.inspections.UnnecessaryQualifierInspection"/>
+
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
         </intentionAction>

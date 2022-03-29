@@ -11,6 +11,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.*;
 import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.types.CycType;
@@ -45,6 +46,14 @@ public class CycIdExpr extends CycExpression implements PsiReference, CycClassRe
 	@Nullable
 	public CycExpression on(){
 		return PsiUtils.childOfType(this, CycExpression.class).orElse(null);
+	}
+	
+	@Nullable
+	public PsiElement dot(){
+		return Arrays.stream(getChildren())
+				.filter(x -> x.getNode().getElementType() == Tokens.getFor(CyclicLangLexer.DOT))
+				.findFirst()
+				.orElse(null);
 	}
 	
 	// [JvmClass | PsiPackage | CycVariable | JvmField | String | null]
@@ -195,5 +204,19 @@ public class CycIdExpr extends CycExpression implements PsiReference, CycClassRe
 	
 	public boolean isQualified(){
 		return on() != null;
+	}
+	
+	public @Nullable CycFile containingCyclicFile(){
+		var file = getContainingFile();
+		return file instanceof CycFile ? (CycFile)file : null;
+	}
+	
+	public void shortenReference(){
+		var on = on();
+		if(on != null)
+			on.delete();
+		var dot = dot();
+		if(dot != null)
+			dot.delete();
 	}
 }
