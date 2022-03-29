@@ -23,7 +23,12 @@ public class Flow{
 		if(statement instanceof CycIfStatement)
 			return ((CycIfStatement)statement).body().map(x -> guaranteedToRun(x, condition)).orElse(false)
 				&& ((CycIfStatement)statement).elseBody().map(x -> guaranteedToRun(x, condition)).orElse(false);
-		
+		if(statement instanceof CycTryCatchStatement){
+			CycTryCatchStatement tryCatch = (CycTryCatchStatement)statement;
+			return tryCatch.body().map(x -> guaranteedToRun(x, condition)).orElse(false)
+				&& tryCatch.streamCatchBodies().allMatch(k -> guaranteedToRun(k, condition))
+				|| tryCatch.finallyBlock().flatMap(CycFinallyBlock::body).map(k -> guaranteedToRun(k, condition)).orElse(false);
+		}
 		return false;
 	}
 	
@@ -59,6 +64,19 @@ public class Flow{
 			forStat.start().ifPresent(body -> visitAfterMatching(body, condition, actor));
 			forStat.updater().ifPresent(body -> visitAfterMatching(body, condition, actor));
 			forStat.body().ifPresent(body -> visitAfterMatching(body, condition, actor));
+		}
+		if(statement instanceof CycForeachStatement){
+			CycForeachStatement foreachStat = (CycForeachStatement)statement;
+			foreachStat.body().ifPresent(body -> visitAfterMatching(body, condition, actor));
+		}
+		if(statement instanceof CycTryCatchStatement){
+			CycTryCatchStatement tryStat = (CycTryCatchStatement)statement;
+			tryStat.body().ifPresent(body -> visitAfterMatching(body, condition, actor));
+			tryStat.finallyBlock()
+					.flatMap(CycFinallyBlock::body)
+					.ifPresent(body -> visitAfterMatching(body, condition, actor));
+			tryStat.streamCatchBodies()
+					.forEach(block -> visitAfterMatching(block, condition, actor));
 		}
 	}
 }

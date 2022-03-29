@@ -64,8 +64,9 @@ statement
     | whileStatement
     | forStatement
     | foreachStatement
+    | doWhileStatement
+    | tryStatement
     | switchStatement
-    | doWhile
     | yieldStatement
     | ((value | SUPER) DOT)? call SEMICOLON
     | ctorCall SEMICOLON
@@ -157,7 +158,11 @@ elseStatement: ELSE statement;
 whileStatement: WHILE LPAREN value RPAREN statement;
 forStatement: FOR LPAREN start=statement? cond=value SEMICOLON end=statement? RPAREN action=statement;
 foreachStatement: FOR LPAREN FINAL? typeOrInferred idPart COLON value RPAREN statement;
-doWhile: DO statement WHILE LPAREN value RPAREN SEMICOLON;
+doWhileStatement: DO statement WHILE LPAREN value RPAREN SEMICOLON;
+
+tryStatement: TRY block catchBlock* finallyBlock?;
+catchBlock: CATCH LPAREN type idPart RPAREN block;
+finallyBlock: FINALLY block;
 
 switchStatement: SWITCH LPAREN value RPAREN LBRACE caseClause* defaultClause? RBRACE;
 caseClause: CASE value DASHARROW (statement | value SEMICOLON);
@@ -281,6 +286,10 @@ ELSE: 'else';
 FOR: 'for';
 DO: 'do';
 IF: 'if';
+
+TRY: 'try';
+CATCH: 'catch';
+FINALLY: 'finally';
 
 DECLIT: MINUS? DIGIT* DOT DIGIT+ ('f' | 'd')?;
 INTLIT: MINUS? DIGIT+ ('f' | 'd' | 'l')?;

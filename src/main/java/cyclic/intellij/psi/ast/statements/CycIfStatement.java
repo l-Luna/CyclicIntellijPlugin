@@ -18,11 +18,11 @@ public class CycIfStatement extends CycAstElement implements CycStatement{
 				.flatMap(CycStatementWrapper::inner);
 	}
 	
-	public Optional<CycElseElement> elsePart(){
-		return PsiUtils.childOfType(this, CycElseElement.class);
+	public Optional<CycElseClause> elseClause(){
+		return PsiUtils.childOfType(this, CycElseClause.class);
 	}
 	
 	public Optional<CycStatement> elseBody(){
-		return elsePart().flatMap(CycElseElement::body);
+		return elseClause().flatMap(CycElseClause::body);
 	}
 }

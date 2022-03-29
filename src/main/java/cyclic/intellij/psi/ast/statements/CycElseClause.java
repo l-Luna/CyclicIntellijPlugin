@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 // not a CycStatement, part of CycIfStatement
-public class CycElseElement extends CycAstElement{
+public class CycElseClause extends CycAstElement{
 	
-	public CycElseElement(@NotNull ASTNode node){
+	public CycElseClause(@NotNull ASTNode node){
 		super(node);
 	}
 	

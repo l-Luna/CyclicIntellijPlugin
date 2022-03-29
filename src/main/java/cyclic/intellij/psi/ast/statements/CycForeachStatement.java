@@ -7,6 +7,7 @@ import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
+import com.intellij.util.PlatformIcons;
 import cyclic.intellij.antlr_generated.CyclicLangLexer;
 import cyclic.intellij.psi.CycDefinitionAstElement;
 import cyclic.intellij.psi.CycVariable;
@@ -17,12 +18,15 @@ import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Optional;
 
 import static cyclic.intellij.psi.utils.JvmClassUtils.typeByName;
 
 // Introduces the for-each variable into scope
+// Picked up by CycBlock
 public class CycForeachStatement extends CycDefinitionAstElement implements CycVariable, CycStatement{
 	
 	public CycForeachStatement(@NotNull ASTNode node){
@@ -76,5 +80,9 @@ public class CycForeachStatement extends CycDefinitionAstElement implements CycV
 	
 	public Optional<CycStatement> body(){
 		return PsiUtils.childOfType(this, CycStatement.class);
+	}
+	
+	public @Nullable Icon getIcon(int flags){
+		return PlatformIcons.VARIABLE_ICON;
 	}
 }

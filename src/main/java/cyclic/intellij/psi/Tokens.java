@@ -77,6 +77,10 @@ public class Tokens{
 			CyclicLangLexer.FOR,
 			CyclicLangLexer.ELSE,
 			
+			CyclicLangLexer.TRY,
+			CyclicLangLexer.CATCH,
+			CyclicLangLexer.FINALLY,
+			
 			CyclicLangLexer.NULL,
 			CyclicLangLexer.TRUE,
 			CyclicLangLexer.FALSE

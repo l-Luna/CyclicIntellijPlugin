@@ -134,7 +134,7 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycAssertStatement(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_ctorCall))
 			return new CycConstructorCallStatement(node);
-		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_doWhile))
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_doWhileStatement))
 			return new CycDoWhileStatement(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_foreachStatement))
 			return new CycForeachStatement(node);
@@ -143,7 +143,7 @@ public class CyclicParserDefinition implements ParserDefinition{
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_ifStatement))
 			return new CycIfStatement(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_elseStatement))
-			return new CycElseElement(node);
+			return new CycElseClause(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_returnStatement))
 			return new CycReturnStatement(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_switchStatement))
@@ -158,6 +158,12 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycWhileStatement(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_yieldStatement))
 			return new CycYieldStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_tryStatement))
+			return new CycTryCatchStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_catchBlock))
+			return new CycCatchBlock(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_finallyBlock))
+			return new CycFinallyBlock(node);
 		return new CycAstElement(node);
 	}
 	
