@@ -22,11 +22,11 @@ public class UnnecessaryQualifierInspection extends LocalInspectionTool{
 					var cls = ((CycClassReference)ref);
 					if(CycImportStatement.isQualificationRedundant(cls)){
 						var shortName = cls.resolveClass().getName();
-						// TODO: only highlight qualifier of reference
 						holder.registerProblem(
 								element,
 								CyclicBundle.message("inspection.text.unnecessaryQualifier"),
 								ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+								((CycClassReference)ref).getQualifierRange(),
 								new ShortenReferenceFix(element, shortName));
 					}
 				}

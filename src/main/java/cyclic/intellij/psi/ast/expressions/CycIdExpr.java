@@ -219,4 +219,14 @@ public class CycIdExpr extends CycExpression implements PsiReference, CycClassRe
 		if(dot != null)
 			dot.delete();
 	}
+	
+	public @Nullable TextRange getQualifierRange(){
+		var on = on();
+		if(on == null)
+			return null;
+		var dot = dot();
+		if(dot == null)
+			return on.getTextRangeInParent();
+		return on.getTextRangeInParent().union(dot.getTextRangeInParent());
+	}
 }

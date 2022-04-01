@@ -81,6 +81,15 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider, Cy
 		}
 	}
 	
+	public @Nullable TextRange getQualifierRange(){
+		if(!isQualified())
+			return null;
+		TextRange range = id.getTextRangeInParent();
+		var parts = id.getChildren();
+		range = range.grown(-parts[parts.length - 1].getTextLength());
+		return range;
+	}
+	
 	public @Nullable PsiElement resolve(){
 		var cClass = resolveClass();
 		return cClass != null ? cClass.getSourceElement() : null;

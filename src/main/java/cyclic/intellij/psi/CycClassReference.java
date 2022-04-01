@@ -1,18 +1,10 @@
 package cyclic.intellij.psi;
 
 import com.intellij.lang.jvm.JvmClass;
-import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nullable;
 
-public interface CycClassReference extends PsiReference{
+public interface CycClassReference extends CycQualifiedReference{
 	
 	@Nullable
 	JvmClass resolveClass();
-	
-	boolean isQualified();
-	
-	@Nullable
-	CycFile containingCyclicFile();
-	
-	void shortenReference();
 }
