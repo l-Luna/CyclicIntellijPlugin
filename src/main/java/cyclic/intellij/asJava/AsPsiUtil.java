@@ -24,13 +24,28 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class AsPsiUtil{
 	
+	// in order to convert a CycType into a PsiClass, we may need to use that PsiClass as part of its description
+	// I'd prefer a WeakIdentityHashMap, but oh well
+	private static final Map<String, PsiClass> converting = new HashMap<>();
+	private static String topConversion = null;
+	
+	// TODO: do something more like JvmCyclicClass.of, please
+	
 	@NotNull
 	public static PsiClass asPsiClass(CycType type){
+		if(topConversion == null)
+			topConversion = type.fullyQualifiedName();
+		else if(converting.containsKey(type.fullyQualifiedName()))
+			return converting.get(type.fullyQualifiedName());
+		
 		var builder = new CycAsPsiClass(type);
+		converting.put(type.fullyQualifiedName(), builder);
 		
 		for(JvmMethod method : type.declaredMethods()){
 			if(method instanceof JvmCyclicMethod){
@@ -54,6 +69,12 @@ public class AsPsiUtil{
 				builder.getExtendsList().addReference(clss);
 		}
 		// TODO: fields
+		
+		if(topConversion != null && topConversion.equals(type.fullyQualifiedName())){
+			converting.clear(); // conversion types are only valid for one conversion session
+			topConversion = null;
+		}
+		
 		return builder;
 	}
 	
