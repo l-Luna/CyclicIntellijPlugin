@@ -8,6 +8,7 @@ import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.source.tree.SharedImplUtil;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.ui.LayeredIcon;
@@ -68,7 +69,8 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 		if(stub != null)
 			return stub.fullyQualifiedName();
 		
-		PsiFile file = getContainingFile();
+		// avoids PsiInvalidElementAccessException by skipping the stub-based implementation that doesn't work here anyways
+		PsiFile file = SharedImplUtil.getContainingFile(getNode());
 		if(file instanceof CycFile)
 			return ((CycFile)file).getPackage().map(k -> k.getPackageName() + ".").orElse("") + super.fullyQualifiedName();
 		return super.fullyQualifiedName();
