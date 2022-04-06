@@ -164,6 +164,11 @@ public class CyclicParserDefinition implements ParserDefinition{
 			return new CycCatchBlock(node);
 		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_finallyBlock))
 			return new CycFinallyBlock(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_breakStatement))
+			return new CycBreakStatement(node);
+		if(type == Tokens.getRuleFor(CyclicLangParser.RULE_continueStatement))
+			return new CycContinueStatement(node);
+		
 		return new CycAstElement(node);
 	}
 	

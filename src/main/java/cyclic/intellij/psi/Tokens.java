@@ -1,6 +1,5 @@
 package cyclic.intellij.psi;
 
-import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import cyclic.intellij.CyclicLanguage;
@@ -17,8 +16,6 @@ import java.util.List;
 import static org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory.createTokenSet;
 
 public class Tokens{
-	
-	public static IElementType BAD_TOKEN_TYPE = TokenType.BAD_CHARACTER;
 	
 	private static final List<TokenIElementType> TOKEN_ELEMENT_TYPES = PSIElementTypeFactory.getTokenIElementTypes(CyclicLanguage.LANGUAGE);
 	private static final List<RuleIElementType> RULE_ELEMENT_TYPES = PSIElementTypeFactory.getRuleIElementTypes(CyclicLanguage.LANGUAGE);
@@ -80,6 +77,10 @@ public class Tokens{
 			CyclicLangLexer.TRY,
 			CyclicLangLexer.CATCH,
 			CyclicLangLexer.FINALLY,
+			
+			CyclicLangLexer.BREAK,
+			CyclicLangLexer.CONTINUE,
+			CyclicLangLexer.YIELD,
 			
 			CyclicLangLexer.NULL,
 			CyclicLangLexer.TRUE,
