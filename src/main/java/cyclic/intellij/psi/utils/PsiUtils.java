@@ -83,6 +83,11 @@ public class PsiUtils{
 	}
 	
 	@NotNull
+	public static PsiElement createStatementWrapperFromText(@NotNull PsiElement context, String text){
+		return createFromText(context, text, Tokens.getRuleFor(CyclicLangParser.RULE_statement));
+	}
+	
+	@NotNull
 	public static PsiElement createWhitespace(@NotNull PsiElement context, String text){
 		assert text.isBlank();
 		return createFromText(context, text, Tokens.getFor(CyclicLangLexer.ID));

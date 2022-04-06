@@ -34,6 +34,8 @@ public class ParserAdapter extends ANTLRParserAdaptor{
 			return cyclicParser.function();
 		if(root == Tokens.getRuleFor(CyclicLangParser.RULE_member))
 			return cyclicParser.member();
+		if(root == Tokens.getRuleFor(CyclicLangParser.RULE_statement))
+			return cyclicParser.statement();
 		
 		if(root == Tokens.getFor(CyclicLangLexer.ID))
 			return cyclicParser.id();

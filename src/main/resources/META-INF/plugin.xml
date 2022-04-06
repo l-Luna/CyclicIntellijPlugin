@@ -166,6 +166,12 @@
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.AddParensAction</className>
         </intentionAction>
+        <intentionAction>
+            <className>cyclic.intellij.refactoring.intentions.AddBracesAction</className>
+        </intentionAction>
+        <intentionAction>
+            <className>cyclic.intellij.refactoring.intentions.RemoveBracesAction</className>
+        </intentionAction>
     </extensions>
 
     <actions>
