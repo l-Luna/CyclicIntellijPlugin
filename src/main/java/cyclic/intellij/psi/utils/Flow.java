@@ -61,9 +61,9 @@ public class Flow{
 		}
 		if(statement instanceof CycForStatement){
 			CycForStatement forStat = (CycForStatement)statement;
-			forStat.start().ifPresent(body -> visitAfterMatching(body, condition, actor));
-			forStat.updater().ifPresent(body -> visitAfterMatching(body, condition, actor));
-			forStat.body().ifPresent(body -> visitAfterMatching(body, condition, actor));
+			forStat.start().flatMap(CycStatementWrapper::inner).ifPresent(body -> visitAfterMatching(body, condition, actor));
+			forStat.updater().flatMap(CycStatementWrapper::inner).ifPresent(body -> visitAfterMatching(body, condition, actor));
+			forStat.body().flatMap(CycStatementWrapper::inner).ifPresent(body -> visitAfterMatching(body, condition, actor));
 		}
 		if(statement instanceof CycForeachStatement){
 			CycForeachStatement foreachStat = (CycForeachStatement)statement;
