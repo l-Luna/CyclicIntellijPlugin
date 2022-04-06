@@ -52,7 +52,10 @@ public class CyclicDirectInheritorsSearcher implements QueryExecutor<PsiClass, S
 		
 		ArrayList<PsiClass> inheritors = new ArrayList<>();
 		// TODO: non-project inheritors!
-		for(JvmClass aClass : ProjectTypeFinder.findAll(scope.getProject(), x -> true, scope))
+		Project project = scope.getProject();
+		if(project == null)
+			return List.of();
+		for(JvmClass aClass : ProjectTypeFinder.findAll(project, x -> true, scope))
 			if(aClass instanceof JvmCyclicClass){
 				var underlying = ((JvmCyclicClass)aClass).getUnderlying();
 				if(JvmClassUtils.isClassAssignableTo(aClass, clss) && !Objects.equals(aClass.getQualifiedName(), clss.getQualifiedName()))

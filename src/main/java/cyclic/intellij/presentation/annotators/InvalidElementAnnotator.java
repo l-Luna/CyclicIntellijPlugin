@@ -8,6 +8,7 @@ import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.lang.jvm.JvmField;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.CycVariable;
@@ -23,13 +24,13 @@ public class InvalidElementAnnotator implements Annotator, DumbAware{
 	
 	public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder){
 		if(element instanceof CycExpression
-			|| element instanceof CycTypeRef)
+				|| element instanceof CycTypeRef)
 			if(element.getTextLength() == 0)
 				holder.newAnnotation(HighlightSeverity.ERROR,
 								CyclicBundle.message("annotator.missing.element", element instanceof CycTypeRef ? 0 : 1))
 						.range(element.getTextRange())
 						.create();
-		if(element instanceof CycIdExpr){
+		if(element instanceof CycIdExpr && !DumbService.isDumb(element.getProject())){
 			var p = element.getParent();
 			var ref = element.getReference();
 			boolean isStaticRef = false;
