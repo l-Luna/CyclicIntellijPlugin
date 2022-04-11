@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
+import static cyclic.intellij.projects.CyclicProjectYamlFileIconPatcher.PROJECT_YAML_EXTENSION;
 import static org.jetbrains.jps.model.java.JavaSourceRootType.SOURCE;
 import static org.jetbrains.jps.model.java.JavaSourceRootType.TEST_SOURCE;
 
@@ -48,7 +49,7 @@ public class CyclicCompileTask implements CompileTask{
 					break;
 				if(projectFile.get() == null)
 					for(VirtualFile sibling : root.getParent().getChildren())
-						if(sibling.getName().endsWith(".cyc.yaml"))
+						if(sibling.getName().endsWith(PROJECT_YAML_EXTENSION))
 							projectFile.set(sibling);
 				VfsUtil.iterateChildrenRecursively(root, x -> true, vf -> {
 					if(vf.getName().endsWith(".cyc")){
