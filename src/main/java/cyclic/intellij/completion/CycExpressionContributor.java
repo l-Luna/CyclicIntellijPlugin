@@ -18,6 +18,7 @@ import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.common.CycCall;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.expressions.CycStringLiteralExpr;
 import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.JvmCyclicClass;
@@ -40,6 +41,9 @@ public class CycExpressionContributor extends CompletionContributor{
 		var fakePrev = parameters.getPosition();
 		
 		var fakeWrapper = PsiTreeUtil.getParentOfType(fakePrev, CycExpression.class, CycStatementWrapper.class);
+		
+		if(PsiTreeUtil.getParentOfType(prev, CycStringLiteralExpr.class) != null)
+			return;
 		
 		// an expression or statement
 		if(fakeWrapper != null){

@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import cyclic.intellij.psi.ast.CycRawTypeRef;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.expressions.CycStringLiteralExpr;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.utils.CycTypeReference;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ public class CycTypeContributor extends CompletionContributor{
 	
 	public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result){
 		PsiElement prev = parameters.getOriginalPosition();
-		if(prev instanceof PsiComment)
+		if(prev instanceof PsiComment || PsiTreeUtil.getParentOfType(prev, CycStringLiteralExpr.class) != null)
 			return;
 		
 		var innerFakeExpr = PsiTreeUtil.getParentOfType(parameters.getPosition(), CycExpression.class);

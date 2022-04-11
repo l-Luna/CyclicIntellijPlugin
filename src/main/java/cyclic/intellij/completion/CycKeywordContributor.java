@@ -9,6 +9,7 @@ import com.intellij.util.ProcessingContext;
 import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
+import cyclic.intellij.psi.ast.expressions.CycStringLiteralExpr;
 import cyclic.intellij.psi.ast.types.CycMemberWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +59,9 @@ public class CycKeywordContributor extends CompletionContributor{
 		                              @NotNull ProcessingContext context,
 		                              @NotNull CompletionResultSet result){
 			PsiElement prev = parameters.getOriginalPosition();
-			if(prev instanceof PsiComment || PsiTreeUtil.getParentOfType(prev, CycIdPart.class) != null)
+			if(prev instanceof PsiComment
+					|| PsiTreeUtil.getParentOfType(prev, CycStringLiteralExpr.class) != null
+					|| PsiTreeUtil.getParentOfType(prev, CycIdPart.class) != null)
 				return;
 			for(String keyword : KEYWORDS)
 				result.addElement(LookupElementBuilder.create(keyword).bold());
