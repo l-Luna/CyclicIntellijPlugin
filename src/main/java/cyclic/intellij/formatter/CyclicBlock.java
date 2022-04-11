@@ -25,6 +25,7 @@ public class CyclicBlock extends AbstractBlock{
 	protected List<Block> buildChildren(){
 		return Arrays.stream(myNode.getChildren(null))
 				.filter(x -> x.getElementType() != TokenType.WHITE_SPACE)
+				.filter(x -> x.getTextLength() > 0)
 				.map(x -> new CyclicBlock(
 						x,
 						Wrap.createWrap(WrapType.NONE, false),
