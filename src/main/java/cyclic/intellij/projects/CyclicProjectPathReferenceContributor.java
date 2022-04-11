@@ -1,12 +1,17 @@
 package cyclic.intellij.projects;
 
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.yaml.YAMLElementGenerator;
 import org.jetbrains.yaml.psi.*;
 
 import java.util.Set;
@@ -70,36 +75,56 @@ public class CyclicProjectPathReferenceContributor extends PsiReferenceContribut
 		
 		private PsiReference[] referencesFor(YAMLScalar value, YAMLKeyValue entry){
 			// use the text from the value to create references, but attach them to the entry
-			return new FileReferenceSet(
+			return new YamlTextFileReferenceSet(
 					value.getTextValue(),
 					entry,
 					value.getStartOffsetInParent() + 1,
-					this,
-					true,
-					false).getAllReferences();
+					this).getAllReferences();
+		}
+	}
+	
+	// the default file reference set fails to properly rename path elements, since it attempts to change keys, not values
+	private static class YamlTextFileReferenceSet extends FileReferenceSet{
+		YamlTextFileReferenceSet(String text, PsiElement element, int startOffset, PsiReferenceProvider provider){
+			super(text, element, startOffset, provider, true, false);
+		}
+		public FileReference createFileReference(final TextRange range, final int index, final String text){
+			return new YamlTextFileReference(this, range, index, text);
+		}
+	}
+	
+	private static class YamlTextFileReference extends FileReference{
+		private static final Logger LOG = Logger.getInstance(YamlTextFileReferenceSet.class);
+		private final FileReferenceSet set;
+		
+		YamlTextFileReference(FileReferenceSet set, TextRange range, int index, String text){
+			super(set, range, index, text);
+			this.set = set;
 		}
 		
-		@Nullable
-		private static PsiFileSystemItem resolveBy(PsiDirectory directory, String[] pathElements){
-			PsiFileSystemItem currentElement = directory;
-			for(String pathElement : pathElements){
-				if(currentElement == null)
-					return null;
-				if(pathElement.isEmpty() || pathElement.equals("."))
-					continue;
-				if(pathElement.equals("..")){
-					currentElement = currentElement.getParent();
-					continue;
+		protected PsiElement rename(String newName) throws IncorrectOperationException{
+			TextRange range = getRangeInElement()
+					.shiftLeft(getRangeInElement().getStartOffset() - 1)
+					.grown(getRangeInElement().getStartOffset() - set.getStartInElement());
+			PsiElement element = getElement();
+			if(element instanceof YAMLKeyValue){
+				YAMLKeyValue keyValue = (YAMLKeyValue)element;
+				var value = keyValue.getValue();
+				if(value instanceof YAMLScalar){
+					try{
+						var newText = value.getText().substring(0, range.getStartOffset()) + newName + value.getText().substring(range.getEndOffset());
+						var generator = YAMLElementGenerator.getInstance(element.getProject());
+						var dummyFile = generator.createDummyYamlWithText(newText);
+						var newElement = PsiTreeUtil.collectElementsOfType(dummyFile, YAMLScalar.class).iterator().next();
+						return value.replace(newElement);
+					}catch(IncorrectOperationException e){
+						LOG.error("Cannot rename " + getClass() + " from " + set.getClass() + " to " + newName, e);
+						throw e;
+					}
 				}
-				if(currentElement instanceof PsiDirectory){
-					if(pathElement.contains("."))
-						currentElement = ((PsiDirectory)currentElement).findFile(pathElement);
-					else
-						currentElement = ((PsiDirectory)currentElement).findSubdirectory(pathElement);
-				}else
-					return null;
+				throw new IncorrectOperationException("Cannot rename value that is not a scalar");
 			}
-			return currentElement;
+			throw new IncorrectOperationException("Cannot rename element that is not a key/value");
 		}
 	}
 }
