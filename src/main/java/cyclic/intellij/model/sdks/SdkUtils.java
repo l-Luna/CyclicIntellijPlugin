@@ -31,7 +31,7 @@ public final class SdkUtils{
 			if(compilerProps == null)
 				throw new ConfigurationException(CyclicBundle.message("error.sdk.invalid.noProps"));
 			
-			// this *can't* be the best way.
+			// this *can't* be the best way
 			String text;
 			try{
 				text = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(compilerProps.contentsToByteArray())).toString();

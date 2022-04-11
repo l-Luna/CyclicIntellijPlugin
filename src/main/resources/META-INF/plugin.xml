@@ -91,7 +91,9 @@
 
         <frameworkSupport implementation="cyclic.intellij.model.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>
+
         <fileIconPatcher implementation="cyclic.intellij.projects.CyclicProjectYamlFilePatcher"/>
+        <psi.referenceContributor language="yaml" implementation="cyclic.intellij.projects.CyclicProjectPathReferenceContributor"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <nameSuggestionProvider implementation="cyclic.intellij.refactoring.CycNameSuggestionProvider"/>
