@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class CyclicProjectYamlFilePatcher implements FileIconPatcher, DumbAware{
+public class CyclicProjectYamlFileIconPatcher implements FileIconPatcher, DumbAware{
 	
 	public static final String PROJECT_YAML_EXTENSION = ".cyc.yaml";
 	

@@ -16,7 +16,7 @@ import org.jetbrains.yaml.psi.*;
 
 import java.util.Set;
 
-import static cyclic.intellij.projects.CyclicProjectYamlFilePatcher.PROJECT_YAML_EXTENSION;
+import static cyclic.intellij.projects.CyclicProjectYamlFileIconPatcher.PROJECT_YAML_EXTENSION;
 
 public class CyclicProjectPathReferenceContributor extends PsiReferenceContributor{
 	
@@ -74,7 +74,6 @@ public class CyclicProjectPathReferenceContributor extends PsiReferenceContribut
 		}
 		
 		private PsiReference[] referencesFor(YAMLScalar value, YAMLKeyValue entry){
-			// use the text from the value to create references, but attach them to the entry
 			return new YamlTextFileReferenceSet(
 					value.getTextValue(),
 					entry,
@@ -85,15 +84,18 @@ public class CyclicProjectPathReferenceContributor extends PsiReferenceContribut
 	
 	// the default file reference set fails to properly rename path elements, since it attempts to change keys, not values
 	private static class YamlTextFileReferenceSet extends FileReferenceSet{
+		
 		YamlTextFileReferenceSet(String text, PsiElement element, int startOffset, PsiReferenceProvider provider){
 			super(text, element, startOffset, provider, true, false);
 		}
+		
 		public FileReference createFileReference(final TextRange range, final int index, final String text){
 			return new YamlTextFileReference(this, range, index, text);
 		}
 	}
 	
 	private static class YamlTextFileReference extends FileReference{
+		
 		private static final Logger LOG = Logger.getInstance(YamlTextFileReferenceSet.class);
 		private final FileReferenceSet set;
 		

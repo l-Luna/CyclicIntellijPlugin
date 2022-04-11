@@ -92,7 +92,7 @@
         <frameworkSupport implementation="cyclic.intellij.model.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>
 
-        <fileIconPatcher implementation="cyclic.intellij.projects.CyclicProjectYamlFilePatcher"/>
+        <fileIconPatcher implementation="cyclic.intellij.projects.CyclicProjectYamlFileIconPatcher"/>
         <psi.referenceContributor language="yaml" implementation="cyclic.intellij.projects.CyclicProjectPathReferenceContributor"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
