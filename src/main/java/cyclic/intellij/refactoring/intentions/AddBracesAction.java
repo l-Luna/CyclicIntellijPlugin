@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.statements.*;
@@ -31,11 +32,11 @@ public class AddBracesAction implements IntentionAction{
 	private String statementType;
 	
 	public @IntentionName @NotNull String getText(){
-		return "Add braces to '" + statementType + "'";
+		return CyclicBundle.message("intention.text.braces.add", statementType);
 	}
 	
 	public @NotNull @IntentionFamilyName String getFamilyName(){
-		return "Control flow statement without braces";
+		return CyclicBundle.message("intention.familyName.braces.add");
 	}
 	
 	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file){

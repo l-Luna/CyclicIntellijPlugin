@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.IncorrectOperationException;
+import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.statements.CycForStatement;
 import cyclic.intellij.psi.ast.statements.CycStatement;
@@ -24,11 +25,11 @@ public class RemoveBracesAction implements IntentionAction{
 	private String statementType;
 	
 	public @IntentionName @NotNull String getText(){
-		return "Remove braces from '" + statementType + "'";
+		return CyclicBundle.message("intention.text.braces.remove", statementType);
 	}
 	
 	public @NotNull @IntentionFamilyName String getFamilyName(){
-		return "Control flow statement contains single statement";
+		return CyclicBundle.message("intention.familyName.braces.remove");
 	}
 	
 	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file){
