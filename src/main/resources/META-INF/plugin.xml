@@ -177,6 +177,10 @@
         </intentionAction>
     </extensions>
 
+    <extensions defaultExtensionNs="JavaScript.JsonSchema">
+        <ProviderFactory implementation="cyclic.intellij.projects.CyclicProjectSchemaProvider$Factory"/>
+    </extensions>
+
     <actions>
         <action id="cyclic.intellij.actions.CreateCyclicClassAction" class="cyclic.intellij.actions.CreateCyclicClassAction" text="Cyclic Class" description="Create new Cyclic class">
             <add-to-group group-id="NewGroup1" anchor="after" relative-to-action="NewClass"/>

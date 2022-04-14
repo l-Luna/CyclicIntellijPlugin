@@ -3,7 +3,6 @@ package cyclic.intellij.projects;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
@@ -16,8 +15,6 @@ import org.jetbrains.yaml.psi.*;
 
 import java.util.Set;
 
-import static cyclic.intellij.projects.CyclicProjectYamlFileIconPatcher.PROJECT_YAML_EXTENSION;
-
 public class CyclicProjectPathReferenceContributor extends PsiReferenceContributor{
 	
 	public static final Set<String> TOP_LEVEL_PATH_ELEMENT_NAMES = Set.of("source", "output");
@@ -27,7 +24,7 @@ public class CyclicProjectPathReferenceContributor extends PsiReferenceContribut
 	public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar){
 		registrar.registerReferenceProvider(PlatformPatterns
 						.psiElement(YAMLKeyValue.class)
-						.inVirtualFile(PlatformPatterns.virtualFile().withName(StandardPatterns.string().endsWith(PROJECT_YAML_EXTENSION))),
+						.inVirtualFile(ProjectFileUtil.projectFilePattern()),
 				new CyclicProjectPathReferenceProvider());
 	}
 	

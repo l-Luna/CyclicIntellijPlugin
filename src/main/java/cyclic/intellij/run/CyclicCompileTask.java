@@ -13,6 +13,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.model.facet.WorkspaceSdk;
+import cyclic.intellij.projects.ProjectFileUtil;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -23,7 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
-import static cyclic.intellij.projects.CyclicProjectYamlFileIconPatcher.PROJECT_YAML_EXTENSION;
 import static org.jetbrains.jps.model.java.JavaSourceRootType.SOURCE;
 import static org.jetbrains.jps.model.java.JavaSourceRootType.TEST_SOURCE;
 
@@ -49,7 +49,7 @@ public class CyclicCompileTask implements CompileTask{
 					break;
 				if(projectFile.get() == null)
 					for(VirtualFile sibling : root.getParent().getChildren())
-						if(sibling.getName().endsWith(PROJECT_YAML_EXTENSION))
+						if(ProjectFileUtil.isProjectFile(sibling))
 							projectFile.set(sibling);
 				VfsUtil.iterateChildrenRecursively(root, x -> true, vf -> {
 					if(vf.getName().endsWith(".cyc")){

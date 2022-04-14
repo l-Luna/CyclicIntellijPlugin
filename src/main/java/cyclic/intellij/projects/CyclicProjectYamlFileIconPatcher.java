@@ -11,10 +11,8 @@ import javax.swing.*;
 
 public class CyclicProjectYamlFileIconPatcher implements FileIconPatcher, DumbAware{
 	
-	public static final String PROJECT_YAML_EXTENSION = ".cyc.yaml";
-	
 	public Icon patchIcon(Icon baseIcon, VirtualFile file, int flags, @Nullable Project project){
-		if(file.getName().endsWith(PROJECT_YAML_EXTENSION))
+		if(ProjectFileUtil.isProjectFile(file))
 			return CyclicIcons.CYCLIC_FILE; // TODO: better icon
 		return baseIcon;
 	}
