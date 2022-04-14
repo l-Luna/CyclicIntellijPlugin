@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class CyclicProjectYamlFileIconPatcher implements FileIconPatcher, DumbAware{
+public class CyclicProjectFileIconPatcher implements FileIconPatcher, DumbAware{
 	
 	public Icon patchIcon(Icon baseIcon, VirtualFile file, int flags, @Nullable Project project){
 		if(ProjectFileUtil.isProjectFile(file))
