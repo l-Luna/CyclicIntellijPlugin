@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>org.example.CyclicIntellijPlugin</id>
+    <id>cyclic.lang.CyclicIntellijPlugin</id>
     <name>Cyclic</name>
     <vendor>Cyclic</vendor>
 
@@ -13,6 +13,12 @@
 
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends>Coverage</depends>
+
+    <extensionPoints>
+        <extensionPoint qualifiedName="cyclic.intellij.newProjectWizard.buildSystem"
+                        interface="cyclic.intellij.projects.BuildSystemCyclicNewProjectWizard"
+                        dynamic="true"/>
+    </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
@@ -89,11 +95,12 @@
 
         <java.elementFinder implementation="cyclic.intellij.asJava.CyclicPsiElementProvider"/>
 
+        <newProjectWizard.language implementation="cyclic.intellij.projects.CyclicNewProjectWizard"/>
         <frameworkSupport implementation="cyclic.intellij.model.facet.CyclicFrameworkSupport"/>
         <facetType implementation="cyclic.intellij.model.facet.CyclicFacetType"/>
 
-        <fileIconPatcher implementation="cyclic.intellij.projects.CyclicProjectFileIconPatcher"/>
-        <psi.referenceContributor language="yaml" implementation="cyclic.intellij.projects.CyclicProjectPathReferenceContributor"/>
+        <fileIconPatcher implementation="cyclic.intellij.projectFiles.CyclicProjectFileIconPatcher"/>
+        <psi.referenceContributor language="yaml" implementation="cyclic.intellij.projectFiles.CyclicProjectPathReferenceContributor"/>
 
         <renamePsiElementProcessor implementation="cyclic.intellij.refactoring.RenameCycTypeProcessor"/>
         <nameSuggestionProvider implementation="cyclic.intellij.refactoring.CycNameSuggestionProvider"/>
@@ -178,7 +185,12 @@
     </extensions>
 
     <extensions defaultExtensionNs="JavaScript.JsonSchema">
-        <ProviderFactory implementation="cyclic.intellij.projects.CyclicProjectSchemaProvider$Factory"/>
+        <ProviderFactory implementation="cyclic.intellij.projectFiles.CyclicProjectSchemaProvider$Factory"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="cyclic.intellij">
+        <newProjectWizard.buildSystem implementation="cyclic.intellij.projects.buildSystem.IntelliJCyclicNewProjectWizard"/>
+        <newProjectWizard.buildSystem implementation="cyclic.intellij.projects.buildSystem.CyclicCompilerNewProjectWizard"/>
     </extensions>
 
     <actions>

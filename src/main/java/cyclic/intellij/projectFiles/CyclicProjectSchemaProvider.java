@@ -1,4 +1,4 @@
-package cyclic.intellij.projects;
+package cyclic.intellij.projectFiles;
 
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;

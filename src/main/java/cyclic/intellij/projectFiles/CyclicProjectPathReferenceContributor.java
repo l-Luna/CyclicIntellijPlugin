@@ -1,4 +1,4 @@
-package cyclic.intellij.projects;
+package cyclic.intellij.projectFiles;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;

@@ -13,7 +13,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.model.facet.WorkspaceSdk;
-import cyclic.intellij.projects.ProjectFileUtil;
+import cyclic.intellij.projectFiles.ProjectFileUtil;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
