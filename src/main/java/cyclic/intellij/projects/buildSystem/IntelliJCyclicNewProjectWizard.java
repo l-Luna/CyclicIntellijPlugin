@@ -66,6 +66,7 @@ public class IntelliJCyclicNewProjectWizard implements BuildSystemCyclicNewProje
 			WorkspaceSdk.getFor(project).compilerPath = ((CyclicSdk)sdkChooser.getSelectedItem()).path;
 			
 			addDefaultCode(builder, project);
+			builder.setCompilerOutputPath(getContentRoot() + "/out");
 			
 			builder.commit(project);
 			NewProjectWizardCollector.BuildSystem.INSTANCE.logSdkFinished(getParent(), getSdk());

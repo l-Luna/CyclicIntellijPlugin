@@ -7,9 +7,12 @@ import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.roots.CompilerModuleExtension;
+import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
 import cyclic.intellij.model.facet.CyclicFacetType;
+import org.jetbrains.annotations.NotNull;
 
 public class CyclicModuleBuilder extends JavaModuleBuilder{
 	
@@ -29,5 +32,11 @@ public class CyclicModuleBuilder extends JavaModuleBuilder{
 				CyclicFacetType.NAME,
 				null);
 		super.setupModule(module);
+	}
+	
+	public void setupRootModel(@NotNull ModifiableRootModel rootModel) throws ConfigurationException{
+		super.setupRootModel(rootModel);
+		CompilerModuleExtension cme = rootModel.getModuleExtension(CompilerModuleExtension.class);
+		cme.inheritCompilerOutputPath(false);
 	}
 }
