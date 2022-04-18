@@ -1,2 +1,4 @@
 source: "src/"
 output: "out/"
+
+includeCyclicLibRefs: false
