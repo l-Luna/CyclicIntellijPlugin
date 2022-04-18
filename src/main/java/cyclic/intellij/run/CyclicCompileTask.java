@@ -5,6 +5,7 @@ import com.intellij.compiler.server.BuildManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileTask;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
+import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.projectRoots.JavaSdkType;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.SystemInfo;
@@ -110,7 +111,7 @@ public class CyclicCompileTask implements CompileTask{
 						CyclicBundle.message("compiler.notice.moduleRoots"),
 						null, -1, -1);
 				appendParam(cmdLine, toSystemDependentName(roots.get(0).getPath()));
-				appendParam(cmdLine, toSystemDependentName(context.getModuleOutputDirectory(module).getPath()));
+				appendParam(cmdLine, toSystemDependentName(CompilerPaths.getModuleOutputPath(module, false)));
 			}
 			
 			try{
