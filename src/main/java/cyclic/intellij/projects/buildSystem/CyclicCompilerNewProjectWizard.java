@@ -24,7 +24,7 @@ public class CyclicCompilerNewProjectWizard implements BuildSystemCyclicNewProje
 	}
 	
 	public int getOrdinal(){
-		return 1;
+		return 0;
 	}
 	
 	public static class CyclicCompilerNewProjectWizardStep extends IntelliJCyclicNewProjectWizard.IntelliJCyclicNewProjectWizardStep{
