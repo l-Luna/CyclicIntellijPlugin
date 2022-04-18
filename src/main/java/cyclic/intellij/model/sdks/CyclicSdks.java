@@ -17,6 +17,8 @@ public final class CyclicSdks implements PersistentStateComponent<CyclicSdks>{
 	
 	public List<CyclicSdk> compilers = new ArrayList<>();
 	
+	public static final CyclicSdk DUMMY_SDK = new CyclicSdk();
+	
 	public static CyclicSdks getInstance(){
 		return ApplicationManager.getApplication().getService(CyclicSdks.class);
 	}

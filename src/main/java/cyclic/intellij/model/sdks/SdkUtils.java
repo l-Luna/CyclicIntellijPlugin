@@ -7,6 +7,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import cyclic.intellij.CyclicBundle;
+import cyclic.intellij.model.CyclicLanguageLevel;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -14,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public final class SdkUtils{
+	
+	public static final String PROPERTIES_NAME = "cyclic_compiler.properties";
 	
 	public static CyclicSdk readJarInfo(String path) throws ConfigurationException{
 		return ReadAction.compute(() -> {
@@ -27,11 +30,10 @@ public final class SdkUtils{
 			if(jarFs == null)
 				throw new ConfigurationException(CyclicBundle.message("error.sdk.cant.openJar"));
 			
-			var compilerProps = jarFs.findChild("info.properties");
+			var compilerProps = jarFs.findChild(PROPERTIES_NAME);
 			if(compilerProps == null)
 				throw new ConfigurationException(CyclicBundle.message("error.sdk.invalid.noProps"));
 			
-			// this *can't* be the best way
 			String text;
 			try{
 				text = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(compilerProps.contentsToByteArray())).toString();
@@ -39,24 +41,29 @@ public final class SdkUtils{
 				throw new ConfigurationException(CyclicBundle.message("error.sdk.cant.readProps"));
 			}
 			
-			String name = null, version = null;
+			String compilerName = null, compilerVersion = null, cyclicVersion = null;
 			
 			for(String s : text.split("\n")){
 				var split = s.split("=");
 				if(split.length > 1)
-					if(split[0].equals("name"))
-						name = split[1].strip();
-					else if(split[0].equals("version"))
-						version = split[1].strip();
+					if(split[0].equals("compiler.name"))
+						compilerName = split[1].strip();
+					else if(split[0].equals("compiler.version"))
+						compilerVersion = split[1].strip();
+					else if(split[0].equals("cyclic.version"))
+						cyclicVersion = split[1].strip();
 			}
 			
-			if(name == null)
+			if(compilerName == null)
 				throw new ConfigurationException(CyclicBundle.message("error.sdk.invalid.noName"));
-			if(version == null)
-				throw new ConfigurationException(CyclicBundle.message("error.sdk.invalid.noVersion"));
+			if(compilerVersion == null)
+				throw new ConfigurationException(CyclicBundle.message("error.sdk.invalid.noCompilerVersion"));
+			if(cyclicVersion == null)
+				throw new ConfigurationException(CyclicBundle.message("error.sdk.invalid.noLanguageVersion"));
 			
-			var ver = Version.parseVersion(version);
-			return new CyclicSdk(name, FileUtil.toSystemIndependentName(path), ver != null ? ver : new Version(0, 0, 0));
+			var ver = Version.parseVersion(compilerVersion);
+			var languageLevel = CyclicLanguageLevel.getById(cyclicVersion);
+			return new CyclicSdk(compilerName, FileUtil.toSystemIndependentName(path), ver != null ? ver : new Version(0, 0, 0), languageLevel);
 		});
 	}
 }

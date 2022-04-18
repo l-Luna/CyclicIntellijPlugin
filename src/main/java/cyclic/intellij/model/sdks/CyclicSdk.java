@@ -2,6 +2,8 @@ package cyclic.intellij.model.sdks;
 
 import com.intellij.openapi.util.Version;
 import com.intellij.util.xmlb.annotations.OptionTag;
+import cyclic.intellij.model.CyclicLanguageLevel;
+import cyclic.intellij.model.LangLevelConverter;
 
 public class CyclicSdk{
 	
@@ -11,18 +13,22 @@ public class CyclicSdk{
 	@OptionTag(converter = VersionConverter.class)
 	public Version version = new Version(0, 0, 0);
 	
+	@OptionTag(converter = LangLevelConverter.class)
+	public CyclicLanguageLevel languageLevel = CyclicLanguageLevel.v0_1_0;
+	
 	// by reflection
 	@SuppressWarnings("unused")
 	public CyclicSdk(){}
 	
-	public CyclicSdk(String name, String path, Version version){
+	public CyclicSdk(String name, String path, Version version, CyclicLanguageLevel languageLevel){
 		this.name = name;
 		this.path = path;
 		this.version = version;
+		this.languageLevel = languageLevel;
 	}
 	
 	public CyclicSdk copy(){
-		return new CyclicSdk(name, path, version);
+		return new CyclicSdk(name, path, version, languageLevel);
 	}
 	
 	public void copySettings(CyclicSdk other){
