@@ -24,7 +24,7 @@ public class CompilerOptions{
 		List<CyclicSdk> toShow = new ArrayList<>(CyclicSdks.getInstance().compilers);
 		if(current != null && !toShow.contains(current))
 			toShow.add(0, current);
-		if(!toShow.contains(CyclicSdks.DUMMY_SDK))
+		if(!toShow.contains(CyclicSdks.DUMMY_SDK) && current != null /*editing config*/ || toShow.isEmpty())
 			toShow.add(0, CyclicSdks.DUMMY_SDK);
 		
 		var box = new ComboBox<>(toShow.toArray(CyclicSdk[]::new));
