@@ -112,12 +112,13 @@ public class CyclicProjectPathReferenceContributor extends PsiReferenceContribut
 				if(value instanceof YAMLScalar){
 					try{
 						var newText = value.getText().substring(0, range.getStartOffset()) + newName + value.getText().substring(range.getEndOffset());
-						if(newText.equals("\"\"")) // change empty refs to /
-							newText = "\"/\"";
+						if(newText.equals("\"\"")) // change empty refs to /. to ensure they're updated correctly when moving
+							newText = "\"/.\"";
 						var generator = YAMLElementGenerator.getInstance(element.getProject());
 						var dummyFile = generator.createDummyYamlWithText(newText);
 						var newElement = PsiTreeUtil.collectElementsOfType(dummyFile, YAMLScalar.class).iterator().next();
-						return value.replace(newElement);
+						value.replace(newElement);
+						return element;
 					}catch(IncorrectOperationException e){
 						LOG.error("Cannot rename " + getClass() + " from " + set.getClass() + " to " + newName, e);
 						throw e;
