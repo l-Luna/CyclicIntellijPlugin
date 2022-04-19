@@ -13,7 +13,7 @@ public class CyclicProjectFileIconPatcher implements FileIconPatcher, DumbAware{
 	
 	public Icon patchIcon(Icon baseIcon, VirtualFile file, int flags, @Nullable Project project){
 		if(ProjectFileUtil.isProjectFile(file))
-			return CyclicIcons.CYCLIC_FILE; // TODO: better icon
+			return CyclicIcons.CYCLIC_ICON; // TODO: maybe use a different icon
 		return baseIcon;
 	}
 }
