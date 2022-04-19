@@ -64,6 +64,7 @@ public class Tokens{
 			CyclicLangLexer.ASSERT,
 			
 			CyclicLangLexer.THIS,
+			CyclicLangLexer.INSTANCEOF,
 			
 			CyclicLangLexer.SWITCH,
 			CyclicLangLexer.DEFAULT,
