@@ -13,4 +13,5 @@ public class CyclicIcons{
 	public static final Icon CYCLIC_DECORATION = IconLoader.getIcon("cyclic_decoration.svg", CyclicIcons.class);
 	
 	public static final Icon SINGLE = IconLoader.getIcon("single.svg", CyclicIcons.class);
+	public static final Icon EXCEPTION_SINGLE = IconLoader.getIcon("exceptionSingle.svg", CyclicIcons.class);
 }

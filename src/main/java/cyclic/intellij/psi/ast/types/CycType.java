@@ -172,12 +172,21 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 			else if(objType.findChildByType(Tokens.TOK_RECORD) != null)
 				result = PlatformIcons.RECORD_ICON;
 			else if(objType.findChildByType(Tokens.TOK_SINGLE) != null)
-				result = AllIcons.Nodes.Static;
+				result = CyclicIcons.SINGLE;
 		}
-		if(!DumbService.isDumb(getProject())
-				&& !EDT.isCurrentThreadEdt() // TODO: can this can be refactored to not require slow operations?
-				&& JvmClassUtils.hasMainMethod(JvmCyclicClass.of(this)))
-			result = new LayeredIcon(result, AllIcons.Nodes.RunnableMark);
+		if(!DumbService.isDumb(getProject()) && !EDT.isCurrentThreadEdt()){
+			var superType = getSuperType();
+			if(JvmClassUtils.isClassAssignableTo(superType,
+					JvmClassUtils.classByName(CommonClassNames.JAVA_LANG_THROWABLE, getProject()))){
+				if(kind() == CycKind.SINGLE)
+					result = CyclicIcons.EXCEPTION_SINGLE;
+				else
+					result = PlatformIcons.EXCEPTION_CLASS_ICON;
+			}
+			if(JvmClassUtils.hasMainMethod(JvmCyclicClass.of(this))){
+				result = new LayeredIcon(result, AllIcons.Nodes.RunnableMark);
+			}
+		}
 		return new LayeredIcon(result, CyclicIcons.CYCLIC_DECORATION);
 	}
 	
