@@ -18,13 +18,16 @@ import cyclic.intellij.psi.ast.expressions.CycCallExpr;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
 import cyclic.intellij.psi.ast.statements.CycForeachStatement;
+import cyclic.intellij.psi.ast.statements.CycStatementWrapper;
+import cyclic.intellij.psi.types.CycKind;
+import cyclic.intellij.psi.types.JvmCyclicClass;
+import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class InvalidElementAnnotator implements Annotator, DumbAware{
 	
 	public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder){
-		if(element instanceof CycExpression
-				|| element instanceof CycTypeRef)
+		if(element instanceof CycExpression || element instanceof CycTypeRef)
 			if(element.getTextLength() == 0)
 				holder.newAnnotation(HighlightSeverity.ERROR,
 								CyclicBundle.message("annotator.missing.element", element instanceof CycTypeRef ? 0 : 1))
@@ -45,14 +48,19 @@ public class InvalidElementAnnotator implements Annotator, DumbAware{
 				var pTarget = ((CycCallExpr)p).call().map(CycCall::resolveMethod);
 				isStaticRef = pTarget.isEmpty() || pTarget.get().hasModifier(JvmModifier.STATIC);
 			}
+			if(p instanceof CycStatementWrapper){
+				var pTarget = PsiUtils.childOfType(p, CycCall.class).map(CycCall::resolveMethod);
+				isStaticRef = pTarget.isEmpty() || pTarget.get().hasModifier(JvmModifier.STATIC);
+			}
 			if(ref != null && !isStaticRef){
 				var target = ((CycIdExpr)element).resolveTarget();
-				// TODO: allow singles as values
 				if(target instanceof JvmClass){
-					if(!(((JvmClass)target).getClassKind() == JvmClassKind.ENUM && element.getParent() instanceof CycForeachStatement))
-						holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.element.exprNotType"))
-								.range(ref.getAbsoluteRange())
-								.create();
+					JvmClass jclass = (JvmClass)target;
+					if(!(jclass instanceof JvmCyclicClass && ((JvmCyclicClass)jclass).getUnderlying().kind() == CycKind.SINGLE))
+						if(!(jclass.getClassKind() == JvmClassKind.ENUM && element.getParent() instanceof CycForeachStatement))
+							holder.newAnnotation(HighlightSeverity.ERROR, CyclicBundle.message("annotator.invalid.element.exprNotType"))
+									.range(ref.getAbsoluteRange())
+									.create();
 				}
 			}
 		}
