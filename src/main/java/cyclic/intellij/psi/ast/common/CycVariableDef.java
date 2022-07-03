@@ -20,6 +20,7 @@ import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.stubs.StubCycField;
 import cyclic.intellij.psi.stubs.StubTypes;
 import cyclic.intellij.psi.types.ClassTypeImpl;
+import cyclic.intellij.psi.types.CycKind;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,6 +84,11 @@ public class CycVariableDef extends CycDefinitionStubElement<CycVariableDef, Stu
 				if(!isLocal() && type.isPresent() && type.get().getText().equals("val"))
 					return true;
 			}
+		}
+		if(modifier.equals("static")){ // TODO: handle interface field public+final (check this is a field first)
+			CycType container = getStubOrPsiParentOfType(CycType.class);
+			if(container != null && (container.kind() == CycKind.INTERFACE || container.isStaticSingle()))
+				return true;
 		}
 		return CycModifiersHolder.super.hasModifier(modifier);
 	}

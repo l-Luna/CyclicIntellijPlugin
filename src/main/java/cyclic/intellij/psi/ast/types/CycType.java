@@ -238,6 +238,10 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 		return list.map(CycClassList::elements).orElse(List.of());
 	}
 	
+	public boolean isStaticSingle(){
+		return kind() == CycKind.SINGLE && hasModifier("static");
+	}
+	
 	public IStubElementType<StubCycType, CycType> getElementType(){
 		return StubTypes.CYC_TYPE;
 	}

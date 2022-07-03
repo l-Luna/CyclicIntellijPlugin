@@ -113,6 +113,11 @@ public class CycMethod extends CycDefinitionStubElement<CycMethod, StubCycMethod
 		if(modifier.equals("abstract") && containingType().kind() == CycKind.INTERFACE)
 			if(hasSemicolon()) // note that a semicolon does not mean abstract in classes
 				return true;
+		if(modifier.equals("static")){
+			CycType container = getStubOrPsiParentOfType(CycType.class);
+			if(container != null && container.isStaticSingle())
+				return true;
+		}
 		return CycCodeHolder.super.hasModifier(modifier);
 	}
 	
