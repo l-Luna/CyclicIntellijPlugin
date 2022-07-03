@@ -1,6 +1,6 @@
 plugins{
 	id("org.jetbrains.intellij") version "1.5.2"
-	// TODO: Use the plugin to build the parser automatically - requires splitting parser and lexer
+	// TODO: Use the plugin to build the parser automatically
 	//id("antlr")
 	java
 }
@@ -13,7 +13,7 @@ repositories{
 }
 
 dependencies{
-	implementation("org.antlr:antlr4-runtime:4.9.3")
+	implementation("org.antlr:antlr4-runtime:4.10.1")
 	implementation("org.antlr:antlr4-intellij-adaptor:0.1")
 	//implementation("org.antlr:antlr4-master:4.9.3")
 	
@@ -23,7 +23,7 @@ dependencies{
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij{
-	version.set("2022.1")
+	version.set("IC-222.3244-EAP-CANDIDATE-SNAPSHOT")
 	plugins.add("com.intellij.java")
 	plugins.add("yaml")
 	plugins.add("coverage")

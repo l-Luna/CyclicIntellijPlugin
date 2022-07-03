@@ -3,6 +3,8 @@
     <name>Cyclic</name>
     <vendor>Cyclic</vendor>
 
+    <idea-version until-build="222.*" since-build="221.0" />
+
     <description><![CDATA[
     Adds support for the Cyclic programming language to IntelliJ.
     ]]></description>
