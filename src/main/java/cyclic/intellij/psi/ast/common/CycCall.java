@@ -19,8 +19,11 @@ import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
 import cyclic.intellij.psi.ast.expressions.CycIdExpr;
+import cyclic.intellij.psi.ast.expressions.CycParenthesisedExpr;
 import cyclic.intellij.psi.ast.statements.CycStatement;
 import cyclic.intellij.psi.ast.types.CycType;
+import cyclic.intellij.psi.types.CycKind;
+import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.MethodUtils;
 import cyclic.intellij.psi.utils.PsiUtils;
@@ -59,11 +62,19 @@ public class CycCall extends CycAstElement implements PsiReference, CycStatement
 		
 		List<Target> targets = new ArrayList<>();
 		List<JvmMethod> candidates;
+		while(on instanceof CycParenthesisedExpr)
+			on = PsiUtils.childOfType(on, CycExpression.class).orElse(null);
 		if(on != null){
-			// TODO: consider types in brackets?
-			boolean isStatic = on instanceof CycIdExpr && ((CycIdExpr)on).resolveTarget() instanceof JvmClass;
+			boolean staticOnly = false;
+			if(on instanceof CycIdExpr){
+				var target = ((CycIdExpr)on).resolveTarget();
+				if(target instanceof JvmClass)
+					if(!(target instanceof JvmCyclicClass && ((JvmCyclicClass)target).getUnderlying().kind() == CycKind.SINGLE))
+						staticOnly = true;
+			}
+			boolean temp = staticOnly;
 			candidates = JvmClassUtils.findAllMethodsInHierarchy(JvmClassUtils.asClass(on.type()),
-					m -> m.hasModifier(JvmModifier.STATIC) == isStatic,
+					m -> !temp || m.hasModifier(JvmModifier.STATIC),
 					false);
 		}else
 			candidates = getStandaloneCandidates(this);
