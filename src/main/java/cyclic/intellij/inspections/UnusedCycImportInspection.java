@@ -12,6 +12,7 @@ import cyclic.intellij.CyclicBundle;
 import cyclic.intellij.psi.CycClassReference;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.ast.CycImportStatement;
+import cyclic.intellij.psi.utils.JvmClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +49,7 @@ public class UnusedCycImportInspection extends LocalInspectionTool{
 	private static class ImportsUsedElementVisitor extends PsiRecursiveElementVisitor{
 		private final Set<CycImportStatement> allImports;
 		private final Set<CycImportStatement> visitedImports;
+		private @Nullable String thisPackage;
 		
 		public ImportsUsedElementVisitor(Set<CycImportStatement> allImports, Set<CycImportStatement> visitedImports){
 			this.allImports = allImports;
@@ -55,8 +57,11 @@ public class UnusedCycImportInspection extends LocalInspectionTool{
 		}
 		
 		public void visitFile(@NotNull PsiFile file){
-			if(file instanceof CycFile)
-				allImports.addAll(((CycFile)file).getImports());
+			if(file instanceof CycFile){
+				CycFile cycFile = (CycFile)file;
+				allImports.addAll(cycFile.getImports());
+				thisPackage = cycFile.getPackageName();
+			}
 			super.visitFile(file);
 		}
 		
@@ -67,11 +72,12 @@ public class UnusedCycImportInspection extends LocalInspectionTool{
 				if(!classRef.isQualified()){
 					var type = classRef.resolveClass();
 					if(type != null)
-						if(followToImport(type, visitedImports) == null){
-							var importStatement = followToImport(type, allImports);
-							if(importStatement != null)
-								visitedImports.add(importStatement);
-						}
+						if(thisPackage == null || !thisPackage.equals(JvmClassUtils.getPackageName(type)))
+							if(followToImport(type, visitedImports) == null){
+								var importStatement = followToImport(type, allImports);
+								if(importStatement != null)
+									visitedImports.add(importStatement);
+							}
 				}
 			}
 			super.visitElement(element);
