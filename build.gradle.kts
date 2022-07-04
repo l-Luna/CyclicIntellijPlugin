@@ -1,7 +1,6 @@
 plugins{
 	id("org.jetbrains.intellij") version "1.5.2"
-	// TODO: Use the plugin to build the parser automatically
-	//id("antlr")
+	antlr
 	java
 }
 
@@ -15,7 +14,8 @@ repositories{
 dependencies{
 	implementation("org.antlr:antlr4-runtime:4.10.1")
 	implementation("org.antlr:antlr4-intellij-adaptor:0.1")
-	//implementation("org.antlr:antlr4-master:4.9.3")
+	
+	antlr("org.antlr:antlr4:4.10.1")
 	
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
