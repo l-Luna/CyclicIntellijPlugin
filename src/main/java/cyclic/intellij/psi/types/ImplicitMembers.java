@@ -1,6 +1,7 @@
 package cyclic.intellij.psi.types;
 
 import com.intellij.lang.jvm.JvmMethod;
+import com.intellij.psi.OriginInfoAwareElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.stubs.StubElement;
@@ -25,6 +26,8 @@ import static cyclic.intellij.asJava.AsPsiUtil.asPsiType;
 
 public final class ImplicitMembers{
 	
+	private static final String NON_RENAMABLE_ORIGIN = "Cyclic: non-renamable implicit method";
+	
 	public static List<JvmMethod> implicitMethodsOf(CycType type){
 		List<JvmMethod> implicits = new ArrayList<>();
 		if(type.kind() == CycKind.RECORD){
@@ -38,6 +41,10 @@ public final class ImplicitMembers{
 			implicits.add(enumEntriesMethod(type));
 		}
 		return implicits;
+	}
+	
+	public static boolean isNotFixed(Object d){
+		return !(d instanceof OriginInfoAwareElement && NON_RENAMABLE_ORIGIN.equals(((OriginInfoAwareElement)d).getOriginInfo()));
 	}
 	
 	private static PsiMethod recordAccessorMethod(CycVariable backing){
@@ -55,6 +62,7 @@ public final class ImplicitMembers{
 		builder.addModifier("public");
 		builder.addModifier("static");
 		builder.setMethodReturnType(asPsiType(ArrayTypeImpl.of(ClassTypeImpl.of(of))));
+		builder.setOriginInfo(NON_RENAMABLE_ORIGIN);
 		return builder;
 	}
 	
@@ -65,6 +73,7 @@ public final class ImplicitMembers{
 		builder.addModifier("static");
 		builder.addParameter("name", "java.lang.String");
 		builder.setMethodReturnType(asPsiType(ClassTypeImpl.of(of)));
+		builder.setOriginInfo(NON_RENAMABLE_ORIGIN);
 		return builder;
 	}
 	
@@ -74,6 +83,7 @@ public final class ImplicitMembers{
 		builder.addModifier("public");
 		builder.addModifier("static");
 		builder.setMethodReturnType("java.util.List");
+		builder.setOriginInfo(NON_RENAMABLE_ORIGIN);
 		return builder;
 	}
 	

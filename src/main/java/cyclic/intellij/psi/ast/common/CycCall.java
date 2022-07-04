@@ -23,6 +23,7 @@ import cyclic.intellij.psi.ast.expressions.CycParenthesisedExpr;
 import cyclic.intellij.psi.ast.statements.CycStatement;
 import cyclic.intellij.psi.ast.types.CycType;
 import cyclic.intellij.psi.types.CycKind;
+import cyclic.intellij.psi.types.ImplicitMembers;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.utils.JvmClassUtils;
 import cyclic.intellij.psi.utils.MethodUtils;
@@ -178,7 +179,7 @@ public class CycCall extends CycAstElement implements PsiReference, CycStatement
 	public @Nullable PsiElement resolve(){
 		var method = resolveMethod();
 		PsiElement source = method != null ? method.getSourceElement() : null;
-		return source != null ? source.getNavigationElement() : null;
+		return source != null ? (ImplicitMembers.isNotFixed(source) ? source.getNavigationElement() : source) : null;
 	}
 	
 	public @NotNull @NlsSafe String getCanonicalText(){
