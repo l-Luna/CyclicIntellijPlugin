@@ -263,5 +263,9 @@ public class AsPsiUtil{
 		public boolean isEnum(){
 			return type.kind() == CycKind.ENUM;
 		}
+		
+		public boolean isValid(){
+			return type.isValid();
+		}
 	}
 }
