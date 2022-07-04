@@ -27,7 +27,7 @@ public class CycKeywordContributor extends CompletionContributor{
 	private static final String[] EXPRESSION_KEYWORDS = new String[]{
 			"null", "true", "false", "this", "super", "instanceof" };
 	private static final String[] STATEMENT_KEYWORDS = new String[]{
-			"var", "val", "if", "else", "while", "do", "for", "return", "throw", "switch", "assert", "yield", "try", "catch", "finally" };
+			"var", "val", "if", "else", "while", "do", "for", "return", "throw", "switch", "assert", "yield", "try", "catch", "finally", "this", "super" };
 	
 	public CycKeywordContributor(){
 		extend(CompletionType.BASIC,
