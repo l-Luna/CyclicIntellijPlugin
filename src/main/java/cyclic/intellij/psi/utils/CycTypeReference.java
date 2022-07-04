@@ -214,9 +214,11 @@ public class CycTypeReference implements PsiReference, LocalQuickFixProvider, Cy
 						.withInsertHandler((ctx, elem) -> {
 							if(ctx.getFile() instanceof CycFile){
 								CycFile cFile = (CycFile)ctx.getFile();
+								// TODO: check project default imports
 								if(cFile.getImports().stream().noneMatch(imp -> imp.importsType(aClass))
 										&& !CycImportStatement.importsType("java.lang.*", fqName)
-										&& !CycImportStatement.importsType(cFile.getPackageName() + ".*", fqName))
+										&& !CycImportStatement.importsType(cFile.getPackageName() + ".*", fqName)
+										&& !("".equals(cFile.getPackageName()) && !(fqName != null && fqName.contains("."))))
 									AddImportFix.addImport(cFile, fqName);
 							}
 						});
