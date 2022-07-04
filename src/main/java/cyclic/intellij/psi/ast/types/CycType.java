@@ -17,15 +17,17 @@ import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.EDT;
 import cyclic.intellij.CyclicIcons;
 import cyclic.intellij.antlr_generated.CyclicLangParser;
-import cyclic.intellij.asJava.AsPsiUtil;
 import cyclic.intellij.psi.*;
 import cyclic.intellij.psi.ast.CycFileWrapper;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.CycPackageStatement;
-import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.ast.common.CycVariableDef;
-import cyclic.intellij.psi.stubs.*;
+import cyclic.intellij.psi.stubs.StubCycMemberWrapper;
+import cyclic.intellij.psi.stubs.StubCycMethod;
+import cyclic.intellij.psi.stubs.StubCycType;
+import cyclic.intellij.psi.stubs.StubTypes;
 import cyclic.intellij.psi.types.CycKind;
+import cyclic.intellij.psi.types.ImplicitMembers;
 import cyclic.intellij.psi.types.JvmCyclicClass;
 import cyclic.intellij.psi.types.JvmCyclicMethod;
 import cyclic.intellij.psi.utils.JvmClassUtils;
@@ -37,7 +39,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -115,24 +116,13 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 					.map(StubElement::getPsi)
 					.map(JvmCyclicMethod::of)
 					.collect(Collectors.toCollection(ArrayList::new));
-			var recComponents = stub.findChildStubByType(StubTypes.CYC_RECORD_COMPONENTS);
-			if(recComponents != null){
-				var comps = recComponents.components();
-				for(StubCycParameter comp : comps)
-					if(methods.stream().noneMatch(m -> m.getParameters().length == 0 && Objects.equals(m.getName(), comp.name())))
-						methods.add(AsPsiUtil.recordAccessorMethod(comp.getPsi()));
-			}
+			methods.addAll(ImplicitMembers.implicitMethodsOf(this));
 			return methods;
 		}
 		
 		List<JvmMethod> methods
 				= PsiUtils.wrappedChildrenOfType(this, CycMethod.class).stream().map(JvmCyclicMethod::of).collect(Collectors.toList());
-		List<CycParameter> components = PsiUtils.childOfType(this, CycRecordComponents.class)
-				.map(CycRecordComponents::components)
-				.orElse(List.of());
-		for(CycParameter comp : components)
-			if(methods.stream().noneMatch(m -> m.getParameters().length == 0 && Objects.equals(m.getName(), comp.varName())))
-				methods.add(AsPsiUtil.recordAccessorMethod(comp));
+		methods.addAll(ImplicitMembers.implicitMethodsOf(this));
 		return methods;
 	}
 	
