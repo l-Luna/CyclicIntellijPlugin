@@ -247,7 +247,8 @@ public class JvmClassUtils{
 		if(subParams.length != superParams.length)
 			return false;
 		for(int i = 0; i < subParams.length; i++)
-			if(!Objects.equals(eraseGenerics(subParams[i].getType(), project), eraseGenerics(superParams[i].getType(), project)))
+			// TODO: is this correct compiler-side?
+			if(!isAssignableTo(eraseGenerics(subParams[i].getType(), project), eraseGenerics(superParams[i].getType(), project)))
 				return false;
 		return isAssignableTo(eraseGenerics(subMethod.getReturnType(), project), eraseGenerics(superMethod.getReturnType(), project));
 	}
