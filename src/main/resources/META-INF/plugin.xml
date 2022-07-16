@@ -139,6 +139,9 @@
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.InvalidTypeDefinitionAnnotator"/>
 
+        <externalAnnotator language="Cyclic"
+                           implementationClass="cyclic.intellij.presentation.compilerLints.CompilerExternalAnnotator"/>
+
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>
         <internalFileTemplate name="Cyclic Enum"/>
