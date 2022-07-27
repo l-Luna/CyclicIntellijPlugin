@@ -41,7 +41,7 @@ public class CompilerExternalAnnotator extends ExternalAnnotator<PsiFile, List<C
 					.anyMatch(y -> y.equals(problem.filename)))
 				if(source.start != null && source.end != null){
 					String body = file.getText();
-					holder.newAnnotation(HighlightSeverity.WARNING, "[" + problem.type + "] " + problem.description)
+					holder.newAnnotation(HighlightSeverity.WARNING, problem.description)
 							.range(TextRange.create(charInLineToOffset(source.start, body), charInLineToOffset(source.end, body) + 1))
 							.create();
 				}
