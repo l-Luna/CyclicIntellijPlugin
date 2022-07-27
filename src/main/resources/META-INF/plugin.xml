@@ -139,7 +139,8 @@
         <annotator language="Cyclic"
                    implementationClass="cyclic.intellij.presentation.annotators.InvalidTypeDefinitionAnnotator"/>
 
-        <highlightingPassFactory implementation="cyclic.intellij.presentation.compilerLints.CompilerLinterPass$Factory$Register"/>
+        <externalAnnotator language="Cyclic"
+                           implementationClass="cyclic.intellij.presentation.compilerLints.CompilerExternalAnnotator"/>
 
         <internalFileTemplate name="Cyclic Class"/>
         <internalFileTemplate name="Cyclic Interface"/>
@@ -173,13 +174,6 @@
                          enabledByDefault="true" level="WARNING"
                          groupName="Unnecessary qualification" displayName="Unnecessary qualification"
                          implementationClass="cyclic.intellij.inspections.UnnecessaryQualifierInspection"/>
-
-        <!--<localInspection language="Cyclic"
-                         groupPath="Cyclic"
-                         enabledByDefault="true"
-                         groupName="External linter" displayName="Compiler linter"
-                         shortName="CyclicCompilerLint"
-                         implementationClass="cyclic.intellij.inspections.CompilerLinterInspection"/>-->
 
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
