@@ -26,7 +26,7 @@ public class CompilerExternalAnnotator extends ExternalAnnotator<PsiFile, List<C
 		if(info == null)
 			return null;
 		
-		return CompilerLinterManager.getProblems(info.getProject()).get();
+		return CompilerLinterManager.getProblems(info.getProject());
 	}
 	
 	public void apply(@NotNull PsiFile file, List<CompileProblem> problems, @NotNull AnnotationHolder holder){
