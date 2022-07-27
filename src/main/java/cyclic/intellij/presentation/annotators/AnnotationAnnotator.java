@@ -7,6 +7,7 @@ import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import cyclic.intellij.psi.CycElement;
 import cyclic.intellij.psi.ast.CycAnnotation;
@@ -17,13 +18,13 @@ public class AnnotationAnnotator implements Annotator, DumbAware{
 	
 	public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder){
 		if(element instanceof CycAnnotation){
-			holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-					.textAttributes(JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
-					.range(((CycAnnotation)element).getIdElement()
-							.map(PsiElement::getTextRange)
-							.map(x -> x.shiftLeft(1).grown(1))
-							.orElseThrow())
-					.create();
+			for(PsiElement child : element.getChildren()){
+				if(!(child instanceof PsiComment))
+					holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+							.textAttributes(JavaHighlightingColors.ANNOTATION_NAME_ATTRIBUTES)
+							.range(child.getTextRange())
+							.create();
+			}
 		}
 		
 		if(element instanceof CycElement
