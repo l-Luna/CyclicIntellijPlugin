@@ -175,6 +175,13 @@
                          groupName="Unnecessary qualification" displayName="Unnecessary qualification"
                          implementationClass="cyclic.intellij.inspections.UnnecessaryQualifierInspection"/>
 
+        <localInspection language="Cyclic"
+                         groupPath="Cyclic"
+                         enabledByDefault="true" level="WARNING"
+                         groupName="External linting" displayName="Compiler linting"
+                         shortName="CyclicCompilerLinter"
+                         implementationClass="cyclic.intellij.inspections.CompilerLinterInspection"/>
+
         <intentionAction>
             <className>cyclic.intellij.refactoring.intentions.RemoveParensAction</className>
         </intentionAction>

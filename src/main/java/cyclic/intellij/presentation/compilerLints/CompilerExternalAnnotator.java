@@ -8,6 +8,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassOwner;
 import com.intellij.psi.PsiFile;
 import cyclic.intellij.CyclicLanguage;
+import cyclic.intellij.inspections.CompilerLinterInspection;
 import cyclic.intellij.psi.CycFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +51,10 @@ public class CompilerExternalAnnotator extends ExternalAnnotator<PsiFile, List<C
 	
 	public static boolean isCycFile(PsiFile file){
 		return file instanceof CycFile || file.getLanguage().isKindOf(CyclicLanguage.LANGUAGE);
+	}
+	
+	public String getPairedBatchInspectionShortName(){
+		return CompilerLinterInspection.SHORT_NAME;
 	}
 	
 	// stupid way of doing it
