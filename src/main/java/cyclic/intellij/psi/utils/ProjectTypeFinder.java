@@ -109,7 +109,7 @@ public class ProjectTypeFinder{
 		Optional<String> pkg = file.getPackage().map(CycPackageStatement::getPackageName);
 		List<String> candidates = file.getImports().stream()
 				.filter(x -> !x.isStatic())
-				.map(x -> x.isWildcard() ? (x.getImportName() + "." + id) : (x.getImportName().endsWith(id) ? x.getImportName() : null))
+				.map(x -> x.isWildcard() ? (x.getImportName() + "." + id) : (x.getImportName().endsWith("." + id) ? x.getImportName() : null))
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 		candidates.add(0, id);
