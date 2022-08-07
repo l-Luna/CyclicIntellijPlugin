@@ -238,7 +238,7 @@ public class AsPsiUtil{
 		}
 		
 		public PsiFile getContainingFile(){
-			return type.getContainingFile();
+			return isValid() ? type.getContainingFile() : null;
 		}
 		
 		public boolean isInterface(){
