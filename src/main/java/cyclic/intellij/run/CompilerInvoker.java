@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -125,7 +126,7 @@ public class CompilerInvoker{
 					reporter.addMessage(CompilerMessageCategory.ERROR,
 							CyclicBundle.message("compiler.error.generic", log),
 							null, -1, -1);
-					return false;
+					return Arrays.asList(args).contains("--diagnostics");
 				}else if(!log.isBlank())
 					reporter.addMessage(CompilerMessageCategory.WARNING,
 							CyclicBundle.message("compiler.warning.generic", log),

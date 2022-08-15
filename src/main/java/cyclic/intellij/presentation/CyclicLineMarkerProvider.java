@@ -108,6 +108,8 @@ public class CyclicLineMarkerProvider implements LineMarkerProvider{
 				// TODO: don't build the type twice
 				// we do need to set the container or the query won't bother
 				((LightMethodBuilder)method).setContainingClass(container);
+
+                if(!method.isValid()) return;
 				
 				PsiMethod overridden = OverridingMethodsSearch.search(method).findFirst();
 				PsiElement name = cMethod.getNameIdentifier();
