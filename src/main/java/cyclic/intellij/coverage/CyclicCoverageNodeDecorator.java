@@ -23,23 +23,6 @@ public class CyclicCoverageNodeDecorator extends AbstractCoverageProjectViewNode
 		super(project);
 	}
 	
-	public void decorate(PackageDependenciesNode node, ColoredTreeCellRenderer cellRenderer){
-		PsiElement element = node.getPsiElement();
-		if(element == null || !element.isValid() || !(element instanceof CycType || element instanceof CycFile))
-			return;
-		
-		Project project = element.getProject();
-		
-		CoverageDataManager data = getCoverageDataManager(project);
-		JavaCoverageAnnotator annotator = getCovAnnotator(data, project);
-		if(annotator == null)
-			return;
-		
-		String fqName = fqName(element);
-		if(fqName != null)
-			appendCoverageInfo(cellRenderer, annotator.getClassCoverageInformationString(fqName, data));
-	}
-	
 	public void decorate(ProjectViewNode<?> node, PresentationData data){
 		Project project = node.getProject();
 		if(project == null)
@@ -56,8 +39,7 @@ public class CyclicCoverageNodeDecorator extends AbstractCoverageProjectViewNode
 			element = (PsiElement)value;
 		else if(value instanceof SmartPsiElementPointer)
 			element = ((SmartPsiElementPointer<?>)value).getElement();
-		else if(value instanceof PackageElement){
-			PackageElement pkg = (PackageElement)value;
+		else if(value instanceof PackageElement pkg){
 			String coverageString = annotator.getPackageCoverageInformationString(pkg.getPackage(),
 					pkg.getModule(),
 					coverageData);
