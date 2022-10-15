@@ -6,6 +6,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import cyclic.intellij.CyclicFileType;
 import cyclic.intellij.CyclicLanguage;
@@ -40,10 +41,8 @@ public class CycFile extends PsiFileBase implements PsiClassOwner{
 	}
 	
 	public PsiClass @NotNull [] getClasses(){
-		return getTypeDef()
-				.map(AsPsiUtil::asPsiClass)
-				.map(x -> new PsiClass[]{x})
-				.orElse(PsiClass.EMPTY_ARRAY);
+		var types = PsiTreeUtil.collectElementsOfType(this, CycType.class);
+		return types.stream().map(AsPsiUtil::asPsiClass).toArray(PsiClass[]::new);
 	}
 	
 	public String getPackageName(){
