@@ -1,5 +1,5 @@
 plugins{
-	id("org.jetbrains.intellij") version "1.5.2"
+	id("org.jetbrains.intellij") version "1.8.0"
 	antlr
 	java
 }
@@ -23,7 +23,7 @@ dependencies{
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij{
-	version.set("IC-222.3244-EAP-CANDIDATE-SNAPSHOT")
+	version.set("IC-2022.2.3")
 	plugins.add("com.intellij.java")
 	plugins.add("yaml")
 	plugins.add("coverage")

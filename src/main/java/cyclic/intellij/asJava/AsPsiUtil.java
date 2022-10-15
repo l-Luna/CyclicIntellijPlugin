@@ -218,43 +218,47 @@ public class AsPsiUtil{
 	}
 	
 	private static class CycAsPsiClass extends LightPsiClassBuilder{
-		private final CycType type;
+		private final SmartPsiElementPointer<CycType> pointer;
 		
 		public CycAsPsiClass(CycType type){
 			super(type, type.name());
-			this.type = type;
+			this.pointer = SmartPointerManager.createPointer(type);
 		}
 		
 		public String getQualifiedName(){
-			return type.fullyQualifiedName();
+			return deref().fullyQualifiedName();
 		}
 		
 		public @NotNull PsiElement getNavigationElement(){
-			return type;
+			return deref();
 		}
 		
 		public @Nullable Icon getIcon(int flags){
-			return type.getIcon(flags);
+			return deref().getIcon(flags);
 		}
 		
 		public PsiFile getContainingFile(){
-			return isValid() ? type.getContainingFile() : null;
+			return isValid() ? deref().getContainingFile() : null;
 		}
 		
 		public boolean isInterface(){
-			return type.kind() == CycKind.INTERFACE;
+			return deref().kind() == CycKind.INTERFACE;
 		}
 		
 		public boolean isAnnotationType(){
-			return type.kind() == CycKind.ANNOTATION;
+			return deref().kind() == CycKind.ANNOTATION;
 		}
 		
 		public boolean isEnum(){
-			return type.kind() == CycKind.ENUM;
+			return deref().kind() == CycKind.ENUM;
 		}
 		
 		public boolean isValid(){
-			return type.isValid();
+			return deref().isValid();
+		}
+		
+		private CycType deref(){
+			return pointer.dereference();
 		}
 	}
 }
