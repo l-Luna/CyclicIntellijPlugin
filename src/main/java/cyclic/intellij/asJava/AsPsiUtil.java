@@ -46,8 +46,8 @@ public class AsPsiUtil{
 		converting.put(type.fullyQualifiedName(), builder);
 		
 		for(JvmMethod method : type.declaredMethods()){
-			if(method instanceof JvmCyclicMethod){
-				PsiMethod mBuilder = asPsiMethod(((JvmCyclicMethod)method).getUnderlying());
+			if(method instanceof JvmCyclicMethod cycMethod){
+				PsiMethod mBuilder = asPsiMethod(cycMethod.getUnderlying());
 				builder.addMethod(mBuilder);
 			}
 		}
@@ -86,8 +86,8 @@ public class AsPsiUtil{
 			var jType = parameter.varType();
 			var psiType = asPsiType(jType);
 			if(psiType != null){
-				if(parameter.isVarargs() && psiType instanceof PsiArrayType)
-					psiType = ((PsiArrayType)psiType).getComponentType(); // wrapped in PsiEllipsesType for us
+				if(parameter.isVarargs() && psiType instanceof PsiArrayType arr)
+					psiType = arr.getComponentType(); // wrapped in PsiEllipsesType for us
 				mBuilder.addParameter(parameter.varName(), psiType, parameter.isVarargs());
 			}else
 				mBuilder.addParameter(parameter.varName(), JvmClassUtils.name(parameter.varType()));
@@ -97,16 +97,16 @@ public class AsPsiUtil{
 	}
 	
 	public static PsiType asPsiType(JvmType type){
-		if(type instanceof PsiType)
-			return (PsiType)type;
-		if(type instanceof JvmArrayType)
-			return new PsiArrayType(asPsiType(((JvmArrayType)type).getComponentType()));
-		if(type instanceof JvmReferenceType){
-			var resolve = ((JvmReferenceType)type).resolve();
-			if(resolve instanceof PsiClass)
-				return new CycPsiClassReferenceType((PsiClass)resolve);
-			if(resolve instanceof JvmCyclicClass)
-				return new CycPsiClassReferenceType(asPsiClass(((JvmCyclicClass)resolve).getUnderlying()));
+		if(type instanceof PsiType pType)
+			return pType;
+		if(type instanceof JvmArrayType arrType)
+			return new PsiArrayType(asPsiType(arrType.getComponentType()));
+		if(type instanceof JvmReferenceType refType){
+			var resolve = refType.resolve();
+			if(resolve instanceof PsiClass classType)
+				return new CycPsiClassReferenceType(classType);
+			if(resolve instanceof JvmCyclicClass cycType)
+				return new CycPsiClassReferenceType(asPsiClass(cycType.getUnderlying()));
 		}
 		return null; // should never occur
 	}
@@ -200,12 +200,10 @@ public class AsPsiUtil{
 		public boolean equals(Object o){
 			if(this == o)
 				return true;
-			if(!(o instanceof CycPsiClassReferenceType))
+			if(!(o instanceof CycPsiClassReferenceType type))
 				return false;
 			if(!super.equals(o))
 				return false;
-			
-			CycPsiClassReferenceType type = (CycPsiClassReferenceType)o;
 			
 			return Objects.equals(underlying, type.underlying);
 		}

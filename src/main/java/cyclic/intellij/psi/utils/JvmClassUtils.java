@@ -58,21 +58,21 @@ public class JvmClassUtils{
 	public static String name(JvmType type){
 		if(type == null)
 			return "<nothing>";
-		if(type instanceof JvmArrayType)
-			return name(((JvmArrayType)type).getComponentType()) + "[]";
+		if(type instanceof JvmArrayType arrType)
+			return name(arrType.getComponentType()) + "[]";
 		if(Objects.equals(type, PsiPrimitiveType.NULL))
 			return "null";
-		if(type instanceof JvmPrimitiveType)
-			return ((JvmPrimitiveType)type).getKind().getName();
-		if(type instanceof JvmReferenceType)
-			return ((JvmReferenceType)type).getName();
+		if(type instanceof JvmPrimitiveType primType)
+			return primType.getKind().getName();
+		if(type instanceof JvmReferenceType refType)
+			return refType.getName();
 		return "";
 	}
 	
 	@Nullable
 	public static JvmClass asClass(@Nullable JvmType type){
-		if(type instanceof JvmReferenceType){
-			var res = ((JvmReferenceType)type).resolve();
+		if(type instanceof JvmReferenceType refType){
+			var res = refType.resolve();
 			return res instanceof JvmClass ? (JvmClass)res : null;
 		}
 		return null;
@@ -81,14 +81,14 @@ public class JvmClassUtils{
 	public static boolean isAssignableTo(@Nullable JvmType value, @Nullable JvmType to){
 		if(value == null || to == null)
 			return to == value;
-		if(to instanceof JvmPrimitiveType){
-			return value instanceof JvmPrimitiveType
+		if(to instanceof JvmPrimitiveType toPrim){
+			return value instanceof JvmPrimitiveType fromPrim
 					&& value != PsiPrimitiveType.NULL
 					&& to != PsiPrimitiveType.NULL
-					&& (((JvmPrimitiveType)value).getKind() == ((JvmPrimitiveType)to).getKind());
+					&& (fromPrim.getKind() == toPrim.getKind());
 		}
-		if(to instanceof JvmArrayType)
-			return value instanceof JvmArrayType && (isAssignableTo(((JvmArrayType)value).getComponentType(), ((JvmArrayType)to).getComponentType()));
+		if(to instanceof JvmArrayType toArr)
+			return value instanceof JvmArrayType fromArr && (isAssignableTo(fromArr.getComponentType(), toArr.getComponentType()));
 		if(to instanceof JvmReferenceType){
 			if(value instanceof JvmPrimitiveType)
 				return value == PsiPrimitiveType.NULL;
@@ -105,12 +105,12 @@ public class JvmClassUtils{
 	public static boolean isConvertibleTo(@Nullable JvmType value, @Nullable JvmType to){
 		if(value == null || to == null)
 			return to == value;
-		if(to instanceof JvmPrimitiveType){
-			if(value instanceof JvmPrimitiveType){
+		if(to instanceof JvmPrimitiveType toPrim){
+			if(value instanceof JvmPrimitiveType fromPrim){
 				if(value == PsiPrimitiveType.NULL || to == PsiPrimitiveType.NULL)
 					return false;
-				var k = ((JvmPrimitiveType)value).getKind();
-				var tk = ((JvmPrimitiveType)to).getKind();
+				var k = fromPrim.getKind();
+				var tk = toPrim.getKind();
 				// why isn't this an enum :p
 				if(tk == BOOLEAN)
 					return k == BOOLEAN;
@@ -129,11 +129,11 @@ public class JvmClassUtils{
 			var c = asClass(value);
 			if(c != null){
 				var name = c.getQualifiedName();
-				return name != null && name.equals(((JvmPrimitiveType)to).getKind().getBoxedFqn());
+				return name != null && name.equals(toPrim.getKind().getBoxedFqn());
 			}
 		}
-		if(to instanceof JvmArrayType) // Integer[] != int[]
-			return value instanceof JvmArrayType && (isAssignableTo(((JvmArrayType)value).getComponentType(), ((JvmArrayType)to).getComponentType()));
+		if(to instanceof JvmArrayType toArr) // Integer[] != int[]
+			return value instanceof JvmArrayType fromArr && (isAssignableTo(fromArr.getComponentType(), toArr.getComponentType()));
 		if(to instanceof JvmReferenceType){
 			if(value instanceof JvmPrimitiveType)
 				return value == PsiPrimitiveType.NULL;
@@ -268,8 +268,8 @@ public class JvmClassUtils{
 	
 	@Nullable
 	public static JvmType eraseGenerics(@Nullable JvmType type, @NotNull Project project){
-		if(type instanceof PsiClassReferenceType){
-			var res = ((PsiClassReferenceType)type).resolve();
+		if(type instanceof PsiClassReferenceType classType){
+			var res = classType.resolve();
 			if(res instanceof PsiTypeParameter){
 				var bounds = res.getExtendsList();
 				type = bounds != null && bounds.getReferencedTypes().length > 0
