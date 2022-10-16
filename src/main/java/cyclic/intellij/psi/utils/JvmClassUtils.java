@@ -282,16 +282,16 @@ public class JvmClassUtils{
 	
 	public static boolean isMainMethod(@NotNull JvmMethod method){
 		if(method.getName().equals("main"))
-			if(method.getParameters().length == 1)
-				if(method.getParameters()[0].getType() instanceof JvmArrayType){
-					JvmArrayType array = (JvmArrayType)method.getParameters()[0].getType();
-					if(array.getComponentType() instanceof JvmReferenceType){
-						JvmClass first = asClass(array.getComponentType());
-						return first != null
-								&& first.getQualifiedName() != null
-								&& first.getQualifiedName().equals(CommonClassNames.JAVA_LANG_STRING);
-					}
-				}
+			if(method.getParameters().length == 1 && method.hasModifier(JvmModifier.PUBLIC) && method.hasModifier(JvmModifier.STATIC)){
+				if(PsiType.VOID.equals(method.getReturnType()))
+					if(method.getParameters()[0].getType() instanceof JvmArrayType array)
+						if(array.getComponentType() instanceof JvmReferenceType){
+							JvmClass first = asClass(array.getComponentType());
+							return first != null
+									&& first.getQualifiedName() != null
+									&& first.getQualifiedName().equals(CommonClassNames.JAVA_LANG_STRING);
+						}
+			}
 		return false;
 	}
 	
