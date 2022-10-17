@@ -2,6 +2,7 @@ package cyclic.intellij.psi.utils;
 
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmMember;
+import com.intellij.psi.util.PsiUtil;
 
 import java.util.Objects;
 
@@ -38,5 +39,19 @@ public class Visibility{
 		if(in == null)
 			return (JvmClass)member;
 		return in;
+	}
+	
+	@PsiUtil.AccessLevel
+	public static int getVisibilityLevel(JvmMember member){
+		if(member.hasModifier(PRIVATE))
+			return PsiUtil.ACCESS_LEVEL_PRIVATE;
+		else if(member.hasModifier(PROTECTED))
+			return PsiUtil.ACCESS_LEVEL_PROTECTED;
+		else if(member.hasModifier(PACKAGE_LOCAL))
+			return PsiUtil.ACCESS_LEVEL_PACKAGE_LOCAL;
+		else if(member.hasModifier(PUBLIC))
+			return PsiUtil.ACCESS_LEVEL_PUBLIC;
+		
+		return PsiUtil.ACCESS_LEVEL_PACKAGE_LOCAL;
 	}
 }
