@@ -1,7 +1,9 @@
 package cyclic.intellij.psi.ast;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiPackage;
 import cyclic.intellij.psi.CycAstElement;
 import cyclic.intellij.psi.utils.PsiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +17,7 @@ public class CycPackageStatement extends CycAstElement{
 		super(node);
 	}
 	
-	@Nullable
-	public String getPackageName(){
+	public @Nullable String getPackageName(){
 		return getId().map(PsiElement::getText).orElse(null);
 	}
 	
@@ -24,5 +25,8 @@ public class CycPackageStatement extends CycAstElement{
 		return PsiUtils.childOfType(this, CycId.class);
 	}
 	
-	// TODO: resolve against packages
+	public @Nullable PsiPackage resolve(){
+		var name = getPackageName();
+		return name != null ? JavaPsiFacade.getInstance(getProject()).findPackage(name) : null;
+	}
 }

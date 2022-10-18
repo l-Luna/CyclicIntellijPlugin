@@ -6,6 +6,7 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.java.VisibilitySorter;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import cyclic.intellij.psi.CycFile;
 import cyclic.intellij.psi.ast.CycConstructor;
@@ -35,5 +36,11 @@ public class CyclicStructViewModel extends StructureViewModelBase implements Str
 	
 	protected Class<?> @NotNull [] getSuitableClasses(){
 		return new Class[]{ CycFile.class, CycType.class, CycMethod.class, CycVariableDef.class, CycConstructor.class };
+	}
+	
+	protected boolean isSuitable(PsiElement element){
+		if(element instanceof CycVariableDef v)
+			return !v.isLocal();
+		return super.isSuitable(element);
 	}
 }

@@ -58,10 +58,8 @@ public class CycType extends CycDefinitionStubElement<CycType, StubCycType> impl
 	}
 	
 	public String getPackageName(){
-		if(getContainingFile() instanceof CycFile){
-			CycFile file = (CycFile)getContainingFile();
+		if(getContainingFile() instanceof CycFile file)
 			return file.getPackage().map(CycPackageStatement::getPackageName).orElse("");
-		}
 		return "";
 	}
 	
