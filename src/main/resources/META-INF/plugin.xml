@@ -111,7 +111,10 @@
         <fileIconPatcher implementation="cyclic.intellij.presentation.CyclicFileIconPatcher"/>
         <createFromTemplateHandler implementation="cyclic.intellij.templates.CyclicInternalTemplateHandler"/>
         <runConfigurationProducer implementation="cyclic.intellij.run.CyclicRunConfigProducer"/>
+
         <lang.formatter language="Cyclic" implementationClass="cyclic.intellij.formatter.CyclicFormattingModelBuilder"/>
+        <codeStyleSettingsProvider implementation="cyclic.intellij.formatter.settings.CyclicCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider implementation="cyclic.intellij.formatter.settings.CyclicLanguageCodeStyleSettingsProvider"/>
 
         <lang.psiStructureViewFactory language="Cyclic" implementationClass="cyclic.intellij.presentation.structureView.CyclicStructViewFactory"/>
         <navbar implementation="cyclic.intellij.presentation.CyclicNavbar"/>
