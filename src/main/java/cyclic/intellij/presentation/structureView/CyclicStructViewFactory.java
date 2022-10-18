@@ -9,12 +9,16 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CycStructViewFactory implements PsiStructureViewFactory{
+public class CyclicStructViewFactory implements PsiStructureViewFactory{
 	
 	public @Nullable StructureViewBuilder getStructureViewBuilder(@NotNull PsiFile psiFile){
 		return new TreeBasedStructureViewBuilder(){
 			public @NotNull StructureViewModel createStructureViewModel(@Nullable Editor editor){
 				return new CyclicStructViewModel(psiFile, editor);
+			}
+			
+			public boolean isRootNodeShown(){
+				return false;
 			}
 		};
 	}

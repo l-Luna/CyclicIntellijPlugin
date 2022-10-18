@@ -22,7 +22,7 @@ public class CyclicStructViewModel extends StructureViewModelBase implements Str
 	}
 	
 	public Sorter @NotNull [] getSorters(){
-		return new Sorter[]{ Sorter.ALPHA_SORTER, VisibilitySorter.INSTANCE };
+		return new Sorter[]{ VisibilitySorter.INSTANCE, Sorter.ALPHA_SORTER };
 	}
 	
 	public boolean isAlwaysShowsPlus(StructureViewTreeElement element){

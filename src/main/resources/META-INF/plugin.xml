@@ -112,7 +112,7 @@
         <createFromTemplateHandler implementation="cyclic.intellij.templates.CyclicInternalTemplateHandler"/>
         <runConfigurationProducer implementation="cyclic.intellij.run.CyclicRunConfigProducer"/>
         <lang.formatter language="Cyclic" implementationClass="cyclic.intellij.formatter.CyclicFormattingModelBuilder"/>
-        <lang.psiStructureViewFactory language="Cyclic" implementationClass="cyclic.intellij.presentation.structureView.CycStructViewFactory"/>
+        <lang.psiStructureViewFactory language="Cyclic" implementationClass="cyclic.intellij.presentation.structureView.CyclicStructViewFactory"/>
 
         <debugger.javaDebugAware implementation="cyclic.intellij.debug.CyclicIsDebugAware"/>
         <debugger.positionManagerFactory implementation="cyclic.intellij.debug.CyclicPosManagerFactory"/>
