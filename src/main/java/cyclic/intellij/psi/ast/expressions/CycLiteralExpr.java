@@ -23,6 +23,8 @@ public class CycLiteralExpr extends CycExpression{
 			return PsiType.INT;
 		if(getNode().findChildByType(Tokens.TOK_DECLIT) != null)
 			return PsiType.DOUBLE;
+		if(getNode().findChildByType(Tokens.TOK_CHARLIT) != null)
+			return PsiType.CHAR;
 		return null;
 	}
 }

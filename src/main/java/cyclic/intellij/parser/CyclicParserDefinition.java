@@ -36,6 +36,7 @@ public class CyclicParserDefinition implements ParserDefinition{
 				}
 			};
 	
+	@SuppressWarnings("deprecation")
 	public CyclicParserDefinition(){
 		PSIElementTypeFactory.defineLanguageIElementTypes(CyclicLanguage.LANGUAGE, CyclicLangLexer.tokenNames, CyclicLangLexer.ruleNames);
 	}

@@ -14,10 +14,10 @@ public class CycRefactoringSupport extends RefactoringSupportProvider{
 	}
 	
 	public boolean isInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context){
-		return element instanceof CycVariable && ((CycVariable)element).isLocal();
+		return element instanceof CycVariable var && var.isLocal();
 	}
 	
 	public boolean isMemberInplaceRenameAvailable(@NotNull PsiElement element, @Nullable PsiElement context){
-		return element instanceof CycDefinition && !(element instanceof CycVariable && ((CycVariable)element).isLocal());
+		return element instanceof CycDefinition && !(element instanceof CycVariable var && var.isLocal());
 	}
 }

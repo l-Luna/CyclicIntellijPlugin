@@ -126,6 +126,13 @@ public class Tokens{
 			CyclicLangLexer.DECLIT
 	);
 	
+	public static final TokenSet STRING_HIGHLIGHTING_LITERALS = createTokenSet(
+			CyclicLanguage.LANGUAGE,
+			
+			CyclicLangLexer.STRLIT,
+			CyclicLangLexer.CHARLIT
+	);
+	
 	public static final TokenSet SYMBOLS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
@@ -177,6 +184,7 @@ public class Tokens{
 	public static final TokenSet TOK_INSTANCEOF = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.INSTANCEOF);
 	public static final TokenSet TOK_THIS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.THIS);
 	public static final TokenSet TOK_STRING = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.STRLIT);
+	public static final TokenSet TOK_CHARLIT = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.CHARLIT);
 	
 	public static final TokenSet TOK_CLASS = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.CLASS);
 	public static final TokenSet TOK_INTERFACE = createTokenSet(CyclicLanguage.LANGUAGE, CyclicLangLexer.INTERFACE);

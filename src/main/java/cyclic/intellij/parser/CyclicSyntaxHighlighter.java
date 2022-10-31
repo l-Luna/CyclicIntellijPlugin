@@ -35,7 +35,7 @@ public class CyclicSyntaxHighlighter extends SyntaxHighlighterFactory implements
 			return array(ID);
 		else if(Tokens.KEYWORDS.contains(element))
 			return array(KEYWORD);
-		else if(Tokens.getFor(CyclicLangLexer.STRLIT) == element)
+		else if(Tokens.STRING_HIGHLIGHTING_LITERALS.contains(element))
 			return array(STRLIT);
 		else if(Tokens.LITERALS.contains(element))
 			return array(NUMLIT); // Add boolean literal formatting

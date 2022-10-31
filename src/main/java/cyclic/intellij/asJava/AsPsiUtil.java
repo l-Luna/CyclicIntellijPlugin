@@ -2,6 +2,7 @@ package cyclic.intellij.asJava;
 
 import com.intellij.lang.jvm.JvmClass;
 import com.intellij.lang.jvm.JvmMethod;
+import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.lang.jvm.types.JvmArrayType;
 import com.intellij.lang.jvm.types.JvmReferenceType;
 import com.intellij.lang.jvm.types.JvmType;
@@ -11,7 +12,6 @@ import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.impl.light.LightPsiClassBuilder;
 import com.intellij.psi.search.GlobalSearchScope;
 import cyclic.intellij.CyclicLanguage;
-import cyclic.intellij.psi.CycVariable;
 import cyclic.intellij.psi.ast.CycMethod;
 import cyclic.intellij.psi.ast.common.CycParameter;
 import cyclic.intellij.psi.ast.types.CycType;
@@ -80,8 +80,14 @@ public class AsPsiUtil{
 	public static PsiMethod asPsiMethod(CycMethod method){
 		var mBuilder = new LightMethodBuilder(method.getManager(), CyclicLanguage.LANGUAGE, method.getName());
 		mBuilder.setNavigationElement(method);
-		for(String modifier : method.getModifiers())
-			mBuilder.addModifier(modifier);
+		// need to query modifiers instead of listing in the case of implicit modifiers
+		// TODO: change getModifiers?
+		for(JvmModifier value : JvmModifier.values())
+			if(value != JvmModifier.PACKAGE_LOCAL){
+				String mod = value.toString().toLowerCase();
+				if(method.hasModifier(mod))
+					mBuilder.addModifier(mod);
+			}
 		for(CycParameter parameter : method.parameters()){
 			var jType = parameter.varType();
 			var psiType = asPsiType(jType);
