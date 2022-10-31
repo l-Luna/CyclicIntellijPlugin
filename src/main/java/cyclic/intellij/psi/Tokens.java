@@ -130,15 +130,15 @@ public class Tokens{
 			CyclicLanguage.LANGUAGE,
 			
 			CyclicLangLexer.STRLIT,
-			CyclicLangLexer.CHARLIT
+			CyclicLangLexer.CHARLIT,
+			CyclicLangLexer.QUOTE,
+			CyclicLangLexer.APOSTRAPHE
 	);
 	
 	public static final TokenSet SYMBOLS = createTokenSet(
 			CyclicLanguage.LANGUAGE,
 			
-			CyclicLangLexer.QUOTE,
 			CyclicLangLexer.SEMICOLON,
-			
 			CyclicLangLexer.DASHARROW,
 			CyclicLangLexer.EQARROW
 	);
@@ -209,7 +209,8 @@ public class Tokens{
 			CyclicLangLexer.NULL,
 			CyclicLangLexer.INTLIT,
 			CyclicLangLexer.DECLIT,
-			CyclicLangLexer.BOOLLIT
+			CyclicLangLexer.BOOLLIT,
+			CyclicLangLexer.CHARLIT
 	);
 	
 	@Contract(pure = true)

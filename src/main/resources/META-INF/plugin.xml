@@ -69,6 +69,9 @@
         <completion.contributor language="Cyclic"
                                 implementationClass="cyclic.intellij.completion.CycExpressionContributor"/>
 
+        <lang.quoteHandler language="Cyclic"
+                           implementationClass="cyclic.intellij.refactoring.CycQuoteHandler"/>
+
         <codeInsight.inlayProvider language="Cyclic"
                                    implementationClass="cyclic.intellij.presentation.CyclicImplicitTypeInlayProvider"/>
 

@@ -9,6 +9,7 @@ import com.intellij.util.ProcessingContext;
 import cyclic.intellij.psi.ast.CycIdPart;
 import cyclic.intellij.psi.ast.common.CycBlock;
 import cyclic.intellij.psi.ast.expressions.CycExpression;
+import cyclic.intellij.psi.ast.expressions.CycLiteralExpr;
 import cyclic.intellij.psi.ast.expressions.CycStringLiteralExpr;
 import cyclic.intellij.psi.ast.types.CycMemberWrapper;
 import cyclic.intellij.psi.ast.types.CycType;
@@ -61,6 +62,7 @@ public class CycKeywordContributor extends CompletionContributor{
 			PsiElement prev = parameters.getOriginalPosition();
 			if(prev instanceof PsiComment
 					|| PsiTreeUtil.getParentOfType(prev, CycStringLiteralExpr.class) != null
+					|| PsiTreeUtil.getParentOfType(prev, CycLiteralExpr.class) != null
 					|| PsiTreeUtil.getParentOfType(prev, CycIdPart.class) != null)
 				return;
 			for(String keyword : KEYWORDS)

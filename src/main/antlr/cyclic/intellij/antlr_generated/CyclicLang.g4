@@ -306,8 +306,10 @@ YIELD: 'yield';
 
 DECLIT: MINUS? DIGIT* DOT DIGIT+ ('f' | 'd')?;
 INTLIT: MINUS? DIGIT+ ('f' | 'd' | 'l')?;
-STRLIT: QUOTE (ESCAPE_QUOTE | (~[\r\n"]))*? (QUOTE);
-CHARLIT: APOSTRAPHE (ESCAPE_APOSTRAPHE | ~[\r\n']) APOSTRAPHE;
+STRLIT: QUOTE (ESCAPE_QUOTE | ~[\r\n"])*? (QUOTE);
+// note that the compiler enforces only 1 char here, while we handle that inside the annotator
+// to easier support e.g. matching quotes, autocomplete
+CHARLIT: APOSTRAPHE (ESCAPE_APOSTRAPHE | ~[\r\n'])*? APOSTRAPHE;
 BOOLLIT: TRUE | FALSE;
 NULL: 'null';
 
